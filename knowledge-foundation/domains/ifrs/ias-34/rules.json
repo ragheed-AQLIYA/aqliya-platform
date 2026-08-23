@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-34-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-34",
+    "standardCode": "IAS 34",
+    "versionLabel": "IAS 34:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-34-r001",
+      "paragraphReference": "IAS 34.14",
+      "ruleText": "An entity shall apply the same accounting policies in its interim financial report as are applied in its annual financial statements, except for changes in accounting policies made after the date of the most recent annual financial statements.",
+      "topic": "interim-period-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-34",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-34-r002",
+      "paragraphReference": "IAS 34.15",
+      "ruleText": "An entity shall include in its interim financial report an explanation of events and transactions that are significant to an understanding of the changes in financial position and performance of the entity since the end of the last annual reporting period.",
+      "topic": "interim-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-34",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    },
+    {
+      "ruleId": "ias-34-r003",
+      "paragraphReference": "IAS 34.28",
+      "ruleText": "An entity shall include a reconciliation of income tax expense for the interim period to the applicable tax rate on annual earnings, explaining the relationship between the interim tax expense and the annual tax rate.",
+      "topic": "interim-tax-reconciliation",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-34",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    },
+    {
+      "ruleId": "ias-34-r004",
+      "paragraphReference": "IAS 34.37",
+      "ruleText": "An entity shall assess at each interim reporting date whether there is any indication that an asset may be impaired, and if so, shall determine the recoverable amount and recognise an impairment loss in the interim period.",
+      "topic": "interim-impairment-assessment",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-34",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    }
+  ]
+}

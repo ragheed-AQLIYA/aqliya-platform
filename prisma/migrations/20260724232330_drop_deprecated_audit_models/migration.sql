@@ -1,4 +1,4 @@
-﻿-- Drop deprecated audit tables (migrated to PlatformAuditLog)
+-- Drop deprecated audit tables (migrated to PlatformAuditLog)
 
 -- 1. Tables without foreign keys
 DROP TABLE IF EXISTS "LcAiAuditEvent" CASCADE;

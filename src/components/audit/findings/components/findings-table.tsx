@@ -73,7 +73,7 @@ export function FindingsTable({
     critical: t("critical"),
   };
   const typeLabel: Record<string, string> = {
-    material_misstatement: t("materialMisStatement"),
+    material_misstatement: t("materialMisstatement"),
     control_deficiency: t("controlDeficiency"),
     disclosure_gap: t("disclosureGap"),
     observation: t("observation"),

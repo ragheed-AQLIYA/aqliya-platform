@@ -1,5 +1,5 @@
 import PDFDocument from "pdfkit";
-import * as XLSX from "xlsx";
+import { createWorkbook, aoaToSheet, writeBuffer } from "@/lib/xlsx";
 import type { ScoringResult } from "./types";
 import {
   formatPdfArabicNumber,
@@ -149,21 +149,21 @@ export async function buildAssessmentSummaryPDF(
 export async function buildSpendClassificationXLSX(
   input: LocalContentExportInput,
 ): Promise<LocalContentExportResult> {
-  const wb = XLSX.utils.book_new();
-  const data: string[][] = [];
+  const wb = createWorkbook();
+  const data: (string | number)[][] = [];
 
   data.push(["Category", "Supplier", "Amount (SAR)", "Local %", "Locality"]);
   data.push(["Score Summary", "", "", "", ""]);
-  data.push(["Total Spend", "", `${input.score.totalSpend}`, "", ""]);
+  data.push(["Total Spend", "", input.score.totalSpend, "", ""]);
   data.push([
     "Local Content %",
     "",
-    `${input.score.localContentPercentage.toFixed(1)}`,
+    parseFloat(input.score.localContentPercentage.toFixed(1)),
     "",
     "",
   ]);
-  data.push(["Local Spend", "", `${input.score.localSpend}`, "", ""]);
-  data.push(["Non-Local Spend", "", `${input.score.nonLocalSpend}`, "", ""]);
+  data.push(["Local Spend", "", input.score.localSpend, "", ""]);
+  data.push(["Non-Local Spend", "", input.score.nonLocalSpend, "", ""]);
   data.push([""]);
   data.push(["Evidence Coverage", "", "", "", ""]);
   data.push([
@@ -173,22 +173,17 @@ export async function buildSpendClassificationXLSX(
     "",
     "",
   ]);
-  data.push(["Verified", "", `${input.score.evidenceStats.verified}`, "", ""]);
-  data.push(["Total", "", `${input.score.evidenceStats.total}`, "", ""]);
+  data.push(["Verified", "", input.score.evidenceStats.verified, "", ""]);
+  data.push(["Total", "", input.score.evidenceStats.total, "", ""]);
   data.push([""]);
   data.push([input.disclaimer]);
 
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  ws["!cols"] = [
-    { wch: 25 },
-    { wch: 20 },
-    { wch: 18 },
-    { wch: 12 },
-    { wch: 12 },
-  ];
-  XLSX.utils.book_append_sheet(wb, ws, "Spend Classification");
+  aoaToSheet(wb, data, {
+    sheetName: "Spend Classification",
+    colWidths: [25, 20, 18, 12, 12],
+  });
 
-  const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" }) as Buffer;
+  const buffer = await writeBuffer(wb);
 
   return {
     format: "xlsx",
@@ -202,25 +197,26 @@ export async function buildSpendClassificationXLSX(
 export async function buildEvidenceIndexXLSX(
   input: LocalContentExportInput,
 ): Promise<LocalContentExportResult> {
-  const wb = XLSX.utils.book_new();
-  const data: string[][] = [];
+  const wb = createWorkbook();
+  const data: (string | number)[][] = [];
 
   data.push(["Evidence Type", "Status", "Count"]);
-  data.push(["Verified", "", `${input.score.evidenceStats.verified}`]);
-  data.push(["Reviewed", "", `${input.score.evidenceStats.reviewed}`]);
-  data.push(["Uploaded", "", `${input.score.evidenceStats.uploaded}`]);
-  data.push(["Linked", "", `${input.score.evidenceStats.linked}`]);
-  data.push(["Rejected", "", `${input.score.evidenceStats.rejected}`]);
-  data.push(["Missing", "", `${input.score.evidenceStats.missing}`]);
-  data.push(["Total", "", `${input.score.evidenceStats.total}`]);
+  data.push(["Verified", "", input.score.evidenceStats.verified]);
+  data.push(["Reviewed", "", input.score.evidenceStats.reviewed]);
+  data.push(["Uploaded", "", input.score.evidenceStats.uploaded]);
+  data.push(["Linked", "", input.score.evidenceStats.linked]);
+  data.push(["Rejected", "", input.score.evidenceStats.rejected]);
+  data.push(["Missing", "", input.score.evidenceStats.missing]);
+  data.push(["Total", "", input.score.evidenceStats.total]);
   data.push([""]);
   data.push([input.disclaimer]);
 
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  ws["!cols"] = [{ wch: 25 }, { wch: 12 }, { wch: 10 }];
-  XLSX.utils.book_append_sheet(wb, ws, "Evidence Index");
+  aoaToSheet(wb, data, {
+    sheetName: "Evidence Index",
+    colWidths: [25, 12, 10],
+  });
 
-  const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" }) as Buffer;
+  const buffer = await writeBuffer(wb);
 
   return {
     format: "xlsx",

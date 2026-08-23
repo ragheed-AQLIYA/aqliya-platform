@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-4-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-4",
+    "standardCode": "IFRS 4",
+    "versionLabel": "IFRS 4:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-4-r001",
+      "paragraphReference": "IFRS 4.12",
+      "ruleText": "An entity shall not recognise a liability for possible future claims under insurance contracts that are not in existence at the end of the reporting period.",
+      "topic": "insurance-liability-recognition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-4",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-4-r002",
+      "paragraphReference": "IFRS 4.15",
+      "ruleText": "An entity shall perform a liability adequacy test for insurance liabilities at each reporting date, and recognise any deficiency in the income statement.",
+      "topic": "insurance-liability-adequacy-test",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-4",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-4-r003",
+      "paragraphReference": "IFRS 4.16",
+      "ruleText": "An entity shall remove an insurance liability from its statement of financial position when, and only when, the obligation is discharged, cancelled, or expires.",
+      "topic": "insurance-liability-derecognition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-4",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-4-r004",
+      "paragraphReference": "IFRS 4.20",
+      "ruleText": "An entity shall disclose information that identifies and explains the amounts recognised in its financial statements arising from insurance contracts.",
+      "topic": "insurance-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-4",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

@@ -20,6 +20,28 @@ export const ALLOW_PROTECTED_AUDIT_MOCK_FALLBACK =
 
 export const delay = (ms = 30) => new Promise((r) => setTimeout(r, ms));
 
+// ─── Mock Data Tracking ───
+// Tracks whether any tryDb call has fallen back to mock data.
+// This flag is surfaced to the UI so users know they are viewing
+// fabricated demo data, not real customer records.
+
+let _mockDataActive = false;
+
+/**
+ * Returns true if any tryDb call has fallen back to mock data
+ * during the current process lifetime.
+ */
+export function isUsingMockData(): boolean {
+  return _mockDataActive;
+}
+
+/**
+ * Resets the mock data flag. Intended for testing only.
+ */
+export function _resetMockDataFlag(): void {
+  _mockDataActive = false;
+}
+
 export async function getDb() {
   return import("../db");
 }
@@ -42,6 +64,7 @@ export async function tryDb<T>(
       }
 
       logger.warn(`[AuditServices] ${label} failed; explicit mock fallback enabled:`, { detail: e, });
+      _mockDataActive = true;
     }
   }
 
@@ -52,6 +75,7 @@ export async function tryDb<T>(
   }
 
   await delay();
+  _mockDataActive = true;
   return fallback();
 }
 

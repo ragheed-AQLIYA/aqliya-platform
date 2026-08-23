@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-29-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-29",
+    "standardCode": "IAS 29",
+    "versionLabel": "IAS 29:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-29-r001",
+      "paragraphReference": "IAS 29.3",
+      "ruleText": "An entity whose functional currency is the currency of a hyperinflationary economy shall restate its financial statements in terms of the measuring unit current at the end of the reporting period.",
+      "topic": "hyperinflation-restatement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-29",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-29-r002",
+      "paragraphReference": "IAS 29.8",
+      "ruleText": "An entity shall apply the same procedures for restating comparative figures and corresponding figures in the current period as for restating the current period figures.",
+      "topic": "hyperinflation-comparative-restatement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-29",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-29-r003",
+      "paragraphReference": "IAS 29.9",
+      "ruleText": "The restated amounts for non-monetary items carried at historical cost shall be determined by applying the change in the general price index from the date of acquisition to the end of the reporting period.",
+      "topic": "hyperinflation-non-monetary-items",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-29",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-29-r004",
+      "paragraphReference": "IAS 29.12",
+      "ruleText": "An entity shall disclose the fact that financial statements have been restated for changes in the general purchasing power of the functional currency, and the price index used and its level at the end of the reporting period.",
+      "topic": "hyperinflation-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-29",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

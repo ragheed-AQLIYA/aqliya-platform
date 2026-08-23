@@ -7,6 +7,9 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { readFileSync, existsSync } from "fs";
+import ExcelJS from "exceljs";
+
+function cellText(v) { if (v == null) return ""; if (typeof v === "object" && v.text) return String(v.text); return String(v); }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/aqliya?schema=public";
@@ -37,18 +40,19 @@ async function main() {
   // Step 2: Parse TB XLSX
   console.log("\n[2/4] Parsing TB XLSX...");
   
-  // Parse XLSX using the xlsx package directly (ESM doesn't have readFile)
-  const XLSX = await import("xlsx");
-  const fileData = await import("fs").then(m => m.readFileSync(TB_FILE_PATH));
-  const workbook = XLSX.read(fileData, { type: "buffer" });
+  const fileData = readFileSync(TB_FILE_PATH);
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(fileData.buffer.slice(fileData.byteOffset, fileData.byteOffset + fileData.byteLength));
   
-  const sheetNames = workbook.SheetNames.filter(
-    (n) => n.includes("مركز مالي") || n.includes("دخل") || n.includes("BS") || n.includes("IS")
-  );
+  const sheetNames = workbook.worksheets
+    .map((ws) => ws.name)
+    .filter(
+      (n) => n.includes("مركز مالي") || n.includes("دخل") || n.includes("BS") || n.includes("IS")
+    );
   
   if (sheetNames.length === 0) {
     console.log("  No Arabic-named BS/IS sheets found. Using all sheets.");
-    sheetNames.push(...workbook.SheetNames);
+    sheetNames.push(...workbook.worksheets.map((ws) => ws.name));
   }
   
   console.log("  Sheets found: " + sheetNames.length);
@@ -58,11 +62,14 @@ async function main() {
   const seen = new Set();
   
   for (const name of sheetNames) {
-    const ws = workbook.Sheets[name];
-    const json = XLSX.utils.sheet_to_json(ws, { header: 1 });
+    const ws = workbook.getWorksheet(name);
+    if (!ws) continue;
     
-    for (const row of json) {
-      const arr = Array.isArray(row) ? row : Object.values(row);
+    ws.eachRow((row) => {
+      const arr = [];
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        arr[colNumber - 1] = cell.value ?? "";
+      });
       
       // Find account code (usually first numeric-ish value of 10 digits)
       let accountCode = "";
@@ -96,7 +103,7 @@ async function main() {
           creditBalance: credit,
         });
       }
-    }
+    });
   }
   
   console.log("  Parsed " + tbLines.length + " unique accounts");

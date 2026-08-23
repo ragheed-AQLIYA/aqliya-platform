@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-4-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-24-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-24",
+    "standardCode": "IAS 24",
+    "versionLabel": "IAS 24:2024",
+    "wave": 3,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-004",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-24-r001",
+      "paragraphReference": "IAS 24.13",
+      "ruleText": "An entity shall disclose related party relationships, transactions and outstanding balances in accordance with this Standard.",
+      "topic": "rp-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-24",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ias-24-r002",
+      "paragraphReference": "IAS 24.18",
+      "ruleText": "An entity shall disclose key management personnel compensation in total and by category.",
+      "topic": "kmp-compensation",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-24",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ias-24-r003",
+      "paragraphReference": "IAS 24.21",
+      "ruleText": "An entity shall disclose the amount of transactions with related parties, outstanding balances, commitments, and provisions for doubtful debts.",
+      "topic": "rp-transactions",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-24",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ias-24-r004",
+      "paragraphReference": "IAS 24.24",
+      "ruleText": "An entity shall disclose that related party transactions were made on terms equivalent to those that prevail in arm's length transactions if such terms can be substantiated.",
+      "topic": "arm-length",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-24",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

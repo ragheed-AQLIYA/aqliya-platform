@@ -21,7 +21,9 @@ process.env.FF_AUDIT_FS_V2 = "true";
 
 import fs from "node:fs";
 import path from "node:path";
-import XLSX from "xlsx";
+import ExcelJS from "exceljs";
+
+function cellText(v) { if (v == null) return ""; if (typeof v === "object" && v.text) return String(v.text); return String(v); }
 
 const ENGAGEMENT_ID = "eng-shalfa-2025";
 const CLIENT_ID = "client-shalfa";
@@ -225,19 +227,31 @@ async function ensureShalfaEngagement() {
   return { org, client, engagement };
 }
 
-function parseTbForUpload(filePath) {
-  const wb = XLSX.readFile(filePath);
-  const sheetName = wb.SheetNames[0];
-  if (!sheetName) {
+async function parseTbForUpload(filePath) {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(filePath);
+  const ws = workbook.worksheets[0];
+  if (!ws) {
     throw new Error(`No sheets in TB workbook: ${filePath}`);
   }
-  const sheet = wb.Sheets[sheetName];
-  if (!sheet) {
-    throw new Error(`Missing sheet ${sheetName} in ${filePath}`);
-  }
-  const rows = XLSX.utils.sheet_to_json(sheet, {
-    defval: "",
+
+  const rows = [];
+  let headers = [];
+  ws.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        headers[colNumber] = cellText(cell.value).trim();
+      });
+      return;
+    }
+    const obj = {};
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const key = headers[colNumber];
+      if (key) obj[key] = cell.value ?? "";
+    });
+    rows.push(obj);
   });
+
   const keys = Object.keys(rows[0] ?? {});
   const codeKey = keys.find((k) => k.includes("رقم الحساب")) ?? "Account Code";
   const nameKey = keys.find((k) => k.includes("اسم الحساب")) ?? "Account Name";
@@ -285,7 +299,7 @@ async function ingestTbIfPresent() {
     return { skipped: true, reason: `TB not found: ${tbFile}` };
   }
 
-  const parsed = parseTbForUpload(tbFile);
+  const parsed = await parseTbForUpload(tbFile);
   await prisma.auditAccountMapping.deleteMany({
     where: { engagementId: ENGAGEMENT_ID },
   });

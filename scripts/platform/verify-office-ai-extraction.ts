@@ -17,10 +17,10 @@ config({ path: resolve(__dirname, "../../.env") });
 
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import * as XLSX from "xlsx";
+import { createWorkbook, aoaToSheet, writeBuffer } from "@/lib/xlsx";
 
-function createTestXlsxBuffer(): Buffer {
-  const wb = XLSX.utils.book_new();
+async function createTestXlsxBuffer(): Promise<Buffer> {
+  const wb = createWorkbook();
   const data = [
     ["Department", "Manager", "Budget", "Spent", "Variance"],
     ["Audit", "Ahmed", "500000", "420000", "0.16"],
@@ -28,16 +28,14 @@ function createTestXlsxBuffer(): Buffer {
     ["IT", "Khalid", "300000", "290000", "0.033"],
     ["HR", "Noura", "200000", "185000", "0.075"],
   ];
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  XLSX.utils.book_append_sheet(wb, ws, "Budget2025");
+  aoaToSheet(wb, data, { sheetName: "Budget2025" });
   const secondSheet = [
     ["Client", "Revenue", "Margin"],
     ["Client A", "1200000", "0.35"],
     ["Client B", "850000", "0.28"],
   ];
-  const ws2 = XLSX.utils.aoa_to_sheet(secondSheet);
-  XLSX.utils.book_append_sheet(wb, ws2, "Revenue");
-  return Buffer.from(XLSX.write(wb, { type: "buffer", bookType: "xlsx" }));
+  aoaToSheet(wb, secondSheet, { sheetName: "Revenue" });
+  return await writeBuffer(wb);
 }
 
 function getMeta(file: { extractionMeta: unknown }, key: string): unknown {
@@ -131,7 +129,7 @@ async function main() {
     console.log(`  ✅ CSV: ${csvFile.id}`);
 
     // XLSX file (generated in memory)
-    const xlsxBuffer = createTestXlsxBuffer();
+    const xlsxBuffer = await createTestXlsxBuffer();
     const xlsxContent =
       "Department,Manager,Budget,Spent,Variance\nAudit,Ahmed,500000,420000,0.16\nFinance,Sara,750000,710000,0.053";
     const xlsxFile = await prisma.officeAiFile.create({

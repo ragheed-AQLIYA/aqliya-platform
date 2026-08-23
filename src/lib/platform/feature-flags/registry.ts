@@ -7,7 +7,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     name: "Real AI Providers",
     description:
       "When off, all AI uses deterministic fallback handlers. When on, real Anthropic/OpenAI providers are enabled.",
-    variant: "off",
+    variant: "on",
     owner: "ai-gov",
     dependencies: ["ai.cost-tracking"],
     createdAt: "2026-06-03",
@@ -47,7 +47,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     key: "ai.rag",
     name: "AI RAG/pgvector Pipeline",
     description: "When on, embeddings and vector search are available for RAG retrieval.",
-    variant: "off",
+    variant: "on",
     owner: "ai-gov",
     dependencies: ["ai.cost-tracking"],
     createdAt: "2026-06-03",
@@ -145,7 +145,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     name: "AuditOS IFRS Rules Engine",
     description:
       "When on, evaluates admitted IFRS knowledge rules after FS rebuild and on validation.",
-    variant: "off",
+    variant: "on",
     owner: "eng",
     dependencies: [],
     createdAt: "2026-06-13",
@@ -156,7 +156,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     name: "AuditOS SOCPA Rules Engine",
     description:
       "When on, evaluates SOCPA jurisdiction overlay rules for SAR/Saudi engagements.",
-    variant: "off",
+    variant: "on",
     owner: "eng",
     dependencies: [],
     createdAt: "2026-06-13",
@@ -249,7 +249,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
     key: "audit.isa-rules",
     name: "AuditOS ISA Rules Runtime",
     description: "When on, evaluates admitted ISA knowledge packs after FS rebuild.",
-    variant: "off",
+    variant: "on",
     owner: "eng",
     dependencies: [],
     createdAt: "2026-06-21",
@@ -301,6 +301,7 @@ const FLAG_REGISTRY: Record<string, FeatureFlag> = {
 function getEnvOverride(key: string): FlagVariant | undefined {
   switch (key) {
     case "ai.real-providers":
+      if (process.env.FF_AI_REAL_PROVIDERS === "false") return "off"
       return process.env.FF_AI_REAL_PROVIDERS === "true" ? "on" : undefined
     case "ai.cost-tracking":
       return process.env.FF_AI_COST_TRACKING === "false" ? "off" : undefined
@@ -309,6 +310,7 @@ function getEnvOverride(key: string): FlagVariant | undefined {
     case "ai.budget-quotas":
       return process.env.FF_AI_BUDGET_QUOTAS === "true" ? "on" : undefined
     case "ai.rag":
+      if (process.env.FF_AI_RAG === "false") return "off"
       return process.env.FF_AI_RAG === "true" ? "on" : undefined
     case "ai.budget-alerts":
       return process.env.FF_AI_BUDGET_ALERTS === "true" ? "on" : undefined

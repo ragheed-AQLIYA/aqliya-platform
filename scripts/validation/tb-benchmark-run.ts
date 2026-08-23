@@ -10,22 +10,22 @@
 import { config } from "dotenv";
 import { resolve } from "path";
 import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { readFile, sheetToJsonArrays } from "@/lib/xlsx";
 
 config({ path: resolve(__dirname, "../../.env") });
 
 const RESULTS_DIR = resolve(__dirname, "../../docs/audits/evidence");
 
-function loadAccounts(): Array<{
+async function loadAccounts(): Promise<Array<{
   accountCode: string;
   accountName: string;
   balance: number;
   erpStatementSide?: string;
   classificationHints?: string[];
-}> {
-  const XLSX = require("xlsx");
-  const wb = XLSX.readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
-  const ws = wb.Sheets[wb.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+}>> {
+  const wb = await readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
+  const ws = wb.worksheets[0]!;
+  const rows = sheetToJsonArrays(ws, { includeEmpty: true });
 
   const accounts = [];
   for (let i = 1; i < rows.length; i++) {
@@ -168,7 +168,7 @@ async function main() {
 
   // Load accounts
   console.log("Loading TB file...");
-  const accounts = loadAccounts();
+  const accounts = await loadAccounts();
   console.log(`Loaded ${accounts.length} accounts\n`);
 
   // Import tb-intelligence functions

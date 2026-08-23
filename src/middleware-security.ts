@@ -53,7 +53,19 @@ export function setCorsHeaders(request: Request, response: NextResponse) {
   return response;
 }
 
-const securityHeaders = {
+function getCspHeader(): string {
+  // Strict CSP — no unsafe-eval.
+  // style-src 'unsafe-inline' is required for Tailwind CSS v4 + shadcn/ui
+  // which generate inline styles during server rendering.
+  // script-src 'unsafe-inline' is required for Next.js hydration and inline scripts.
+  // 'unsafe-eval' is only allowed in development for Next.js dev mode.
+  if (process.env.NODE_ENV === "production") {
+    return "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;";
+  }
+  return "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;";
+}
+
+const securityHeaders: Record<string, string> = {
   "Strict-Transport-Security":
     "max-age=31536000; includeSubDomains; preload",
   "X-DNS-Prefetch-Control": "on",
@@ -63,20 +75,16 @@ const securityHeaders = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Permissions-Policy":
     "camera=(), microphone=(), geolocation=(), interest-cohort=()",
-  // Strict CSP — no unsafe-eval.
-  // style-src 'unsafe-inline' is required for Tailwind CSS v4 + shadcn/ui
-  // which generate inline styles during server rendering.
-  // script-src 'unsafe-inline' is required in development for Next.js dev mode inline scripts.
-  // In production, script-src remains 'self' only (no unsafe-inline for scripts).
-  "Content-Security-Policy":
-    process.env.NODE_ENV === "production"
-      ? "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;"
-      : "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.sentry.io;",
   "X-Powered-By": "",
 };
 
 export function setSecurityHeaders(response: NextResponse) {
-  Object.entries(securityHeaders).forEach(([key, value]) => {
+  // CSP is resolved at call time to respect the runtime NODE_ENV
+  const headers: Record<string, string> = {
+    ...securityHeaders,
+    "Content-Security-Policy": getCspHeader(),
+  };
+  Object.entries(headers).forEach(([key, value]) => {
     if (value) {
       response.headers.set(key, value);
     } else {

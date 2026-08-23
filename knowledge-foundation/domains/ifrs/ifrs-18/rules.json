@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-6-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-18-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-18",
+    "standardCode": "IFRS 18",
+    "versionLabel": "IFRS 18:2024",
+    "wave": 6,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-006",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-18-r001",
+      "paragraphReference": "IFRS 18.14",
+      "ruleText": "An entity shall classify income and expenses into categories: operating, investing, and financing in the statement of profit or loss.",
+      "topic": "income-expense-categorisation",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-18",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ifrs-18-r002",
+      "paragraphReference": "IFRS 18.23",
+      "ruleText": "An entity shall present an operating expense category based on the nature of expenses or the function within the entity.",
+      "topic": "operating-expense-classification",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-18",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ifrs-18-r003",
+      "paragraphReference": "IFRS 18.50",
+      "ruleText": "An entity shall provide disclosures that enable users of financial statements to assess the effects of significant management-defined performance measures on the financial statements.",
+      "topic": "mpm-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-18",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ifrs-18-r004",
+      "paragraphReference": "IFRS 18.60",
+      "ruleText": "An entity shall disclose significant operating expenses by nature and provide disaggregation of operating expenses to enable users to understand the composition of operating expenses.",
+      "topic": "expense-disaggregation",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-18",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

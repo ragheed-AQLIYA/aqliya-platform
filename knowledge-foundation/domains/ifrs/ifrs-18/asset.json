@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-6-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": true,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-18",
+    "assetType": "A",
+    "standardCode": "IFRS 18",
+    "standardName": "Presentation and Disclosure in Financial Statements",
+    "versionLabel": "IFRS 18:2024",
+    "issueDate": "2024-04-01",
+    "effectiveDate": "2027-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-18/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-18",
+    "session": "6",
+    "wave": 6,
+    "attribution": ["© IFRS Foundation"],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text.",
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-006",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "tb-intelligence"
+  },
+  "engines": ["tb-intelligence", "disclosure-engine", "mapping-engine"],
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "note": "Lineage assigned at reviewer approval — source document is this asset"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "approved",
+    "confidenceScore": 90,
+    "note": "Level A authority — capped at 95; new standard effective 2027, score reduced for early adoption uncertainty"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "permitted",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

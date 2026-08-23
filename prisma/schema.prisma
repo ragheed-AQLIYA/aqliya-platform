@@ -2002,6 +2002,16 @@ model LocalContentProject {
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
+  // ── LCGPA Entity-Level fields (WAVE 1 — additive, nullable) ──
+  baselineLcPct          Float?   // Current LC% at baseline (historical)
+  targetedLcPct          Float?   // Committed LC% improvement target
+  baselineDate           DateTime? // When baseline was measured
+  targetDate             DateTime? // When target must be achieved
+  calculationMethod      String?  @default("iktva_v1") // "iktva_v1", "lcgpa_v1"
+  ruleVersion            String?  @default("2026-01")  // Regulatory rule version used
+  listedCompanyStatus    String?  @default("not_listed") // "listed_tadawul", "listed_nomu", "not_listed"
+  gradualPlanStatus      String?  @default("none")     // "none", "draft", "submitted", "approved", "expired"
+
   suppliers       LocalContentSupplier[]
   spendRecords    LocalContentSpendRecord[]
   classifications LocalContentClassification[]
@@ -2011,6 +2021,11 @@ model LocalContentProject {
   approvals       LocalContentApproval[]
   reports         LocalContentReport[]
   workbooks       LcWorkbook[]
+
+  calculationRuns        LcCalculationRun[]
+  gradulPlans            LcGradualPlan[]
+  penaltyAssessments     LcPenaltyAssessment[]
+  financialEvaluations   LcFinancialEvaluation[]
 
   @@index([organizationId, createdAt])
   @@index([platformOrganizationId, createdAt])
@@ -2036,6 +2051,12 @@ model LocalContentSupplier {
   createdById            String?
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
+
+  // ── LCGPA Entity-Level fields (WAVE 1 — additive, nullable) ──
+  saudiOwnershipPct      Float?   // Saudi ownership percentage (0-100)
+  isSme                  Boolean? @default(false) // Is this a local SME?
+  ownershipEvidenceUrl   String?  // URL to ownership evidence document
+  smeEvidenceUrl         String?  // URL to SME classification evidence
 
   spendRecords    LocalContentSpendRecord[]
   classifications LocalContentClassification[]
@@ -5105,6 +5126,13 @@ model LcWorkbook {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 
+  // ── LCGPA calculation tracking (WAVE 1 — additive, nullable) ──
+  calculationMethod String?  @default("iktva_v1") // "iktva_v1", "lcgpa_v1"
+  ruleVersion       String?  @default("2026-01")
+  lcgpaOverallLcPct Float?   // LCGPA 4-pillar LC% (stored separately from lcScore)
+  lcgpaPillars      Json?    // { gs, ad, lc, cb } pillar-level breakdown
+  lcgpaComputedAt   DateTime? // When LCGPA score was computed
+
   lines        LcWorkbookLine[]
   dataRequests LcDataRequest[]
 
@@ -5676,3 +5704,622 @@ model ComponentMateriality {
   @@index([planningMaterialityId])
 }
 
+// ─── LCGPA Entity-Level — Calculation Traceability (WAVE 1) ─────────────────
+
+/// Stores each LC calculation run with full input/output traceability.
+/// Every score result must be reproducible from this record alone.
+model LcCalculationRun {
+  id                    String    @id @default(cuid())
+  projectId             String
+  project               LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workbookId            String?   // Optional — some calculations may not originate from a workbook
+  method                String    // "lcgpa_v1", "iktva_v1"
+  ruleVersion           String    // "2026-01"
+  inputs                Json      // All input values used (deterministic replay)
+  result                Json      // Pillar-level results
+  lcPillars             Json      // { gs: number, ad: number, lc: number, cb: number }
+  overallLcPct          Float     // Final LC percentage
+  totalCosts            Float     // Denominator of LCGPA formula
+  computedAt            DateTime  @default(now())
+  computedById          String?   // userId who triggered calculation
+  evidence              Json?     // Evidence references used
+  createdAt             DateTime  @default(now())
+
+  // ─── Regulatory version binding (LCGPA Regulatory Intelligence) ───
+  // Which exact regulatory state produced this calculation. Together with
+  // ruleVersion above these answer: "which regulatory version was used?"
+  /// The exact dataset version that produced this result. A real foreign key:
+  /// a dataset that has produced a calculation can never be deleted.
+  regulatoryDatasetVersion String?
+  regulatoryDataset        LcRegulatoryDataset? @relation(fields: [regulatoryDatasetVersion], references: [datasetVersion], onDelete: Restrict)
+  /// Per-product version identities used, so the exact product facts are pinned.
+  regulatoryProductVersions Json?
+  regulatoryArtifactSha256 String? // SHA-256 of the official artifact behind it
+  regulatoryParserVersion  String?
+  regulatorySchemaVersion  String?
+  /// The instant the calculation was resolved AGAINST — never "now" implicitly.
+  regulatoryAsOf           DateTime?
+  /// Per-product resolution outcomes, including UNKNOWNs that were not substituted.
+  regulatoryResolution     Json?
+
+  @@index([regulatoryDatasetVersion])
+  @@index([regulatoryArtifactSha256])
+  @@index([projectId, computedAt])
+  @@index([projectId, method])
+  @@index([workbookId])
+  @@index([method])
+  @@index([createdAt])
+}
+
+// ─── LCGPA Entity-Level — Mandatory List (WAVE 6) ───────────────────────────
+
+/// Versioned mandatory product list imported from LCGPA documents library.
+/// Each version is a snapshot — historical versions are never deleted.
+model LcMandatoryList {
+  id                    String    @id @default(cuid())
+  version               String    // "2026-Q1", "2025-Q4"
+  sourceUrl             String    // LCGPA documents library URL
+  effectiveDate         DateTime  // When this list became effective
+  productCount          Int       // Number of products in this version
+  sectorCount           Int       // Number of sectors covered
+  importedAt            DateTime  @default(now())
+  importedById          String?
+  status                String    @default("active") // "active", "superseded", "archived"
+  createdAt             DateTime  @default(now())
+
+  items                 LcMandatoryListItem[]
+
+  @@unique([version])
+  @@index([status])
+  @@index([effectiveDate])
+  @@index([createdAt])
+}
+
+/// Individual product entry within a mandatory list version.
+model LcMandatoryListItem {
+  id                    String    @id @default(cuid())
+  listId                String
+  list                  LcMandatoryList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  productCode           String    // LCGPA product code
+  productNameAr         String    // Arabic product name
+  productNameEn         String?   // English product name (if available)
+  sectorCode            String    // LCGPA sector code (1-16)
+  sectorNameAr          String    // Arabic sector name
+  sectorNameEn          String?   // English sector name
+  effectiveDate         DateTime  // When this product became mandatory
+  createdAt             DateTime  @default(now())
+
+  @@unique([listId, productCode])
+  @@index([listId])
+  @@index([productCode])
+  @@index([sectorCode])
+  @@index([productNameAr])
+}
+
+// ─── LCGPA Entity-Level — Gradual Plan (WAVE 7) ─────────────────────────────
+
+/// Tracks the gradual improvement plan required within 60 days after contract award.
+model LcGradualPlan {
+  id                    String    @id @default(cuid())
+  projectId             String
+  project               LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  baselineLcPct         Float     // LC% at time of award
+  targetLcPct           Float     // Committed LC% improvement
+  awardDate             DateTime  // Contract award date
+  submissionDeadline    DateTime  // awardDate + 60 days
+  status                String    @default("draft") // "draft", "submitted", "approved", "expired", "rejected"
+  submittedAt           DateTime?
+  approvedAt            DateTime?
+  rejectedAt            DateTime?
+  rejectionReason       String?
+  createdById           String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  milestones            LcGradualPlanMilestone[]
+
+  @@index([projectId])
+  @@index([projectId, status])
+  @@index([status])
+  @@index([submissionDeadline])
+  @@index([createdAt])
+}
+
+/// Individual milestone within a gradual improvement plan.
+model LcGradualPlanMilestone {
+  id                    String    @id @default(cuid())
+  planId                String
+  plan                  LcGradualPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  targetDate            DateTime  // Milestone deadline
+  targetLcPct           Float     // LC% to achieve by this date
+  actualLcPct           Float?    // Actual LC% achieved (filled after review)
+  status                String    @default("pending") // "pending", "achieved", "missed", "exceeded"
+  evidenceUrl           String?   // Evidence of achievement
+  notes                 String?
+  reviewedById          String?
+  reviewedAt            DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([planId])
+  @@index([planId, status])
+  @@index([targetDate])
+  @@index([createdAt])
+}
+
+// ─── LCGPA Entity-Level — Penalty Assessment (WAVE 7) ───────────────────────
+
+/// Stores penalty eligibility and exposure assessment.
+model LcPenaltyAssessment {
+  id                    String    @id @default(cuid())
+  projectId             String
+  project               LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contractValue         Float     // Total contract value in SAR
+  targetLcPct           Float     // Contractual LC% target
+  actualLcPct           Float     // Actual LC% achieved
+  variance              Float     // actualLcPct - targetLcPct (negative = gap)
+  exceedsThreshold      Boolean   // |variance| > 5% → penalty eligible
+  maxPenaltyPct         Float     // Up to 10% of contract value
+  maxPenaltyAmount      Float     // contractValue * maxPenaltyPct / 100
+  assessmentBasis       String?   // "self_assessment", "lcgpa_audit", "internal_review"
+  status                String    @default("calculated") // "calculated", "contested", "applied", "waived"
+  assessedAt            DateTime  @default(now())
+  assessedById          String?
+  notes                 String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([projectId])
+  @@index([projectId, exceedsThreshold])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ─── LCGPA Entity-Level — Financial Evaluation (WAVE 5) ─────────────────────
+
+/// Stores Article 17 financial evaluation result for supply tenders.
+model LcFinancialEvaluation {
+  id                    String    @id @default(cuid())
+  projectId             String
+  project               LocalContentProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tenderReference       String?   // External tender reference number
+  supplierId            String?   // Supplier being evaluated
+  lowestBidPrice        Float     // Lowest qualifying bid price (SAR)
+  evaluatedBidPrice     Float     // This bid's price (SAR)
+  baselineLcPct         Float     // Supplier's baseline LC%
+  targetedLcPct         Float     // Supplier's committed LC% target
+  isListedCompany       Boolean   @default(false) // Listed on Tadawul/Nomu?
+  listedCompanyBonus    Float     @default(0)     // 5% if listed
+  priceScore            Float     // (lowestBid / evaluatedBid) * 60
+  lcScore               Float     // (targetedLcPct * 50% + baselineLcPct * 50% + listedBonus) * 40
+  overallScore          Float     // priceScore + lcScore (higher = better)
+  rank                  Int?      // Rank among evaluated bids (1 = best)
+  status                String    @default("calculated") // "calculated", "reviewed", "final"
+  calculatedAt          DateTime  @default(now())
+  calculatedById        String?
+  reviewedById          String?
+  reviewedAt            DateTime?
+  notes                 String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([projectId])
+  @@index([projectId, tenderReference])
+  @@index([projectId, overallScore])
+  @@index([supplierId])
+  @@index([rank])
+  @@index([createdAt])
+}
+
+
+// ─── LCGPA Regulatory Intelligence Engine ───────────────────────────────────
+//
+// Continuous regulatory monitoring for the LCGPA Mandatory List.
+// Every table here is APPEND-ONLY in spirit: artifacts, datasets, changes,
+// journal entries and audit events are never deleted, only superseded.
+// See docs/regulatory/LCGPA_REGULATORY_INTELLIGENCE.md
+
+/// A monitored regulatory source. Only TIER 1 (LCGPA), once operator-verified,
+/// may produce artifacts that update authoritative regulatory state.
+model LcRegulatorySource {
+  id                     String    @id                  // stable slug, e.g. "lcgpa-mandatory-list-government"
+  authority              String
+  name                   String
+  description            String
+  url                    String
+  sourceType             String    // WEB_PAGE | DOCUMENT | XLSX | CSV | PDF | API | JSON | ANNOUNCEMENT | CIRCULAR
+  authorityTier          Int       // 1 = LCGPA, 2 = official government, 3 = supporting, 4 = third party
+  monitoringMethod       String
+  checkFrequency         String    // HOURLY | DAILY | WEEKLY | ON_DEMAND
+  enabled                Boolean   @default(true)
+  status                 String    @default("UNVERIFIED")
+  lastCheckedAt          DateTime?
+  lastSuccessfulCheckAt  DateTime?
+  lastFailedAt           DateTime?
+  lastArtifactHash       String?
+  lastKnownVersion       String?
+  consecutiveFailures    Int       @default(0)
+
+  // Operator verification of the canonical artifact URL
+  verifiedById           String?
+  verifiedAt             DateTime?
+  verificationEvidence   String?
+  verifiedUrl            String?
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  checks                 LcRegulatoryCheck[]
+  artifacts              LcRegulatoryArtifact[]
+  datasets               LcRegulatoryDataset[]
+  cases                  LcRegulatoryCase[]
+  alerts                 LcRegulatoryAlert[]
+  changeEvents           LcRegulatoryChangeEvent[]
+  conflictsAsA           LcRegulatoryConflict[]  @relation("ConflictSourceA")
+  conflictsAsB           LcRegulatoryConflict[]  @relation("ConflictSourceB")
+  effectiveDateEvidence  LcRegulatoryEffectiveDateEvidence[]
+
+  @@index([authorityTier, enabled])
+  @@index([status])
+  @@index([lastCheckedAt])
+}
+
+/// One immutable source check. Never updated.
+model LcRegulatoryCheck {
+  id                     String    @id                  // deterministic checkId
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  checkedAt              DateTime
+  outcome                String    // NO_CHANGE | CHANGE_DETECTED | FIRST_OBSERVATION | SOURCE_UNAVAILABLE | …
+  httpStatus             Int?
+  observedSha256         String?
+  previousSha256         String?
+  metadata               Json?     // ETag, Last-Modified, Content-Length — advisory only
+  errorCode              String?
+  errorMessage           String?
+  nextCheckAt            DateTime?
+  attemptCount           Int       @default(1)
+  correlationId          String
+  createdAt              DateTime  @default(now())
+
+  @@index([sourceId, checkedAt])
+  @@index([outcome])
+  @@index([correlationId])
+}
+
+/// An immutable capture of exactly what an official source served.
+/// Identity is content-addressed: sourceId + sha256.
+model LcRegulatoryArtifact {
+  id                     String    @id                  // "${sourceId}:${sha256}"
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  sourceUrl              String
+  directUrl              String
+  filename               String
+  mimeType               String
+  size                   Int
+  sha256                 String
+  acquiredAt             DateTime
+  acquiredBy             String
+  publishedAt            DateTime?
+  effectiveFrom          DateTime?
+  effectiveTo            DateTime?
+  version                String?
+  status                 String    // ACQUIRED | VERIFIED | PARSED | PARSE_FAILED | QUARANTINED | SUPERSEDED | REJECTED
+  blockedReason          String?
+  integrity              Json      // full IntegrityReport: checks, errors, warnings
+  /// Storage key for the preserved raw bytes. The bytes themselves are never
+  /// stored in the database.
+  rawStorageKey          String?
+  createdAt              DateTime  @default(now())
+
+  datasets               LcRegulatoryDataset[]
+
+  @@unique([sourceId, sha256])
+  @@index([sourceId, acquiredAt])
+  @@index([sha256])
+  @@index([status])
+}
+
+/// A normalized, versioned regulatory dataset produced from exactly one artifact.
+/// DATASET VERSION is independent of RULE VERSION.
+model LcRegulatoryDataset {
+  id                     String    @id                  // deterministic datasetId
+  datasetVersion         String    @unique
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  artifactId             String
+  artifact               LcRegulatoryArtifact @relation(fields: [artifactId], references: [id], onDelete: Restrict)
+  artifactSha256         String
+  documentVersionId      String
+  documentVersion        String
+  documentTitleAr        String?
+  documentTitleEn        String?
+  documentType           String?
+  parserVersion          String
+  schemaVersion          String
+  ruleVersion            String
+  status                 String    @default("DRAFT")    // DRAFT | PENDING_REVIEW | APPROVED | PUBLISHED | ACTIVE | SUPERSEDED | ROLLED_BACK | QUARANTINED | REJECTED
+  effectiveFrom          DateTime?
+  effectiveTo            DateTime?
+  activatedAt            DateTime?
+  deactivatedAt          DateTime?
+  productCount           Int       @default(0)
+  provenance             Json      // full RegulatoryProvenance chain
+  fingerprint            String?   // reproducibility digest
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  products               LcRegulatoryProduct[]
+  changesFrom            LcRegulatoryChange[] @relation("ChangeDatasetBefore")
+  changesTo              LcRegulatoryChange[] @relation("ChangeDatasetAfter")
+  impactAssessments      LcRegulatoryImpactAssessment[]
+  calculationRuns        LcCalculationRun[]
+  effectiveDateEvidence  LcRegulatoryEffectiveDateEvidence[]
+
+  @@index([sourceId, status])
+  @@index([status, effectiveFrom])
+  @@index([artifactSha256])
+  @@index([ruleVersion])
+}
+
+/// A normalized product inside a dataset version.
+/// Null always means "the artifact does not state it" — never zero.
+model LcRegulatoryProduct {
+  id                     String    @id @default(cuid())
+  /// Deterministic per-product version identity: a digest of the dataset
+  /// version plus every normalized field. Two rows with the same
+  /// productVersionId state exactly the same regulatory facts.
+  productVersionId       String
+  datasetId              String
+  dataset                LcRegulatoryDataset @relation(fields: [datasetId], references: [id], onDelete: Restrict)
+  productCode            String    // canonical Etimad code (digits, leading zeros stripped)
+  productCodeRaw         String?   // exactly as published
+  productNameAr          String
+  productNameEn          String?
+  /// Official LCGPA sector code — NULL whenever the authority publishes none.
+  sectorCode             String?
+  /// Official Arabic sector name, exactly as published.
+  sectorNameAr           String?
+  sectorNameEn           String?
+  category               String?
+  hsCode                 String?
+  descriptionAr          String?
+  descriptionEn          String?
+  minimumLcPct           Float?
+  minimumLcSchedule      Json?     // [{ year, pct, state, raw }]
+  priceCeilingRaw        Float?
+  manufacturerBaseline   String?
+  requirements           Json?     // string[]
+  applicability          String?
+  regulatoryStatus       String    @default("ACTIVE")
+  effectiveFrom          DateTime?
+  effectiveTo            DateTime?
+  createdAt              DateTime  @default(now())
+
+  @@unique([datasetId, productCode])
+  @@index([productCode])
+  @@index([productVersionId])
+  @@index([productCode, effectiveFrom])
+  @@index([datasetId, sectorNameAr])
+  @@index([effectiveFrom])
+}
+
+/// One semantic difference between two dataset versions.
+model LcRegulatoryChange {
+  id                     String    @id                  // deterministic changeId
+  datasetBeforeId        String?
+  datasetBefore          LcRegulatoryDataset? @relation("ChangeDatasetBefore", fields: [datasetBeforeId], references: [id], onDelete: Restrict)
+  datasetAfterId         String
+  datasetAfter           LcRegulatoryDataset  @relation("ChangeDatasetAfter", fields: [datasetAfterId], references: [id], onDelete: Restrict)
+  diffId                 String
+  productCode            String
+  changeType             String
+  field                  String
+  oldValue               String?
+  newValue               String?
+  detectedAt             DateTime
+  effectiveFrom          DateTime?
+  sourceArtifactBefore   String?
+  sourceArtifactAfter    String
+  severity               String    // LOW | MEDIUM | HIGH | CRITICAL
+  severityRationale      String
+  isBaseline             Boolean   @default(false)
+  createdAt              DateTime  @default(now())
+
+  @@index([diffId])
+  @@index([productCode])
+  @@index([changeType, severity])
+  @@index([effectiveFrom])
+  @@index([datasetAfterId])
+}
+
+/// The governed lifecycle of one detected regulatory change set.
+model LcRegulatoryCase {
+  id                     String    @id                  // deterministic caseId
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  artifactSha256         String
+  datasetVersion         String
+  diffId                 String?
+  impactId               String?
+  state                  String    // DETECTED … PENDING_REVIEW … APPROVED … PUBLISHED … ACTIVE | REJECTED | ROLLED_BACK
+  history                Json      // GovernanceTransition[] — append-only
+  impact                 Json?     // RegulatoryImpactAssessment
+  approvedById           String?
+  approvedByName         String?
+  approvedAt             DateTime?
+  approvalAutomatic      Boolean   @default(false)
+  approvalPolicyId       String?
+  approvalNote           String?
+  rejectedById           String?
+  rejectedAt             DateTime?
+  rejectionReason        String?
+  correlationId          String
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([sourceId, state])
+  @@index([state, createdAt])
+  @@index([datasetVersion])
+}
+
+/// Evidence-carrying regulatory alert.
+model LcRegulatoryAlert {
+  id                     String    @id                  // deterministic alertId
+  category               String
+  severity               String
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  changeId               String?
+  summary                String
+  evidence               Json      // string[]
+  effectiveDate          DateTime?
+  impactLevel            String?
+  recommendedAction      String
+  status                 String    @default("OPEN")     // OPEN | ACKNOWLEDGED | RESOLVED | SUPPRESSED
+  acknowledgedById       String?
+  acknowledgedAt         DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([status, severity])
+  @@index([sourceId, createdAt])
+  @@index([category])
+}
+
+/// Append-only regulatory change journal. Entries are NEVER deleted.
+model LcRegulatoryChangeEvent {
+  id                     String    @id                  // "CHANGE-2026-00017"
+  detectedAt             DateTime
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  sourceName             String
+  artifactFilename       String
+  artifactSha256         String
+  datasetVersion         String
+  changeIds              Json      // string[]
+  summary                String
+  effectiveFrom          DateTime?
+  impactLevel            String?
+  governanceState        String
+  activatedAt            DateTime?
+  correlationId          String
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@unique([artifactSha256, datasetVersion])
+  @@index([sourceId, detectedAt])
+  @@index([effectiveFrom])
+  @@index([impactLevel])
+}
+
+/// A contradiction between two OFFICIAL sources. Never auto-resolved.
+model LcRegulatoryConflict {
+  id                     String    @id                  // deterministic conflictId
+  sourceAId              String
+  sourceA                LcRegulatorySource @relation("ConflictSourceA", fields: [sourceAId], references: [id], onDelete: Restrict)
+  sourceBId              String
+  sourceB                LcRegulatorySource @relation("ConflictSourceB", fields: [sourceBId], references: [id], onDelete: Restrict)
+  artifactAHash          String
+  artifactBHash          String
+  productCode            String
+  conflictingFields      Json
+  detectedAt             DateTime
+  resolution             String    @default("PENDING_HUMAN_REVIEW")
+  resolvedById           String?
+  resolvedAt             DateTime?
+  resolutionNote         String?
+  createdAt              DateTime  @default(now())
+
+  @@index([productCode])
+  @@index([resolution])
+  @@index([detectedAt])
+}
+
+/// A regulatory impact assessment. Queryable, because "14 calculations
+/// affected" must be answerable from the database rather than a Json blob.
+model LcRegulatoryImpactAssessment {
+  id                     String    @id                  // deterministic impactId
+  diffId                 String
+  datasetId              String
+  dataset                LcRegulatoryDataset @relation(fields: [datasetId], references: [id], onDelete: Restrict)
+  impactLevel            String    // NONE | LOW | MEDIUM | HIGH | CRITICAL
+  affectedProducts       Json      // string[]
+  changeIds              Json      // string[]
+  /// Resolved id lists, exactly as returned by the resolver.
+  affected               Json
+  calculationCount       Int       @default(0)
+  projectCount           Int       @default(0)
+  tenderCount            Int       @default(0)
+  supplierCount          Int       @default(0)
+  contractCount          Int       @default(0)
+  reportCount            Int       @default(0)
+  complianceCount        Int       @default(0)
+  requiresReview         Boolean   @default(true)
+  rationale              String
+  /// Entity classes the resolver could NOT link, so a zero here is not read
+  /// as "nothing affected". See persistence/impact-resolver.ts.
+  unresolvableEntities   Json
+  computedAt             DateTime
+  createdAt              DateTime  @default(now())
+
+  @@index([diffId])
+  @@index([impactLevel])
+  @@index([datasetId])
+  @@index([computedAt])
+}
+
+/// Evidence for WHEN a regulatory requirement takes effect.
+///
+/// An effective date is a regulatory fact in its own right and must carry its
+/// own source. It is NEVER copied onto a product by assumption: an announcement
+/// that names a cohort is evidence about that cohort, not about every product.
+model LcRegulatoryEffectiveDateEvidence {
+  id                     String    @id                  // deterministic
+  /// Where the date comes from.
+  sourceId               String
+  source                 LcRegulatorySource @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+  /// The artifact that states it, when there is one.
+  artifactSha256         String?
+  /// Optional dataset the evidence was recorded against.
+  datasetId              String?
+  dataset                LcRegulatoryDataset? @relation(fields: [datasetId], references: [id], onDelete: Restrict)
+
+  /// What this date is the effective date OF. Two dates about different things
+  /// are not a disagreement.
+  dateKind               String    // MANDATORY_LIST_INCLUSION | MINIMUM_LC_REQUIREMENT | DOCUMENT_PUBLICATION | OTHER
+  /// Who the requirement binds.
+  regime                 String    @default("ALL") // GOVERNMENT_ENTITIES | STATE_OWNED_COMPANIES | ALL
+  /// What the date applies to.
+  scope                  String    // DATASET | COHORT | PRODUCT
+  /// Cohort label as published, e.g. "1 أغسطس 2027م". Null for DATASET scope.
+  cohortLabel            String?
+  /// Explicit product codes, when and only when the source names them.
+  productCodes           Json?
+
+  effectiveFrom          DateTime
+  effectiveTo            DateTime?
+
+  /// VERIFIED    stated by a TIER 1 artifact
+  /// CORROBORATED stated by an official TIER 2/3 source, not by LCGPA itself
+  /// ASSERTED    supplied by an operator with written evidence
+  /// DISPUTED    contradicted by another source
+  confidence             String
+  /// What the claim rests on: document reference, announcement id, ticket.
+  evidence               String
+  /// Free-text note from the operator who recorded it.
+  note                   String?
+
+  recordedById           String
+  recordedAt             DateTime
+  supersededById         String?
+  supersededAt           DateTime?
+  createdAt              DateTime  @default(now())
+
+  @@index([sourceId, effectiveFrom])
+  @@index([dateKind, regime, effectiveFrom])
+  @@index([scope, confidence])
+  @@index([datasetId])
+  @@index([effectiveFrom])
+}

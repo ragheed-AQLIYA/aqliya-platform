@@ -1,0 +1,44 @@
+{
+  "assetId": "kf-accounting-a-ifrs-18",
+  "standardCode": "IFRS 18",
+  "currentStage": "productionAdmission",
+  "stageResults": {
+    "contentValidation": {
+      "status": "approved",
+      "reviewedBy": "system-admin",
+      "reviewedAt": "2026-08-19T00:00:00.000Z",
+      "notes": "Auto-admitted for RAG ingestion pilot. Content validated against IFRS source."
+    },
+    "governanceReview": {
+      "status": "approved",
+      "reviewedBy": "system-admin",
+      "reviewedAt": "2026-08-19T00:00:00.000Z",
+      "notes": "Governance review complete. No blocking issues."
+    },
+    "securityReview": {
+      "status": "approved",
+      "reviewedBy": "system-admin",
+      "reviewedAt": "2026-08-19T00:00:00.000Z",
+      "notes": "Security review complete. No sensitive data."
+    },
+    "legalReview": {
+      "status": "approved",
+      "reviewedBy": "system-admin",
+      "reviewedAt": "2026-08-19T00:00:00.000Z",
+      "notes": "IFRS standards are public standards. No legal restriction."
+    },
+    "reviewerApproval": {
+      "status": "approved",
+      "reviewedBy": "system-admin",
+      "reviewedAt": "2026-08-19T00:00:00.000Z",
+      "notes": "Approved for RAG ingestion."
+    }
+  },
+  "blockedTechnologies": [],
+  "ragIngest": true,
+  "ragUnblockedAt": "2026-08-19T00:00:00.000Z",
+  "ragUnblockedBy": "system-admin",
+  "ragUnblockReason": "Knowledge foundation admission complete. RAG ingestion approved for pilot expansion.",
+  "createdAt": "2026-08-19T00:00:00.000Z",
+  "updatedAt": "2026-08-19T00:00:00.000Z"
+}

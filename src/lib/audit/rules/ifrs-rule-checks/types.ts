@@ -24,4 +24,6 @@ export interface IfrsEvaluationContext {
   }>;
   disclosureNoteCount: number;
   performanceMateriality?: number;
+  organizationId?: string;
+  ragEnabled?: boolean;
 }

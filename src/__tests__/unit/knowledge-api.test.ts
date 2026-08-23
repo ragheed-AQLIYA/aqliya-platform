@@ -69,7 +69,7 @@ describe("knowledge-service", () => {
   })
 
   it("requires FF_AI_RAG", async () => {
-    delete process.env.FF_AI_RAG
+    process.env.FF_AI_RAG = "false"
     await expect(
       ingestKnowledgeDocument("org", { documentId: "d", content: "x" }),
     ).rejects.toThrow("KNOWLEDGE_DISABLED")

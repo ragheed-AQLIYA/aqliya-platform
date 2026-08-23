@@ -82,7 +82,7 @@ export function EvidenceDetailDrawer({
           <div className="grid grid-cols-2 gap-3">
             {field(t("typeCol"), ev.fileType.toUpperCase())}
             {field(t("size"), ev.fileSize > 0 ? t("kilobytes", { size: (ev.fileSize / 1024).toFixed(0) }) : "-")}
-            {field(t("uploadedByIdCol"), ev.uploadedById || "-")}
+            {field(t("uploadedByCol"), ev.uploadedById || "-")}
             {field(t("uploadDateCol"), ev.uploadedAt ? new Date(ev.uploadedAt).toLocaleDateString() : "-")}
           </div>
           {field(t("fileHash"), <span className="font-mono text-xs">{ev.fileHash || t("notAvailable")}</span>)}

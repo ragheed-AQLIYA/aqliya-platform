@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": true,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-14",
+    "assetType": "A",
+    "standardCode": "IFRS 14",
+    "standardName": "Regulatory Deferral Accounts",
+    "versionLabel": "IFRS 14:2024",
+    "issueDate": "2014-01-01",
+    "effectiveDate": "2016-01-01",
+    "supersededDate": null,
+    "status": "current",
+    "sourceUrl": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-14/",
+    "sourceOwner": "IFRS Foundation",
+    "catalogId": "kf-acct-ifrs-ifrs-14",
+    "session": "7",
+    "wave": 8,
+    "attribution": ["© IFRS Foundation"],
+    "disclaimer": "Structured rule extracts for governance admission. Requires KNOWLEDGE_REVIEWER approval before production use. Not a substitute for the authoritative standard text. IFRS 14 is optional — an entity may elect to apply it or continue with IAS 1 requirements.",
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "ontology": {
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "entity": "standard",
+    "relationship": "implements",
+    "authority": "ifrs-foundation",
+    "usage": "mapping-engine"
+  },
+  "engines": ["mapping-engine", "disclosure-engine", "tb-intelligence"],
+  "lineage": {
+    "lineageId": null,
+    "lineageParentId": null,
+    "upstreamAssetIds": [],
+    "note": "Lineage assigned at reviewer approval — source document is this asset"
+  },
+  "confidence": {
+    "authorityLevel": "A",
+    "validationStatus": "validated",
+    "versionStatus": "current",
+    "reviewStatus": "approved",
+    "confidenceScore": 85,
+    "note": "Level A authority — reduced from 95 due to optional/elective nature of the standard"
+  },
+  "licensing": {
+    "licenseId": "ifrs-foundation-standard",
+    "linking": "permitted",
+    "cataloging": "permitted-with-attribution",
+    "referencing": "permitted-with-attribution",
+    "embedding": "permitted",
+    "redistribution": "prohibited",
+    "commercialUse": "restricted-review-required"
+  }
+}

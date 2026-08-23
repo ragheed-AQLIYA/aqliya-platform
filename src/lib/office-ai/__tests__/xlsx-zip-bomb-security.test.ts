@@ -8,7 +8,7 @@
 // tests through extractTextFromXlsx via extractOfficeAiFileContent.
 
 import { describe, expect, it } from "@jest/globals";
-import * as XLSX from "xlsx";
+import { createWorkbook, aoaToSheet, writeBuffer, readBuffer, sheetToJsonArrays } from "@/lib/xlsx";
 
 // ── Import the prevalidation function ──
 
@@ -19,28 +19,26 @@ import { prevalidateZipBuffer } from "../file-extraction-service";
 /**
  * Build a minimal valid XLSX buffer (real workbook with small data).
  */
-function buildMinimalXlsx(): Buffer {
-  const ws = XLSX.utils.aoa_to_sheet([
+async function buildMinimalXlsx(): Promise<Buffer> {
+  const wb = createWorkbook();
+  aoaToSheet(wb, [
     ["Name", "Value"],
     ["Item 1", 100],
     ["Item 2", 200],
-  ]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  return XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
+  ], { sheetName: "Sheet1" });
+  return writeBuffer(wb);
 }
 
 /**
  * Build a ZIP buffer with a specified number of entries by creating
  * an XLSX with many sheets (each sheet = ZIP entry).
  */
-function buildMultiSheetXlsx(sheetCount: number): Buffer {
-  const wb = XLSX.utils.book_new();
+async function buildMultiSheetXlsx(sheetCount: number): Promise<Buffer> {
+  const wb = createWorkbook();
   for (let i = 0; i < sheetCount; i++) {
-    const ws = XLSX.utils.aoa_to_sheet([["Col"], [i]]);
-    XLSX.utils.book_append_sheet(wb, ws, `Sheet${i}`);
+    aoaToSheet(wb, [["Col"], [i]], { sheetName: `Sheet${i}` });
   }
-  return XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
+  return writeBuffer(wb);
 }
 
 /**
@@ -48,10 +46,10 @@ function buildMultiSheetXlsx(sheetCount: number): Buffer {
  * central directory uncompressed size claims.
  * This creates a valid ZIP structure but lies about uncompressed sizes.
  */
-function buildSyntheticZipBomb(): Buffer {
+async function buildSyntheticZipBomb(): Promise<Buffer> {
   // Build a real minimal ZIP, then patch the central directory
   // to claim an absurd uncompressed size.
-  const real = buildMinimalXlsx();
+  const real = await buildMinimalXlsx();
 
   // Find EOCD
   let eocdOffset = -1;
@@ -92,9 +90,9 @@ function buildSyntheticZipBomb(): Buffer {
 /**
  * Build a buffer with many fake ZIP entries (entry count bomb).
  */
-function buildEntryCountBomb(entryCount: number): Buffer {
+async function buildEntryCountBomb(entryCount: number): Promise<Buffer> {
   // Start from a real XLSX and patch the EOCD to claim more entries
-  const real = buildMinimalXlsx();
+  const real = await buildMinimalXlsx();
 
   // Find EOCD
   let eocdOffset = -1;
@@ -121,14 +119,14 @@ function buildEntryCountBomb(entryCount: number): Buffer {
 
 describe("XLSX ZIP Bomb Protection", () => {
   describe("prevalidateZipBuffer — Layer 2", () => {
-    it("accepts a valid minimal XLSX", () => {
-      const buf = buildMinimalXlsx();
+    it("accepts a valid minimal XLSX", async () => {
+      const buf = await buildMinimalXlsx();
       const result = prevalidateZipBuffer(buf);
       expect(result).toEqual({ valid: true });
     });
 
-    it("accepts a valid multi-sheet XLSX (within limits)", () => {
-      const buf = buildMultiSheetXlsx(20);
+    it("accepts a valid multi-sheet XLSX (within limits)", async () => {
+      const buf = await buildMultiSheetXlsx(20);
       const result = prevalidateZipBuffer(buf);
       expect(result).toEqual({ valid: true });
     });
@@ -151,8 +149,8 @@ describe("XLSX ZIP Bomb Protection", () => {
       }
     });
 
-    it("rejects ZIP with excessive entry count (entry count bomb)", () => {
-      const bomb = buildEntryCountBomb(500);
+    it("rejects ZIP with excessive entry count (entry count bomb)", async () => {
+      const bomb = await buildEntryCountBomb(500);
       const result = prevalidateZipBuffer(bomb);
       expect(result.valid).toBe(false);
       if (!result.valid) {
@@ -161,8 +159,8 @@ describe("XLSX ZIP Bomb Protection", () => {
       }
     });
 
-    it("rejects ZIP with extreme compression ratio (decompression bomb)", () => {
-      const bomb = buildSyntheticZipBomb();
+    it("rejects ZIP with extreme compression ratio (decompression bomb)", async () => {
+      const bomb = await buildSyntheticZipBomb();
       const result = prevalidateZipBuffer(bomb);
       expect(result.valid).toBe(false);
       if (!result.valid) {
@@ -173,8 +171,8 @@ describe("XLSX ZIP Bomb Protection", () => {
       }
     });
 
-    it("rejects ZIP where central directory extends beyond buffer", () => {
-      const buf = buildMinimalXlsx();
+    it("rejects ZIP where central directory extends beyond buffer", async () => {
+      const buf = await buildMinimalXlsx();
 
       // Find EOCD and patch cdOffset to an impossible value
       let eocdOffset = -1;
@@ -202,32 +200,25 @@ describe("XLSX ZIP Bomb Protection", () => {
     });
   });
 
-  describe("extractTextFromXlsx — integration (via extractOfficeAiFileContent)", () => {
-    // These tests require mocking prisma for the full extraction pipeline.
-    // We test the XLSX-specific behavior through the public API.
-
-    it("normal XLSX extraction produces valid output with cell count", () => {
-      const buf = buildMinimalXlsx();
+  describe("extractTextFromXlsx — integration (via readBuffer)", () => {
+    it("normal XLSX extraction produces valid output with cell count", async () => {
+      const buf = await buildMinimalXlsx();
       // We can't call extractTextFromXlsx directly (private),
       // but we can verify prevalidateZipBuffer passes for normal files
       const zipResult = prevalidateZipBuffer(buf);
       expect(zipResult).toEqual({ valid: true });
 
-      // And we can parse it with XLSX.read to confirm it works
-      const workbook = XLSX.read(buf, {
-        type: "buffer",
-        cellFormula: false,
-        cellHTML: false,
-      });
-      expect(workbook.SheetNames.length).toBeGreaterThan(0);
+      // And we can parse it with readBuffer to confirm it works
+      const workbook = await readBuffer(buf);
+      expect(workbook.worksheets.length).toBeGreaterThan(0);
 
       // Cell count check (Layer 3)
       let totalCells = 0;
-      for (const name of workbook.SheetNames) {
-        const sheet = workbook.Sheets[name];
-        const ref = sheet["!ref"] || "A1";
-        const range = XLSX.utils.decode_range(ref);
-        totalCells += (range.e.r - range.s.r + 1) * (range.e.c - range.s.c + 1);
+      for (const ws of workbook.worksheets) {
+        const dims = ws.dimensions;
+        if (dims && dims.bottom > 0 && dims.right > 0) {
+          totalCells += (dims.bottom - dims.top + 1) * (dims.right - dims.left + 1);
+        }
       }
       expect(totalCells).toBeLessThanOrEqual(100_000);
     });

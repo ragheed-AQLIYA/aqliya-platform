@@ -7,6 +7,19 @@
 
 ---
 
+> **SUPERSEDED IN PART — 2026-08-21.**
+> Continuous monitoring, artifact versioning, semantic diffing, effective-date
+> resolution, impact analysis, governance and rollback are now implemented by the
+> **LCGPA Regulatory Intelligence Engine** at
+> `src/lib/local-content/lcgpa/regulatory/`.
+> See [`docs/regulatory/LCGPA_REGULATORY_INTELLIGENCE.md`](../regulatory/LCGPA_REGULATORY_INTELLIGENCE.md)
+> and the [operational runbook](../regulatory/LCGPA_RUNBOOK.md).
+> This document remains the statement of acquisition **policy**; the engine is
+> its enforcement. The "official source endpoint" step below is still PENDING —
+> see the evidence boundary in the architecture document.
+
+---
+
 ## 1. Principle
 
 The LCGPA Mandatory Product List is **regulatory data**. Its source of truth is the **Local Content and Government Procurement Authority (LCGPA)** — not commercial platforms, not third-party aggregators, not scraped websites.
@@ -220,7 +233,7 @@ model LcMandatoryListChange {
 
 ## 5. What We Know Today
 
-### Current state (2026-08-21)
+### Current state (2026-08-21) — ACQUISITION COMPLETE
 
 | Item | Status |
 |------|--------|
@@ -231,13 +244,61 @@ model LcMandatoryListChange {
 | Validation gates | IMPLEMENTED |
 | Gate check | IMPLEMENTED |
 | Prisma schema enhancement | NEEDS MIGRATION |
-| Actual LCGPA data | NOT YET ACQUIRED |
-| Official source endpoint | NEEDS IDENTIFICATION |
+| Official LCGPA data | **ACQUIRED** |
+| Official source endpoint | **IDENTIFIED** |
+
+### Acquired Official Datasets
+
+| # | File | SHA-256 | Size | Products | Date |
+|---|------|---------|------|----------|------|
+| 1 | `gov-entities-mandatory-list-july-2026.xlsx` | `93F3E1F4...D632` | 461,503 B | 1,984 | 2026-08-21 |
+| 2 | `state-owned-companies-mandatory-list-july-2026.xlsx` | `F613722D...DFC` | 419,723 B | 1,985 | 2026-08-21 |
+| 3 | `minimum-lc-requirements-july-2026.xlsx` | `ACEC6451...673F` | 117,819 B | 1,198 | 2026-08-21 |
+
+**Source:** `https://lcgpa.gov.sa/p/ar_SA/MandatoryListNationalProducts/Documents`
+**Download method:** Playwright browser (session-authenticated)
+**Archive location:** `uploads/lcgpa-sources/2026-Q3/`
+
+### Sector Breakdown (File #1 — Gov Entities)
+
+| Sector (Arabic) | Product Count |
+|-----------------|--------------|
+| المستلزمات الطبية | 585 |
+| البناء و التشييد | 386 |
+| الأدوية و المستحضرات الطبية | 366 |
+| الأثاث | 261 |
+| الأغذية و المنتجات الزراعية | 95 |
+| المواد الكيميائية و الاسمدة | 77 |
+| معدات ولوازم شخصية ومنزلية | 55 |
+| النقل و الخدمات اللوجستية | 45 |
+| مستهلكات النظافة | 19 |
+| تقنية المعلومات | 14 |
+| الأمن السيبراني | 12 |
+| المنتجات الاستهلاكية الورقية | 12 |
+| القرطاسية والأدوات المكتبية | 20 |
+| المنتجات الاستهلاكية البلاستيكية | 24 |
+| الأعمال الفنية | 8 |
+| المعدات و اللوازم الرياضية | 5 |
+| **Total** | **1,984** |
+
+### Minimum LC Requirements (File #3)
+
+| Year | Products with Min LC |
+|------|---------------------|
+| 2026 | 2 |
+| 2027 | 233 |
+| 2028 | 1,198 (all) |
+| 2029 | 1,198 (all) |
+| 2030 | 1,198 (all) |
+| 2031 | 977 |
 
 ### Known data points
 
 | Source | Count | Date | Notes |
 |--------|-------|------|-------|
+| LCGPA Gov Entities List | 1,984 | July 2026 | Official, SHA-256 verified |
+| LCGPA State-Owned List | 1,985 | July 2026 | Official, SHA-256 verified |
+| LCGPA Min LC Requirements | 1,198 | July 2026 | Official, SHA-256 verified |
 | Previous snapshot | 1,444+ | Unknown | May be outdated |
 | Wattan.co (cross-check only) | 1,749 | April 2026 | Third-party, NOT source of truth |
 | SPA announcement | 233 new | Aug 2026 | New minimum LC requirements |
@@ -269,21 +330,35 @@ The following are BLOCKED in the pipeline:
 
 | Step | Owner | Status |
 |------|-------|--------|
-| Identify official LCGPA data endpoint/URL | Data team | PENDING |
-| Download current official publication | Data team | PENDING |
-| Compute source hash | Automated | READY |
-| Parse official file | product-registry.ts | READY |
+| Identify official LCGPA data endpoint/URL | Data team | **DONE** |
+| Download current official publication | Data team | **DONE** |
+| Compute source hash | Automated | **DONE** |
+| Parse official file | product-registry.ts | **DONE** |
 | Compute version diff | product-registry.ts | READY |
 | Gate check | product-registry.ts | READY |
+| Map xlsx sectors to engine LCGPA_SECTORS | Data team | PENDING |
 | Prisma migration (schema enhancement) | Database agent | PENDING |
-| Write to database | Pipeline | PENDING |
+| Write to database with provenance | Pipeline | PENDING |
 | Audit log entry | Audit system | PENDING |
+| Build UI for mandatory list display | Frontend | PENDING |
 
 ---
 
 ## 8. References
 
-- LCGPA Official Documents Library
+- LCGPA Official Documents Library: `https://lcgpa.gov.sa/p/ar_SA/MandatoryListNationalProducts/Documents`
+- File #1: Gov Entities Mandatory List (يوليو 2026) — SHA-256: `93F3E1F4533DA8D12644C0C9B964C4712972B1EADE347D805458ACA0D0D1D632`
+- File #2: State-Owned Companies Mandatory List (يوليو 2026) — SHA-256: `F613722D4017C8B0B2B471B99FBA1C61D53BF5F4B29266A4D901671419E83DFC`
+- File #3: Minimum LC Requirements (يوليو 2026) — SHA-256: `ACEC6451903348B92484C4E0280D26A076E2321219D565E1253A0AA9D111673F`
 - LCGPA Product Addition Service (MyGov)
 - Regulations on Preference for Local Content (MOF)
 - SPA announcement: 233 products with minimum LC requirements (Aug 2026)
+
+### Provenance Evidence
+
+- **Download date:** 2026-08-21
+- **Download method:** Playwright browser (session-authenticated, not API)
+- **Archive location:** `uploads/lcgpa-sources/2026-Q3/`
+- **Hash manifest:** See SHA-256 hashes above
+- **Sector mapping:** 16 xlsx sectors → 38 engine sectors (S01-S23 + P01-P15) requires mapping
+- **Data integrity:** All 3 files parsed successfully, product counts verified

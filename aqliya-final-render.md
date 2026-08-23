@@ -1,0 +1,305 @@
+- generic [active] [ref=f10e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=f10e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f10e3]:
+    - banner [ref=f10e4]:
+      - generic [ref=f10e6]:
+        - paragraph [ref=f10e7]: منصة ذكاء مؤسسي خاص ومحكوم
+        - generic [ref=f10e8]: منصة تشغيل مؤسسية — السحابة المُدارة
+      - generic [ref=f10e10]:
+        - link "AQLIYA" [ref=f10e11] [cursor=pointer]:
+          - /url: /
+          - img "AQLIYA" [ref=f10e12]
+        - navigation "التنقل الرئيسي" [ref=f10e13]:
+          - link "المنصة" [ref=f10e14] [cursor=pointer]:
+            - /url: /platform
+          - link "أنظمة التشغيل" [ref=f10e15] [cursor=pointer]:
+            - /url: /products
+          - link "الأسعار" [ref=f10e16] [cursor=pointer]:
+            - /url: /pricing
+          - link "الحوكمة" [ref=f10e17] [cursor=pointer]:
+            - /url: /governance
+          - link "لماذا AQLIYA" [ref=f10e18] [cursor=pointer]:
+            - /url: /proof
+          - link "عن عقلية" [ref=f10e19] [cursor=pointer]:
+            - /url: /about
+          - button "التبديل إلى العربية" [pressed] [ref=f10e21]: ع
+          - button "التبديل إلى الإنجليزية" [ref=f10e22]: EN
+          - link "احجز جلسة تشخيص" [ref=f10e23] [cursor=pointer]:
+            - /url: /contact?interest=diagnostic
+    - main [ref=f10e24]:
+      - generic [ref=f10e25]:
+        - generic [ref=f10e29]:
+          - generic [ref=f10e30]: منصة ذكاء مؤسسي خاص ومحكوم
+          - heading "ذكاء مؤسسي محكوم قابل للدفاع أمام كل مراجعة" [level=1] [ref=f10e32]
+          - paragraph [ref=f10e33]: الذكاء يساعد. الإنسان يقرّر. الدليل يحكم. طبقة تشغيل مؤسسية تُشغّل فرقك داخل إجراءات حقيقية بأدلة ومراجعة واعتماد وصلاحيات وتتبّع قرارات.
+          - generic [ref=f10e34]:
+            - link "احجز جلسة تشخيص" [ref=f10e35] [cursor=pointer]:
+              - /url: /contact
+            - link "اطلب walkthrough" [ref=f10e36] [cursor=pointer]:
+              - /url: /platform
+          - generic [ref=f10e37]:
+            - link "قيادة" [ref=f10e38] [cursor=pointer]:
+              - /url: /start#executive
+            - link "مالية" [ref=f10e39] [cursor=pointer]:
+              - /url: /start#cfo
+            - link "مقاولات" [ref=f10e40] [cursor=pointer]:
+              - /url: /start#contracting
+            - link "تدقيق" [ref=f10e41] [cursor=pointer]:
+              - /url: /start#audit
+            - link "مشتريات" [ref=f10e42] [cursor=pointer]:
+              - /url: /start#procurement
+            - link "حكومة" [ref=f10e43] [cursor=pointer]:
+              - /url: /start#government
+        - generic [ref=f10e45]:
+          - generic [ref=f10e46]:
+            - heading "المشكلة ليست في الأدوات بل في ما يضيع بينها" [level=2] [ref=f10e47]
+            - paragraph [ref=f10e48]: قرارات تُتخذ في اجتماع ولا تُوثَّق، أرقام بلا مصدر، ومعرفة تخرج مع موظف.
+          - generic [ref=f10e49]:
+            - list [ref=f10e50]:
+              - listitem [ref=f10e51]:
+                - text: Excel
+                - generic [ref=f10e52]: يحسب الأرقام، لكن لا يثبت من راجع ولا يربط الرقم بمصدره.
+              - listitem [ref=f10e53]:
+                - text: البريد وواتساب
+                - generic [ref=f10e54]: ينقل القرار، لكن لا يبني ملفاً يصمد أمام المراجع أو اللجنة.
+              - listitem [ref=f10e55]:
+                - text: ذكاء اصطناعي عام
+                - generic [ref=f10e56]: يعطي إجابة سريعة، لكن بدون مسار مراجعة واعتماد واضح.
+            - generic [ref=f10e57]:
+              - paragraph [ref=f10e58]: ما نقدمه
+              - generic [ref=f10e59]:
+                - generic [ref=f10e60]: رفع البيانات
+                - generic [ref=f10e61]:
+                  - generic [ref=f10e62]: ←
+                  - text: المراجعة
+                - generic [ref=f10e63]:
+                  - generic [ref=f10e64]: ←
+                  - text: الاعتماد
+                - generic [ref=f10e65]:
+                  - generic [ref=f10e66]: ←
+                  - text: الملف النهائي
+              - link "أمثلة من واقع العمل ←" [ref=f10e67] [cursor=pointer]:
+                - /url: /use-cases
+        - generic [ref=f10e69]:
+          - generic [ref=f10e70]:
+            - generic [ref=f10e71]: لماذا منصة لا أداة؟
+            - heading "الأداة تحل مشكلة المنصة تُنظّم المؤسسة" [level=2] [ref=f10e73]
+          - generic [ref=f10e74]:
+            - generic [ref=f10e75]:
+              - paragraph [ref=f10e76]: أداة ذكاء منفصلة
+              - list [ref=f10e77]:
+                - listitem [ref=f10e78]: مخرجات بدون مسار مراجعة أو اعتماد
+                - listitem [ref=f10e80]: كل نطاق جديد يحتاج أداة جديدة من الصفر
+                - listitem [ref=f10e82]: صلاحيات وأدلة تُدار خارج النظام أو لا تُدار
+            - generic [ref=f10e84]:
+              - paragraph [ref=f10e85]: منصة عقلية
+              - list [ref=f10e86]:
+                - listitem [ref=f10e87]: كل مخرج يمر بحوكمة وأدلة قبل الاعتماد
+                - listitem [ref=f10e89]: كل نظام يرث الحوكمة والذكاء من منصة واحدة
+                - listitem [ref=f10e91]: صلاحيات وأدلة جزء من بنية المنصة لا إدارة منفصلة
+        - generic [ref=f10e94]:
+          - generic [ref=f10e95]:
+            - heading "بنية المنصة أربع طبقات متراصة" [level=2] [ref=f10e96]
+            - paragraph [ref=f10e97]: كل طبقة تخدم التي تعلوها. كل نظام تشغيل يستفيد من الثلاث طبقات تحته دون تكرار.
+          - generic [ref=f10e98]:
+            - generic [ref=f10e99]:
+              - text: "01"
+              - heading "الحوكمة" [level=3] [ref=f10e100]
+              - paragraph [ref=f10e101]: الصلاحيات، سجل التدقيق، بوابات الاعتماد كل حدث مُوثَّق
+              - generic [ref=f10e102]: ↑
+            - generic [ref=f10e103]:
+              - text: "02"
+              - heading "قاعدة المعرفة" [level=3] [ref=f10e104]
+              - paragraph [ref=f10e105]: كل مخرج مرتبط بمصدره شبكة أدلة غير قابلة للكسر
+              - generic [ref=f10e106]: ↑
+            - generic [ref=f10e107]:
+              - text: "03"
+              - heading "مشغّلات الذكاء" [level=3] [ref=f10e108]
+              - paragraph [ref=f10e109]: AI يُساعد ويقترح لا يقرّر ولا يعتمد بدون الإنسان
+              - generic [ref=f10e110]: ↑
+            - generic [ref=f10e111]:
+              - text: "04"
+              - heading "أنظمة التشغيل" [level=3] [ref=f10e112]
+              - paragraph [ref=f10e113]: كل نظام يرث الحوكمة والذكاء لا إعادة بناء من الصفر
+          - link "تعمّق في بنية المنصة ←" [ref=f10e115] [cursor=pointer]:
+            - /url: /platform
+        - generic [ref=f10e116]:
+          - generic [ref=f10e117]:
+            - heading "أنظمة تشغيل منصة واحدة" [level=2] [ref=f10e118]
+            - paragraph [ref=f10e119]: تدقيق ومحتوى محلي نفس الحوكمة وسجل العمل في كل مسار.
+          - generic [ref=f10e120]:
+            - link [ref=f10e121] [cursor=pointer]:
+              - /url: /products/audit
+              - paragraph [ref=f10e122]: متاح للتطبيق
+              - heading "AuditOS" [level=3] [ref=f10e123]
+              - paragraph [ref=f10e124]: من رفع ميزان المراجعة إلى ملف جاهز للاعتماد
+            - link [ref=f10e125] [cursor=pointer]:
+              - /url: /products/local-content
+              - paragraph [ref=f10e126]: متاح باتفاق النطاق
+              - heading "LocalContentOS" [level=3] [ref=f10e127]
+              - paragraph [ref=f10e128]: موردون، إنفاق، محتوى محلي، وتقارير للجهات الرقابية
+            - link [ref=f10e129] [cursor=pointer]:
+              - /url: /products/decision
+              - paragraph [ref=f10e130]: متكامل في المنصة
+              - heading "DecisionOS" [level=3] [ref=f10e131]
+              - paragraph [ref=f10e132]: بدائل، معايير، مخاطر، وتوصية كل قرار موثّق.
+            - link [ref=f10e133] [cursor=pointer]:
+              - /url: /products/sales
+              - paragraph [ref=f10e134]: قريباً على خارطة المنصة
+              - heading "SalesOS" [level=3] [ref=f10e135]
+              - paragraph [ref=f10e136]: ذاكرة تجارية ومتابعة فرص
+          - link "تعرّف على الحلول" [ref=f10e138] [cursor=pointer]:
+            - /url: /products
+        - generic [ref=f10e140]:
+          - generic [ref=f10e141]:
+            - heading "جرّب قبل ما تلتزم" [level=2] [ref=f10e142]
+            - paragraph [ref=f10e143]: ديمو تفاعلي، ملخص للقيادة، وملفات جاهزة للمشتريات.
+          - generic [ref=f10e144]:
+            - link [ref=f10e145] [cursor=pointer]:
+              - /url: /demo
+              - heading "الديمو" [level=3] [ref=f10e146]
+              - paragraph [ref=f10e147]: شاهد مسار مراجعة كامل على بيانات تجريبية بدون تسجيل.
+            - link [ref=f10e148] [cursor=pointer]:
+              - /url: /proof#executive-brief
+              - heading "ملخص للقيادة" [level=3] [ref=f10e149]
+              - paragraph [ref=f10e150]: صفحة واحدة تشرح المنصة وطريقة التعاون.
+            - link [ref=f10e151] [cursor=pointer]:
+              - /url: /procurement-pack
+              - heading "ملف المشتريات" [level=3] [ref=f10e152]
+              - paragraph [ref=f10e153]: أمن، نطاق العمل، ونموذج عقد PDF للجنة.
+          - link "كل مواد الإثبات" [ref=f10e155] [cursor=pointer]:
+            - /url: /proof
+        - generic [ref=f10e157]:
+          - generic [ref=f10e158]:
+            - paragraph [ref=f10e159]: FAQ
+            - heading "الأسئلة الشائعة" [level=2] [ref=f10e160]
+          - list [ref=f10e161]:
+            - listitem [ref=f10e162]:
+              - button [ref=f10e163]:
+                - heading "ما هي عقلية؟" [level=3] [ref=f10e164]
+            - listitem [ref=f10e168]:
+              - button [ref=f10e169]:
+                - heading "هل عقلية متوافقة مع اللوائح السعودية؟" [level=3] [ref=f10e170]
+            - listitem [ref=f10e174]:
+              - button [ref=f10e175]:
+                - heading "ما هي المنتجات المتاحة؟" [level=3] [ref=f10e176]
+            - listitem [ref=f10e180]:
+              - button [ref=f10e181]:
+                - heading "كيف يعمل المشروع التجريبي؟" [level=3] [ref=f10e182]
+            - listitem [ref=f10e186]:
+              - button [ref=f10e187]:
+                - heading "هل بياناتي آمنة؟" [level=3] [ref=f10e188]
+        - generic [ref=f10e193]:
+          - heading "نفهم وضعكم أولاً" [level=2] [ref=f10e194]
+          - paragraph [ref=f10e195]: جلسة تشخيص مجانية نقيم موضع الحوكمة والذكاء في مؤسستك ونقترح الخطوة المناسبة. بدون عرض مبيعات.
+          - generic [ref=f10e196]:
+            - link "احجز جلسة تشخيص" [ref=f10e197] [cursor=pointer]:
+              - /url: /contact
+            - link "راجع الإثبات" [ref=f10e198] [cursor=pointer]:
+              - /url: /proof
+    - contentinfo [ref=f10e199]:
+      - generic [ref=f10e200]:
+        - generic [ref=f10e201]:
+          - generic [ref=f10e202]:
+            - link [ref=f10e203] [cursor=pointer]:
+              - /url: /
+              - img "AQLIYA" [ref=f10e204]
+            - paragraph [ref=f10e205]: منصة تشغيل مؤسسية للقرارات والعمليات والأدلة. تربط البيانات والإجراءات والاعتمادات في مسار واحد قابل للمراجعة.
+            - generic [ref=f10e206]:
+              - paragraph [ref=f10e207]: المبدأ المؤسسي
+              - paragraph [ref=f10e208]: الذكاء يساعد. الإنسان يقرر. الدليل يحكم.
+          - generic [ref=f10e209]:
+            - heading "المنصة" [level=4] [ref=f10e210]
+            - list [ref=f10e211]:
+              - listitem [ref=f10e212]:
+                - link "كيف تعمل عقلية" [ref=f10e213] [cursor=pointer]:
+                  - /url: /platform
+              - listitem [ref=f10e214]:
+                - link "أنظمة التشغيل" [ref=f10e215] [cursor=pointer]:
+                  - /url: /products
+              - listitem [ref=f10e216]:
+                - link "من أين تبدأ" [ref=f10e217] [cursor=pointer]:
+                  - /url: /start
+              - listitem [ref=f10e218]:
+                - link "حالات الاستخدام" [ref=f10e219] [cursor=pointer]:
+                  - /url: /use-cases
+              - listitem [ref=f10e220]:
+                - link "الحوكمة" [ref=f10e221] [cursor=pointer]:
+                  - /url: /governance
+              - listitem [ref=f10e222]:
+                - link "بيئات النشر" [ref=f10e223] [cursor=pointer]:
+                  - /url: /deployment
+              - listitem [ref=f10e224]:
+                - link "الأمن المؤسسي" [ref=f10e225] [cursor=pointer]:
+                  - /url: /security
+          - generic [ref=f10e226]:
+            - heading "القطاعات" [level=4] [ref=f10e227]
+            - list [ref=f10e228]:
+              - listitem [ref=f10e229]:
+                - link "مكاتب المراجعة" [ref=f10e230] [cursor=pointer]:
+                  - /url: /industries#audit-firms
+              - listitem [ref=f10e231]:
+                - link "الجهات الحكومية" [ref=f10e232] [cursor=pointer]:
+                  - /url: /industries#government
+              - listitem [ref=f10e233]:
+                - link "الشركات الكبرى" [ref=f10e234] [cursor=pointer]:
+                  - /url: /industries#enterprise
+              - listitem [ref=f10e235]:
+                - link "الخدمات المهنية" [ref=f10e236] [cursor=pointer]:
+                  - /url: /industries#professional-services
+          - generic [ref=f10e237]:
+            - heading "الإثبات" [level=4] [ref=f10e238]
+            - list [ref=f10e239]:
+              - listitem [ref=f10e240]:
+                - link "مركز الإثبات" [ref=f10e241] [cursor=pointer]:
+                  - /url: /proof
+              - listitem [ref=f10e242]:
+                - link "الديمو التفاعلي" [ref=f10e243] [cursor=pointer]:
+                  - /url: /demo
+              - listitem [ref=f10e244]:
+                - link "الملخص التنفيذي" [ref=f10e245] [cursor=pointer]:
+                  - /url: /proof#executive-brief
+              - listitem [ref=f10e246]:
+                - link "إطار التقييم التشغيلي" [ref=f10e247] [cursor=pointer]:
+                  - /url: /proof#evaluation-framework
+              - listitem [ref=f10e248]:
+                - link "مكتبة الأدلة" [ref=f10e249] [cursor=pointer]:
+                  - /url: /proof#evidence-samples
+          - generic [ref=f10e250]:
+            - heading "الشركة" [level=4] [ref=f10e251]
+            - list [ref=f10e252]:
+              - listitem [ref=f10e253]:
+                - link "عن عقلية" [ref=f10e254] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=f10e255]:
+                - link "نماذج التعاون" [ref=f10e256] [cursor=pointer]:
+                  - /url: /start#engagement
+              - listitem [ref=f10e257]:
+                - link "من أين تبدأ" [ref=f10e258] [cursor=pointer]:
+                  - /url: /start
+              - listitem [ref=f10e259]:
+                - link "رؤى ومقالات" [ref=f10e260] [cursor=pointer]:
+                  - /url: /insights
+              - listitem [ref=f10e261]:
+                - link "تواصل" [ref=f10e262] [cursor=pointer]:
+                  - /url: /contact
+        - generic [ref=f10e263]:
+          - paragraph [ref=f10e264]: أنظمة التشغيل المتخصصة
+          - generic [ref=f10e265]:
+            - link "AuditOS" [ref=f10e266] [cursor=pointer]:
+              - /url: /products/audit
+            - link "DecisionOS" [ref=f10e267] [cursor=pointer]:
+              - /url: /products/decision
+            - link "LocalContentOS" [ref=f10e268] [cursor=pointer]:
+              - /url: /products/local-content
+        - generic [ref=f10e270]:
+          - paragraph [ref=f10e271]: © 2026 AQLIYA. جميع الحقوق محفوظة.
+          - generic [ref=f10e272]:
+            - link "سياسة الخصوصية" [ref=f10e273] [cursor=pointer]:
+              - /url: /privacy
+            - link "شروط الخدمة" [ref=f10e274] [cursor=pointer]:
+              - /url: /terms
+          - paragraph [ref=f10e275]: Private Governed Institutional Intelligence Platform
+  - button "Open Next.js Dev Tools" [ref=f10e281] [cursor=pointer]
+  - alert [ref=f10e285]

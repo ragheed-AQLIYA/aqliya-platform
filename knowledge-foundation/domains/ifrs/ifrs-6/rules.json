@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-6-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-6",
+    "standardCode": "IFRS 6",
+    "versionLabel": "IFRS 6:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-6-r001",
+      "paragraphReference": "IFRS 6.12",
+      "ruleText": "An entity shall measure exploration and evaluation assets at cost, less any accumulated depreciation and any accumulated impairment losses, after initial recognition.",
+      "topic": "exploration-evaluation-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-6",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-6-r002",
+      "paragraphReference": "IFRS 6.13",
+      "ruleText": "An entity shall classify exploration and evaluation assets as either tangible or intangible according to the nature of the assets acquired and apply the classification consistently.",
+      "topic": "exploration-evaluation-classification",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-6",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-6-r003",
+      "paragraphReference": "IFRS 6.20",
+      "ruleText": "An entity shall test exploration and evaluation assets for impairment when facts and circumstances suggest that the carrying amount may exceed its recoverable amount.",
+      "topic": "exploration-evaluation-impairment",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-6",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-6-r004",
+      "paragraphReference": "IFRS 6.23",
+      "ruleText": "An entity shall disclose information that identifies and explains the amounts recognised in its financial statements arising from the exploration for and evaluation of mineral resources.",
+      "topic": "exploration-evaluation-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-6",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

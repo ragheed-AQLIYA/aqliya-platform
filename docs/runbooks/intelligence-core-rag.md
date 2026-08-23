@@ -169,6 +169,30 @@ OPENAI_API_KEY=sk-...          # Required for openai
 # No pgvector: uses JSON fallback with JS cosine similarity
 ```
 
+## Metrics Persistence — استمرارية المقاييس (`src/lib/core/knowledge/rag/rag-persistence.ts`)
+
+By default, RAG search metrics (search/error counts, cache hits/misses, citation counts, latency samples) are in-memory only and reset on restart.
+افتراضياً، مقاييس بحث RAG (عمليات البحث والأخطاء، إصابات الكاش، الاستشهادات، عينات زمن الاستجابة) محفوظة في الذاكرة فقط وتُصفَّر عند إعادة التشغيل.
+
+```env
+RAG_METRICS_PERSISTENCE=memory   # memory (default) | redis
+REDIS_URL=redis://...            # required when RAG_METRICS_PERSISTENCE=redis
+```
+
+| Mode | Behavior | السلوك |
+|------|----------|--------|
+| `memory` | Default. Metrics live in-process only and reset on restart. Zero Redis usage. | الافتراضي — في الذاكرة فقط، تُصفَّر عند إعادة التشغيل |
+| `redis` | Write-behind persistence to Redis (keys `aqliya:rag:metrics*`); a once-per-boot restore merges the persisted snapshot back, so metrics survive restarts. | كتابة خلفية إلى Redis (مفاتيح `aqliya:rag:metrics*`) مع استعادة عند الإقلاع — المقاييس تنجو من إعادة التشغيل |
+
+Notes — ملاحظات:
+
+- Requires `REDIS_URL`. A missing `REDIS_URL`, a failed client load, or repeated write failures degrade silently to pure in-memory behavior — the synchronous metrics API never awaits Redis in the hot path.
+  يتطلب `REDIS_URL`؛ عند غيابه أو فشل تحميل العميل أو تكرار فشل الكتابة يتحول بصمت إلى الذاكرة فقط، ولا تنتظر واجهة المقاييس Redis في المسار الحرج.
+- Graceful shutdown (SIGTERM/SIGINT) triggers a bounded final flush — at most ~3 seconds of deltas are lost.
+  الإيقاف الرشيق (SIGTERM/SIGINT) يُطلق تدفقاً نهائياً محدوداً — الخسارة القصوى نحو 3 ثوانٍ من التغييرات.
+- Also documented in `.env.example` under "RAG Metrics Persistence (optional)".
+  موثَّق أيضاً في `.env.example`.
+
 ## Prisma Schema Models — نماذج مخطط بريزما
 
 | Model | Purpose | الغرض |
@@ -188,6 +212,13 @@ npx jest src/lib/ai/__tests__/ingestion-pipeline.test.ts
 npx jest src/lib/ai/__tests__/similarity-search.test.ts
 npx jest src/lib/ai/__tests__/institutional-memory.test.ts
 ```
+
+## Corpus Verification Scripts — سكربتات التحقق من المجموعة
+
+| Script | Purpose | الغرض |
+|--------|---------|-------|
+| `node scripts/ifrs-rag-verify.mjs` | Read-only corpus verification: chunk and token counts, metadata completeness (`topic`, `paragraphRef`, `standardCode`), topic-pattern integrity, and 8 known-answer semantic probes. Exits with code 1 if any probe fails. | تحقق للقراءة فقط من مجموعة IFRS: إحصاءات الأجزاء والرموز، اكتمال البيانات الوصفية، سلامة أنماط المواضيع، و8 فحوصات دلالية — يخرج برمز 1 عند فشل أي فحص |
+| `node scripts/ifrs-rag-topic-ingest.mjs --dry-run` | Reports the chunking/ingest plan without touching the database or the embedding API — use it to plan corpus re-chunking. | يعرض خطة التجزئة والاستيعاب دون تعديل قاعدة البيانات أو استدعاء مزود التضمين — للتخطيط لإعادة تجزئة المجموعة |
 
 ## Bilingual Notes — ملاحظات ثنائية اللغة
 

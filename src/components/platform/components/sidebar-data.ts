@@ -216,6 +216,18 @@ const auditNav: NavItem[] = [
     icon: LayoutDashboard,
   },
   {
+    name: "Audit Knowledge",
+    nameAr: "المعرفة التدقيقية",
+    href: "/audit/knowledge",
+    icon: Brain,
+  },
+  {
+    name: "RAG Monitoring",
+    nameAr: "مراقبة RAG",
+    href: "/audit/knowledge/rag",
+    icon: Bot,
+  },
+  {
     name: "Platform Organization",
     nameAr: "منظمة المنصة",
     href: "/settings/platform-organization",

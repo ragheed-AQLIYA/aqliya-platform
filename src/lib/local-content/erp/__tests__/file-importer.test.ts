@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
+import { createWorkbook, writeBuffer } from "@/lib/xlsx";
 import { parseCsvFile, parseExcelFile, detectFileFormat } from "../file-importer";
 
 describe("ERP file importer — CSV", () => {
@@ -131,5 +132,49 @@ describe("parseExcelFile", () => {
     const result = await parseExcelFile(Buffer.from("", "utf-8"));
     expect(result.fileHash).toBeTruthy();
     expect(result.fileHash.length).toBe(64);
+  });
+
+  it("rejects XLSX with excessive uncompressed size claim (ZIP bomb)", async () => {
+    // Build a valid XLSX, then patch CD to claim 1GB uncompressed
+    const wb = createWorkbook();
+    const ws = wb.addWorksheet("Sheet1");
+    ws.addRow(["A"]);
+    ws.addRow([1]);
+    const buf = await writeBuffer(wb);
+
+    // Find EOCD and patch uncompressed size to 1GB
+    let eocdOffset = -1;
+    for (let i = buf.length - 22; i >= 0; i--) {
+      if (buf[i] === 0x50 && buf[i + 1] === 0x4b && buf[i + 2] === 5 && buf[i + 3] === 6) {
+        eocdOffset = i;
+        break;
+      }
+    }
+    if (eocdOffset < 0) throw new Error("Test helper: cannot find EOCD");
+    const cdOffset = buf.readUInt32LE(eocdOffset + 16);
+    const entryCount = buf.readUInt16LE(eocdOffset + 10);
+    let pos = cdOffset;
+    for (let i = 0; i < entryCount; i++) {
+      const sig = buf.readUInt32LE(pos);
+      if (sig !== 0x02014b50) break;
+      const nameLen = buf.readUInt16LE(pos + 28);
+      const extraLen = buf.readUInt16LE(pos + 30);
+      const commentLen = buf.readUInt16LE(pos + 32);
+      buf.writeUInt32LE(1024 * 1024 * 1024, pos + 24); // 1GB claim
+      pos += 46 + nameLen + extraLen + commentLen;
+    }
+
+    const result = await parseExcelFile(buf);
+    expect(result.totalRows).toBe(0);
+    expect(result.errorRows.length).toBeGreaterThan(0);
+    expect(result.errorRows[0]!.errors[0]).toContain("XLSX rejected");
+  });
+
+  it("rejects oversized buffer (> 10MB)", async () => {
+    const oversized = Buffer.alloc(10 * 1024 * 1024 + 1, 0x50);
+    const result = await parseExcelFile(oversized);
+    expect(result.totalRows).toBe(0);
+    expect(result.errorRows.length).toBeGreaterThan(0);
+    expect(result.errorRows[0]!.errors[0]).toContain("exceeds max");
   });
 });

@@ -64,9 +64,11 @@
     }
   },
   "blockedTechnologies": [
-    "RAG",
     "Ollama",
     "Fine-tuning",
     "Vector DB"
-  ]
+  ],
+  "ragUnblockedAt": "2026-08-18",
+  "ragUnblockedBy": "pilot-governance-decision",
+  "ragUnblockReason": "RAG bridge pilot — IAS 1 selected as broad foundational standard"
 }

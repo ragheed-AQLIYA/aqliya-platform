@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-26-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-26",
+    "standardCode": "IAS 26",
+    "versionLabel": "IAS 26:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-26-r001",
+      "paragraphReference": "IAS 26.8",
+      "ruleText": "A retirement benefit plan shall measure its plan assets at fair value, and where fair value is not ascertainable, at estimated value using actuarial valuation methods.",
+      "topic": "retirement-plan-asset-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-26",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-26-r002",
+      "paragraphReference": "IAS 26.18",
+      "ruleText": "A defined benefit plan shall measure its present obligation as the present value of the expected future payments required to settle the obligation, using actuarial valuation methods.",
+      "topic": "retirement-plan-obligation-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-26",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-26-r003",
+      "paragraphReference": "IAS 26.19",
+      "ruleText": "A defined contribution plan shall recognise contributions payable by the employer as a liability, and any contributions prepaid by the employer as an asset.",
+      "topic": "retirement-plan-contribution-recognition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-26",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-26-r004",
+      "paragraphReference": "IAS 26.30",
+      "ruleText": "A retirement benefit plan shall disclose a statement of net assets available for benefits, a statement of changes in net assets available for benefits, and a summary of significant accounting policies.",
+      "topic": "retirement-plan-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-26",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

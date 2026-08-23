@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-41-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-41",
+    "standardCode": "IAS 41",
+    "versionLabel": "IAS 41:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-41-r001",
+      "paragraphReference": "IAS 41.12",
+      "ruleText": "An entity shall recognise a biological asset when, and only when, the entity controls the asset as a result of past events, it is probable that future economic benefits will flow to the entity, and the fair value or cost of the asset can be measured reliably.",
+      "topic": "biological-asset-recognition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-41",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-41-r002",
+      "paragraphReference": "IAS 41.13",
+      "ruleText": "An entity shall measure a biological asset at its fair value less costs to sell, except where fair value cannot be measured reliably on initial recognition.",
+      "topic": "biological-asset-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-41",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-41-r003",
+      "paragraphReference": "IAS 41.13",
+      "ruleText": "An entity shall measure agricultural produce at the point of harvest at its fair value less costs to sell, and this measurement becomes the cost for subsequent accounting under IAS 2.",
+      "topic": "agricultural-produce-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-41",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ias-41-r004",
+      "paragraphReference": "IAS 41.40",
+      "ruleText": "An entity shall disclose the aggregate gain or loss arising during the period from initial recognition of biological assets and agricultural produce and the change in fair value less costs to sell of biological assets.",
+      "topic": "agricultural-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-41",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+- generic [active] [ref=f5e1]:
+  - link "تخطي إلى المحتوى الرئيسي" [ref=f5e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=f5e3]: جاري التحميل...

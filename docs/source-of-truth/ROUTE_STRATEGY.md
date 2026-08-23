@@ -137,6 +137,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/audit/acceptance`                                 | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.1 Client Acceptance     |
 | `/audit/independence`                               | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.2 Independence           |
 | `/audit/knowledge`                                  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | L6.8 Knowledge Engine       |
+| `/audit/knowledge/rag`                              | AuditOS        | Governed workspace | Protected        | Usable v0.1 (L4)     | RAG monitoring dashboard: IFRS search metrics, cache, rate limits |
 
 ### AuditOS — Guided Demo
 
@@ -148,14 +149,13 @@ These pages serve as detail references for specialized operating systems. They a
 | `/auditos/statements`    | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/evidence`      | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
 | `/auditos/traceability`  | AuditOS demo   | Guided demo | Public           | Demo (L1)             |                              |
-152:
-153: ### Sampling — Governed Workspace
-154:
-155: | Route             | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                      |
-156: | ----------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------- |
-157: | `/sampling`       | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling list/dashboard    |
-158: | `/sampling/[id]`  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling detail            |
-159:
+
+### Sampling — Governed Workspace
+
+| Route             | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                      |
+| ----------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------- |
+| `/sampling`       | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling list/dashboard    |
+| `/sampling/[id]`  | AuditOS        | Governed workspace | Protected        | Pilot-ready (L5)      | Sampling detail            |
 
 ### DecisionOS — Production-hardened Governed Workspace (L6)
 

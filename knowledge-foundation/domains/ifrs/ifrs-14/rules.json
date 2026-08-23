@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-14-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-14",
+    "standardCode": "IFRS 14",
+    "versionLabel": "IFRS 14:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-14-r001",
+      "paragraphReference": "IFRS 14.8",
+      "ruleText": "An entity that elects to apply IFRS 14 shall classify regulatory deferral account balances as separate line items in the statement of financial position, distinct from other assets and liabilities.",
+      "topic": "regulatory-deferral-classification",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-14",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-14-r002",
+      "paragraphReference": "IFRS 14.9",
+      "ruleText": "An entity shall present regulatory deferral account movements in a separate column or separate line items in the statement of comprehensive income.",
+      "topic": "regulatory-deferral-presentation",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-14",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-14-r003",
+      "paragraphReference": "IFRS 14.10",
+      "ruleText": "An entity shall present regulatory deferral account movements in the statement of cash flows in a manner consistent with the classification used in the statement of financial position.",
+      "topic": "regulatory-deferral-cash-flow",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-14",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-14-r004",
+      "paragraphReference": "IFRS 14.22",
+      "ruleText": "An entity shall disclose the nature of its rate-regulated activities and the amounts of regulatory deferral account balances and movements.",
+      "topic": "regulatory-deferral-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-14",
+      "confidenceScore": 85,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

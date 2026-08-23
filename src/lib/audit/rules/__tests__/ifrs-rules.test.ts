@@ -121,8 +121,8 @@ describe("isIfrsRulesEnabled", () => {
     else process.env.FF_AUDIT_IFRS_RULES = prev;
   });
 
-  it("defaults off", () => {
+  it("defaults on", () => {
     delete process.env.FF_AUDIT_IFRS_RULES;
-    expect(isIfrsRulesEnabled()).toBe(false);
+    expect(isIfrsRulesEnabled()).toBe(true);
   });
 });

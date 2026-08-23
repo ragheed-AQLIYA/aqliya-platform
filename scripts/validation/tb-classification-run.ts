@@ -8,6 +8,9 @@
 import { config } from "dotenv";
 import { resolve } from "path";
 import { writeFileSync, mkdirSync, existsSync } from "fs";
+import ExcelJS from "exceljs";
+
+function cellText(v: unknown): string { if (v == null) return ""; if (typeof v === "object" && (v as any).text) return String((v as any).text); return String(v); }
 
 config({ path: resolve(__dirname, "../../.env") });
 process.env.FF_AI_REAL_PROVIDERS = "true";
@@ -27,22 +30,21 @@ async function main() {
 
   // ── Step 1: Load TB ──
   console.log("--- Step 1: Load Real TB File ---");
-  const XLSXmod = await import("xlsx");
-  const XLSX = XLSXmod.default || XLSXmod;
-  const wb = XLSX.readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
-  const ws = wb.Sheets[wb.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
+  const ws = workbook.worksheets[0];
 
   const accounts = [];
-  for (let i = 1; i < rows.length; i++) {
-    const r = rows[i];
-    if (!r[0] || String(r[0]).trim() === "") continue;
+  ws.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) return; // skip header
+    const codeVal = cellText(row.getCell(1).value).trim();
+    if (!codeVal) return;
     accounts.push({
-      accountCode: String(r[0]).trim(),
-      accountName: String(r[1] || "").trim(),
-      balance: parseFloat(String(r[9] || "0")) || 0,
+      accountCode: codeVal,
+      accountName: cellText(row.getCell(2).value).trim(),
+      balance: parseFloat(cellText(row.getCell(10).value) || "0") || 0,
     });
-  }
+  });
 
   record("tb.file", true, "TB 31-12-2025 Final.xlsx");
   record("tb.accounts", true, accounts.length);

@@ -6,7 +6,7 @@
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as XLSX from "xlsx";
+import { readFile, sheetToJsonArrays } from "@/lib/xlsx";
 
 interface VerificationItem {
   id: string;
@@ -53,7 +53,7 @@ function parseSheet(
   return items;
 }
 
-function main() {
+async function main() {
   const input =
     process.argv[2] ??
     path.join(process.cwd(), "Local_Content_Verification_Audit_Matrix_v1.xlsx");
@@ -63,16 +63,13 @@ function main() {
     process.exit(1);
   }
 
-  const wb = XLSX.readFile(resolved);
+  const wb = await readFile(resolved);
   const allItems: VerificationItem[] = [];
 
-  for (const sheetName of wb.SheetNames) {
-    if (sheetName.startsWith("1.")) continue;
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]!, {
-      header: 1,
-      defval: "",
-    }) as unknown[][];
-    allItems.push(...parseSheet(sheetName, rows));
+  for (const ws of wb.worksheets) {
+    if (ws.name.startsWith("1.")) continue;
+    const rows = sheetToJsonArrays(ws, { includeEmpty: true }) as unknown[][];
+    allItems.push(...parseSheet(ws.name, rows));
   }
 
   const outDir = path.join(process.cwd(), "knowledge", "local-content");

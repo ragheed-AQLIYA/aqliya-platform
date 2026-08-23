@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { FindingRagCitations } from "@/components/audit/findings/components/finding-rag-citations";
 import type { Finding } from "@/types/audit";
 
 interface FindingDetailRowProps {
@@ -79,6 +80,10 @@ export function FindingDetailRow({
               })}
             </span>
           </div>
+          <FindingRagCitations
+            title={finding.title}
+            description={finding.description}
+          />
           <div className="flex gap-2 pt-1 flex-wrap">
             {finding.status === "draft" && (
               <Button

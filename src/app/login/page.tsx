@@ -15,6 +15,15 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import type { AvailableProvider, SamlLoginProvider } from "@/actions/sso-login-actions";
 
+/**
+ * One-click demo logins (admin/operator/viewer with published passwords) are a
+ * local demonstration aid only. They must never be rendered on a deployed
+ * pilot, so they are gated on a non-production build and an explicit opt-in.
+ */
+const SHOW_DEMO_ACCOUNTS =
+  process.env.NODE_ENV !== "production" ||
+  process.env.NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS === "true";
+
 const PROVIDER_LABELS: Record<string, string> = {
   google: "Google",
   github: "GitHub",
@@ -389,6 +398,7 @@ export default function LoginPage() {
         </CardContent>
       </Card>
 
+      {SHOW_DEMO_ACCOUNTS && (
       <Card className="w-full max-w-sm mt-4 border-dashed border-muted-foreground/30">
         <CardHeader className="text-center pb-2">
           <CardTitle className="text-sm text-muted-foreground">
@@ -432,6 +442,7 @@ export default function LoginPage() {
           </p>
         </CardContent>
       </Card>
+      )}
     </main>
   );
 }

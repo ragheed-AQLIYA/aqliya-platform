@@ -1,12 +1,33 @@
-import XLSX from "xlsx";
+import ExcelJS from "exceljs";
+
+function cellText(v) { if (v == null) return ""; if (typeof v === "object" && v.text) return String(v.text); return String(v); }
 
 const filePath = process.argv[2] ?? "TB.xlsx";
-const wb = XLSX.readFile(filePath);
-const sheet = wb.Sheets[wb.SheetNames[0]];
-const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+const workbook = new ExcelJS.Workbook();
+await workbook.xlsx.readFile(filePath);
+const ws = workbook.worksheets[0];
+if (!ws) { console.error("No worksheet found"); process.exit(1); }
+
+const sheetRows = [];
+let headers = [];
+ws.eachRow((row, rowNumber) => {
+  if (rowNumber === 1) {
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      headers[colNumber] = cellText(cell.value).trim();
+    });
+    return;
+  }
+  const obj = {};
+  row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+    const key = headers[colNumber];
+    if (key) obj[key] = cell.value ?? "";
+  });
+  sheetRows.push(obj);
+});
+const rows = sheetRows;
 
 console.log("File:", filePath);
-console.log("Sheet:", wb.SheetNames[0]);
+console.log("Sheet:", ws.name);
 console.log("Row count:", rows.length);
 console.log("Columns:", Object.keys(rows[0] ?? {}));
 

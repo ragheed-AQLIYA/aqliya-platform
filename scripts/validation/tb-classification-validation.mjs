@@ -31,11 +31,12 @@ function record(name: string, pass: boolean, detail: CheckResult["detail"]) {
 
 // ─── Step 1: Load TB from XLSX ──────────────────────────────────────────
 
-function loadAccountsFromXLSX(filepath: string) {
-  const { readFile, utils } = require("xlsx");
-  const wb = readFile(filepath);
-  const ws = wb.Sheets[wb.SheetNames[0]];
-  const rows = utils.sheet_to_json(ws, { header: 1, defval: "" });
+async function loadAccountsFromXLSX(filepath: string) {
+  const { readFile, sheetToJsonArrays } = await import("@/lib/xlsx");
+  const wb = await readFile(filepath);
+  const ws = wb.worksheets[0];
+  if (!ws) throw new Error("No worksheet found");
+  const rows = sheetToJsonArrays(ws, { includeEmpty: true });
 
   const accounts: Array<{
     accountCode: string;
@@ -71,7 +72,7 @@ async function main() {
 
   // ── Step 1: Load ──
   console.log("--- Step 1: Load Real TB File ---");
-  const accounts = loadAccountsFromXLSX(tbFile);
+  const accounts = await loadAccountsFromXLSX(tbFile);
   const bsIsCount = accounts.filter((a) => a.bsIs && a.bsIs !== "").length;
   record("tb.fileFound", true, tbFile);
   record("tb.totalAccounts", true, accounts.length);

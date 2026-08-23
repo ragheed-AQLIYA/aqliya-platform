@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-5-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-27-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-27",
+    "standardCode": "IAS 27",
+    "versionLabel": "IAS 27:2024",
+    "wave": 5,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-005",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-27-r001",
+      "paragraphReference": "IAS 27.10",
+      "ruleText": "When an entity prepares separate financial statements, it shall account for investments in subsidiaries, joint ventures and associates either at cost, in accordance with IFRS 9, or using the equity method as described in IAS 28.",
+      "topic": "separate-fs-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-27",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-27-r002",
+      "paragraphReference": "IAS 27.11",
+      "ruleText": "An entity shall apply the same accounting policy for all investments in subsidiaries, joint ventures and associates in its separate financial statements.",
+      "topic": "separate-fs-consistency",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-27",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-27-r003",
+      "paragraphReference": "IAS 27.12",
+      "ruleText": "An entity shall disclose the accounting policy applied to investments in subsidiaries, joint ventures and associates in its separate financial statements.",
+      "topic": "separate-fs-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-27",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ias-27-r004",
+      "paragraphReference": "IAS 27.13",
+      "ruleText": "An entity shall disclose significant judgements and assumptions made in determining whether it has control, joint control or significant influence over investees.",
+      "topic": "separate-fs-judgements",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-27",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

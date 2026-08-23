@@ -68,7 +68,7 @@ export function EvidenceTable({
               <TableRow>
                 <TableHead>{t("filenameCol")}</TableHead>
                 <TableHead>{t("typeCol")}</TableHead>
-                <TableHead>{t("uploadedByIdCol")}</TableHead>
+                <TableHead>{t("uploadedByCol")}</TableHead>
                 <TableHead>{t("uploadDateCol")}</TableHead>
                 <TableHead>{t("stateCol")}</TableHead>
                 <TableHead>التخزين</TableHead>

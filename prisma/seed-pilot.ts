@@ -11,6 +11,7 @@ import {
   ScenarioType,
 } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { CANONICAL_COA_ACCOUNTS } from "../src/lib/audit/coa/canonical-coa";
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -115,7 +116,6 @@ async function cleanup() {
     await prisma.decisionEvidence.deleteMany({ where: { organizationId: { in: orgIds } } });
   }
   if (lcProjectIds.length > 0) {
-    await prisma.localContentAuditEvent.deleteMany({ where: { projectId: { in: lcProjectIds } } });
     await prisma.localContentReport.deleteMany({ where: { projectId: { in: lcProjectIds } } });
     await prisma.localContentApproval.deleteMany({ where: { projectId: { in: lcProjectIds } } });
     await prisma.localContentReview.deleteMany({ where: { projectId: { in: lcProjectIds } } });
@@ -137,13 +137,26 @@ async function cleanup() {
     await prisma.constraint.deleteMany({ where: { decision: { organizationId: { in: orgIds } } } });
     await prisma.objective.deleteMany({ where: { decision: { organizationId: { in: orgIds } } } });
     await prisma.decision.deleteMany({ where: { organizationId: { in: orgIds } } });
-    await prisma.auditReviewComment.deleteMany({ where: { engagement: { organizationId: { in: orgIds } } } });
-    await prisma.auditFinding.deleteMany({ where: { engagement: { organizationId: { in: orgIds } } } });
-    await prisma.auditEvidence.deleteMany({ where: { engagement: { organizationId: { in: orgIds } } } });
-    await prisma.auditAccountMapping.deleteMany({ where: { engagement: { organizationId: { in: orgIds } } } });
-    await prisma.auditTrialBalanceLine.deleteMany({ where: { trialBalance: { engagement: { organizationId: { in: orgIds } } } } });
-    await prisma.auditTrialBalance.deleteMany({ where: { engagement: { organizationId: { in: orgIds } } } });
-    await prisma.auditEngagement.deleteMany({ where: { organizationId: { in: orgIds } } });
+    // Firm-memory rows written by trial balance classification reference the
+    // Organization; without these deletes the seed is no longer re-runnable
+    // once a trial balance has been imported.
+    await prisma.tBClassificationHistory.deleteMany({ where: { organizationId: { in: orgIds } } });
+    await prisma.tBMappingFeedback.deleteMany({ where: { organizationId: { in: orgIds } } });
+    await prisma.tBMappingPattern.deleteMany({ where: { organizationId: { in: orgIds } } });
+  }
+  // AuditOS engagements are scoped by AuditOrganization.id (see tenant-guard).
+  // Historical pilot data was written under Organization.id, so clean both id
+  // spaces to keep re-seeding deterministic.
+  const engagementOrgIds = [...new Set([...orgIds, ...auditOrgIds])];
+  if (engagementOrgIds.length > 0) {
+    await prisma.auditApprovalRecord.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditReviewComment.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditFinding.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditEvidence.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditAccountMapping.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditTrialBalanceLine.deleteMany({ where: { trialBalance: { engagement: { organizationId: { in: engagementOrgIds } } } } });
+    await prisma.auditTrialBalance.deleteMany({ where: { engagement: { organizationId: { in: engagementOrgIds } } } });
+    await prisma.auditEngagement.deleteMany({ where: { organizationId: { in: engagementOrgIds } } });
   }
   if (auditOrgIds.length > 0) {
     await prisma.auditClient.deleteMany({ where: { organizationId: { in: auditOrgIds } } });
@@ -215,6 +228,26 @@ async function main() {
 
   // ═══ 3. AUDITOS ═══
   console.log("\nSeeding AuditOS...");
+
+  // Canonical chart of accounts — global reference data shared by every
+  // AuditOrganization. Trial balance classification resolves to these ids, and
+  // getApprovalStatus blocks approval while any mapping is still unmapped, so
+  // an empty AuditCanonicalAccount table makes approval unreachable. Upserted
+  // (never deleted) so re-running the pilot seed cannot wipe it.
+  for (const account of CANONICAL_COA_ACCOUNTS) {
+    await prisma.auditCanonicalAccount.upsert({
+      where: { code: account.code },
+      update: {
+        name: account.name,
+        category: account.category,
+        subcategory: account.subcategory,
+        statementType: account.statementType,
+        displayOrder: account.displayOrder,
+      },
+      create: account,
+    });
+  }
+  console.log(`  Canonical accounts ensured: ${CANONICAL_COA_ACCOUNTS.length}`);
   const auditOrg = await prisma.auditOrganization.create({
     data: {
       name: "مكتب تدقيق الريادة", slug: "pilot-audit-reyada",
@@ -222,14 +255,32 @@ async function main() {
       status: "active", platformOrganizationId: platformOrg.id, createdById: admin.id,
     },
   });
-  const auditUsers = await Promise.all(
-    [admin, auditor, reviewer, analyst].map((u) =>
-      prisma.auditUser.create({
-        data: { organizationId: auditOrg.id, email: u.email, name: u.name, role: "operator", status: "active" },
+  // ─── Explicit AuditUser provisioning ──────────────────────────────────
+  // AuditOS authorization reads AuditUser.role, not User.role. Every pilot
+  // login is provisioned here explicitly so the pilot environment never relies
+  // on runtime auto-provisioning (actor-context) or AUDIT_DEV_FALLBACK_ENABLED.
+  // upsert on the (organizationId, email) unique key keeps this idempotent.
+  const auditUserRoles: Array<{ user: (typeof users)[number]; auditRole: string }> = [
+    { user: admin, auditRole: "admin" },
+    { user: partner, auditRole: "partner" },
+    { user: manager, auditRole: "operator" },
+    { user: auditor, auditRole: "operator" },
+    { user: reviewer, auditRole: "reviewer" },
+    { user: operator, auditRole: "operator" },
+    { user: analyst, auditRole: "operator" },
+    { user: viewer, auditRole: "viewer" },
+  ];
+  const auditUsers = [];
+  for (const { user, auditRole } of auditUserRoles) {
+    auditUsers.push(
+      await prisma.auditUser.upsert({
+        where: { organizationId_email: { organizationId: auditOrg.id, email: user.email } },
+        update: { name: user.name, role: auditRole, status: "active" },
+        create: { organizationId: auditOrg.id, email: user.email, name: user.name, role: auditRole, status: "active", createdById: admin.id },
       }),
-    ),
-  );
-  console.log(`  AuditOrg + ${auditUsers.length} AuditUsers`);
+    );
+  }
+  console.log(`  AuditOrg + ${auditUsers.length} AuditUsers (explicit provisioning)`);
 
   const auditClients = await Promise.all([
     prisma.auditClient.create({
@@ -245,10 +296,10 @@ async function main() {
 
   const engagements = await Promise.all([
     prisma.auditEngagement.create({
-      data: { organizationId: org.id, clientId: auditClients[0].id, fiscalPeriod: "2025-12", engagementType: EngagementType.full_audit, status: "in_progress", createdById: admin.id, projectId: project.id },
+      data: { organizationId: auditOrg.id, clientId: auditClients[0].id, fiscalPeriod: "2025-12", engagementType: EngagementType.full_audit, status: "in_progress", createdById: admin.id, projectId: project.id },
     }),
     prisma.auditEngagement.create({
-      data: { organizationId: org.id, clientId: auditClients[1].id, fiscalPeriod: "2025-06", engagementType: EngagementType.review, status: "draft", createdById: admin.id, projectId: project.id },
+      data: { organizationId: auditOrg.id, clientId: auditClients[1].id, fiscalPeriod: "2025-06", engagementType: EngagementType.review, status: "draft", createdById: admin.id, projectId: project.id },
     }),
   ]);
   console.log(`  Engagements: ${engagements.length}`);
@@ -356,7 +407,7 @@ async function main() {
   const _auditLogPlaceholder = [
     { decisionId: decisions[0].id, organizationId: org.id, userId: admin.id, action: "DECISION_CREATED", entity: "decision", after: decisions[0].title },
     { decisionId: decisions[0].id, organizationId: org.id, userId: analyst.id, action: "SUBMITTED_FOR_REVIEW", entity: "decision", after: "تم التقدم للمراجعة" },
-  ]);
+  ];
   console.log(`  Risks: 3, Objectives: 2, Alternatives: 2, Recommendations: 1, Evidence: 1`);
 
   // ═══ 5. LOCALCONTENTOS ═══
@@ -385,7 +436,7 @@ async function main() {
     { si: 3, amount: 2100000, cat: "services", desc: "خدمات النفط والغاز" },
     { si: 4, amount: 950000, cat: "services", desc: "تدقيق مالي واستشارات" },
     { si: 1, amount: 180000, cat: "technology", desc: "تطوير تطبيقات" },
-    { si: 5, amount: 275000, cat: "training", desc: "برامج تدريب القوى العاملة" },
+    { si: 0, amount: 275000, cat: "training", desc: "برامج تدريب القوى العاملة" },
     { si: 0, amount: 520000, cat: "services", desc: "خدمات الدعم الفني" },
   ];
   const spendRecords = await Promise.all(

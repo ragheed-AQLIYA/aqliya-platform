@@ -1,6 +1,8 @@
 import * as svc from "./services"
 import type { DisclosureNote, Finding, Recommendation, ReviewComment, ApprovalRecord, AuditEvent, EvidenceObject } from "@/types/audit"
 import { isArabicText } from "./arabic-pdf-support"
+import { generateExport } from "./export"
+import type { ExportFormat, ExportInput, ExportResult } from "./export"
 
 export interface ExportPackage {
   engagementId: string
@@ -178,4 +180,57 @@ export async function exportBilingual(engagementId: string, locale: "ar" | "en" 
       title: locale === "ar" ? n.title : n.title,
     })),
   }
+}
+
+/**
+ * Bridge an ExportPackage (structured data) into an ExportResult (rendered buffer).
+ * Converts the package into ExportInput format and renders via the PDF/XLSX exporter.
+ */
+export async function renderExportPackage(pkg: ExportPackage, format: ExportFormat): Promise<ExportResult> {
+  const input: ExportInput = {
+    metadata: {
+      engagementId: pkg.engagementId,
+      clientName: pkg.clientName,
+      fiscalPeriod: pkg.fiscalPeriod,
+      reportingFramework: pkg.reportingFramework,
+      currency: pkg.currency,
+      status: pkg.status,
+      exportedAt: pkg.exportedAt,
+      labels: pkg.labels,
+      locale: pkg.locale,
+    },
+    statements: pkg.statements.map((s, idx) => ({
+      id: `stmt-${idx}`,
+      engagementId: pkg.engagementId,
+      statementType: s.statementType as "balance_sheet" | "income_statement" | "equity" | "cash_flow",
+      title: s.title,
+      status: s.status as "draft" | "reviewed" | "approved",
+      lines: s.lines.map((l, li) => ({
+        id: `line-${idx}-${li}`,
+        statementId: `stmt-${idx}`,
+        label: l.label,
+        amount: l.amount,
+        isTotal: l.isTotal,
+        indentLevel: l.indentLevel,
+        displayOrder: li,
+        linkedAccountMappings: [],
+      })),
+      linkedAccounts: [],
+      reviewComments: [],
+      createdAt: pkg.exportedAt,
+      updatedAt: pkg.exportedAt,
+    })),
+    notes: pkg.notes,
+    ...(pkg.auditFile
+      ? {
+          evidence: pkg.auditFile.evidenceChecklist,
+          findings: pkg.auditFile.findings,
+          recommendations: pkg.auditFile.recommendations,
+          reviewComments: pkg.auditFile.reviewComments,
+          approvalRecords: pkg.auditFile.approvalRecords,
+          auditTrail: pkg.auditFile.auditTrail,
+        }
+      : {}),
+  }
+  return generateExport(input, format)
 }

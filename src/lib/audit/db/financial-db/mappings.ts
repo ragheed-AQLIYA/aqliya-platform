@@ -220,6 +220,10 @@ export async function createSuggestedMappingsForTrialBalance(
   const existingCodes = new Set(existingMappings.map((m) => m.sourceAccountCode));
   const canonicalMap = new Map(canonicalAccounts.map((c) => [c.id, c.category]));
 
+  // A suggested canonical account that no longer exists (or was never seeded for
+  // this organization) must not abort the whole trial balance import.
+  // canonicalAccountId is nullable, so keep the mapping row as an unmapped
+  // suggestion rather than letting createMany fail on the foreign key.
   const toCreate = rows
     .filter((r) => !existingCodes.has(r.accountCode))
     .map((r) => ({
@@ -229,7 +233,9 @@ export async function createSuggestedMappingsForTrialBalance(
       sourceAccountName: r.accountName,
       debitAmount: r.debitAmount,
       creditAmount: r.creditAmount,
-      canonicalAccountId: r.canonicalAccountId,
+      canonicalAccountId: canonicalMap.has(r.canonicalAccountId)
+        ? r.canonicalAccountId
+        : null,
       confidence: r.confidence,
       mappingType: "ai_suggested" as const,
       status: "pending" as const,

@@ -10,7 +10,7 @@ process.env.DATABASE_URL =
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as XLSX from "xlsx";
+import { readFile, sheetToJsonObjects } from "@/lib/xlsx";
 
 function parseAmount(value: unknown): number {
   if (typeof value === "number") return value;
@@ -18,10 +18,10 @@ function parseAmount(value: unknown): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-function parseTbRows(filePath: string) {
-  const wb = XLSX.readFile(filePath);
-  const sheet = wb.Sheets[wb.SheetNames[0]!]!;
-  const rows = XLSX.utils.sheet_to_json(sheet, {
+async function parseTbRows(filePath: string) {
+  const wb = await readFile(filePath);
+  const sheet = wb.worksheets[0]!;
+  const rows = sheetToJsonObjects(sheet, {
     defval: "",
   }) as Array<Record<string, unknown>>;
 

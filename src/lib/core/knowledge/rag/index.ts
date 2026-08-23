@@ -32,3 +32,13 @@ export {
   deleteKnowledgeDocument,
   resolveKnowledgeOrganizationId,
 } from "./knowledge-service"
+
+export {
+  checkRateLimit,
+  getRemainingRequests,
+  resetRateLimit,
+  type RagRateLimitPurpose,
+} from "./rag-rate-limiter"
+export { cacheKey, getCached, setCached, clearCache, getCacheStats } from "./rag-cache"
+export { RagError, wrapRagError, logRagError, type RagErrorCode } from "./rag-errors"
+export { recordSearch, recordCacheHit, recordCacheMiss, recordError, getMetrics, resetMetrics } from "./rag-metrics"

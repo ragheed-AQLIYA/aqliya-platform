@@ -5,7 +5,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const XLSX = require("xlsx");
+const ExcelJS = require("exceljs");
 
 const PDF_PATH = "C:\\Users\\PC\\Documents\\Aqliya\\Audited FSs 31-12-2025.pdf";
 const XLSX_PATH = "C:\\Users\\PC\\Documents\\Aqliya\\TB 31-12-2025 Final.xlsx";
@@ -14,16 +14,25 @@ const OUT_DIR = "C:\\Users\\PC\\Documents\\Aqliya\\docs\\review\\localcontent";
 // ——— STEP 1: Extract TB ———
 function extractTB() {
   console.log("\n=== STEP 1: TB Analysis ===");
-  const wb = XLSX.readFile(XLSX_PATH, { cellDates: true, cellText: false });
-  const sheetNames = wb.SheetNames;
-  console.log(`Sheets: ${sheetNames.join(", ")}`);
 
-  let allRows = [];
-  for (const name of sheetNames) {
-    const ws = wb.Sheets[name];
-    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
-    allRows.push({ sheet: name, rows });
-  }
+  return (async () => {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(XLSX_PATH);
+    const sheets = workbook.worksheets;
+    console.log(`Sheets: ${sheets.map(ws => ws.name).join(", ")}`);
+
+    let allRows = [];
+    for (const ws of sheets) {
+      const rows = [];
+      ws.eachRow({ includeEmpty: true }, (row, _rowNum) => {
+        const rowData = [];
+        row.eachCell({ includeEmpty: true }, (cell, colNum) => {
+          rowData[colNum - 1] = cell.value;
+        });
+        rows.push(rowData);
+      });
+      allRows.push({ sheet: ws.name, rows });
+    }
 
   // Parse account structure
   const accounts = [];
@@ -84,7 +93,7 @@ function extractTB() {
     metadata: {
       source: "TB 31-12-2025 Final.xlsx",
       extractedAt: new Date().toISOString(),
-      sheets: sheetNames,
+      sheets: sheets.map(ws => ws.name),
       totalRows: accounts.length,
     },
     totalAccounts: accounts.length,
@@ -126,6 +135,7 @@ function extractTB() {
   console.log(`Other Opex: ${opexAccounts.length}`);
   console.log(`TB_ANALYSIS.json saved.`);
   return accounts;
+  })();
 }
 
 // ——— STEP 2: Extract FS ———
@@ -178,7 +188,7 @@ async function main() {
   console.log("=== LOCALCONTENTOS PILOT VALIDATION ===");
   console.log("Extracting input files...");
 
-  const accounts = extractTB();
+  const accounts = await extractTB();
   const fsResult = await extractFS();
 
   // Print sample text for analysis

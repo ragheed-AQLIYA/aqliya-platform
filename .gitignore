@@ -14,6 +14,7 @@
 /coverage
 /cypress/videos/
 /cypress/screenshots/
+/cypress/results/
 
 # next.js
 /.next/
@@ -23,6 +24,9 @@
 /backups/
 /uploads/
 /build
+
+# verification artifacts (locked by editor)
+.tmp-verify/
 
 # misc
 .DS_Store

@@ -1,6 +1,7 @@
 // ─── AuditOS Actor Context ───
 // Centralized actor resolution for AuditOS mutations.
 // Tries authenticated user → AuditUser mapping first.
+// Auto-provisions AuditUser on first visit if AuditOrganization exists.
 // Falls back to demo actor only in development mode.
 
 import { prisma } from "@/lib/prisma";
@@ -26,7 +27,8 @@ export function isUsingDemoFallback(): boolean {
  *
  * Priority:
  * 1. Authenticated NextAuth session user mapped to AuditUser
- * 2. Demo fallback (development only, never in production)
+ * 2. Auto-provision AuditUser from session if AuditOrganization exists
+ * 3. Demo fallback (development only, never in production)
  */
 export async function getAuditActor(): Promise<AuditActor> {
   try {
@@ -35,8 +37,9 @@ export async function getAuditActor(): Promise<AuditActor> {
 
     // Bridge through PlatformOrganization to find the correct AuditOrganization
     let auditUser = null;
+    let auditOrg: { id: string } | null = null;
     if (sessionUser.platformOrganizationId) {
-      const auditOrg = await prisma.auditOrganization.findFirst({
+      auditOrg = await prisma.auditOrganization.findFirst({
         where: { platformOrganizationId: sessionUser.platformOrganizationId },
         select: { id: true },
       });
@@ -52,8 +55,24 @@ export async function getAuditActor(): Promise<AuditActor> {
       }
     }
 
+    // Auto-provision AuditUser on first visit (bridge already resolved auditOrg)
+    if (!auditUser && auditOrg) {
+      auditUser = await prisma.auditUser.create({
+        data: {
+          organizationId: auditOrg.id,
+          email: sessionUser.email,
+          name: sessionUser.name || sessionUser.email,
+          role: mapRole(sessionUser.role),
+          status: "active",
+        },
+      });
+      logger.info(
+        `[AuditActor] Auto-provisioned AuditUser ${auditUser.id} for org ${auditOrg.id} (email: ${sessionUser.email})`,
+      );
+    }
+
     if (!auditUser) {
-      throw new Error("Audit user not provisioned");
+      throw new Error("Audit user not provisioned: no AuditOrganization linked to this platform org");
     }
 
     if (auditUser.status !== "active") {

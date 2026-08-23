@@ -62,3 +62,40 @@ export function handleDepreciation(
     "PPE and depreciation mapping present.",
   );
 }
+
+/**
+ * IAS 16.67 — Derecognition of PPE on disposal or when no future economic benefits expected.
+ */
+export function handleDerecognition(
+  rule: IfrsKnowledgeRule,
+  ctx: IfrsEvaluationContext,
+): IfrsRuleEvaluation {
+  const hasPpe = hasMappingHint(ctx, ["property", "plant", "equipment", "ppe", "fixed", "ممتلكات", "معدات"]);
+  if (!hasPpe) {
+    return baseEval(
+      rule,
+      "skipped",
+      "لا بنود PPE — القاعدة غير قابلة للتطبيق.",
+      "No PPE accounts — rule not applicable.",
+    );
+  }
+
+  const hasDisposal = hasMappingHint(ctx, ["disposal", "derecognition", "gain on disposal", "loss on disposal", "تصرف", "خروج أصل"]);
+  if (!hasDisposal) {
+    return baseEval(
+      rule,
+      "advisory",
+      "أصول ثابتة موجودة. تأكد من الاعتراف بأي تخارج عن أصول وحساب الربح/الخسارة في الأرباح أو الخسائر (IAS 16.67).",
+      "PPE present. Ensure any disposals are recognised and gain/loss is recorded in P&L (IAS 16.67).",
+      ["income_statement"],
+    );
+  }
+
+  return baseEval(
+    rule,
+    "pass",
+    "التخارج عن الأصول الثابتة معترف به.",
+    "PPE derecognition on disposal identified.",
+    ["income_statement"],
+  );
+}

@@ -3,6 +3,7 @@
 import { config } from "dotenv";
 import { resolve } from "path";
 import { readFileSync, writeFileSync } from "fs";
+import { readFile, sheetToJsonArrays } from "@/lib/xlsx";
 
 config({ path: resolve(__dirname, "../../.env") });
 process.env.FF_AI_REAL_PROVIDERS = "true";
@@ -12,10 +13,10 @@ const CODES = [
   "3101070045", "3203010001", "3204010001", "3204010091", "3301010011", "3301010011-1",
 ];
 
-const XLSX = require("xlsx");
-const wb = XLSX.readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
-const ws = wb.Sheets[wb.SheetNames[0]];
-const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+async function main() {
+const wb = await readFile(resolve(__dirname, "../../TB 31-12-2025 Final.xlsx"));
+const ws = wb.worksheets[0]!;
+const rows = sheetToJsonArrays(ws, { includeEmpty: true });
 
 const accounts = [];
 for (let i = 1; i < rows.length; i++) {
@@ -30,7 +31,6 @@ for (let i = 1; i < rows.length; i++) {
   });
 }
 
-async function main() {
 const { classifyAccountLocalOnly } = await import("@/lib/tb-intelligence");
 const { loadCanonicalCandidates } = await import("@/lib/tb-intelligence/coa-loader");
 const { prisma } = await import("@/lib/prisma");

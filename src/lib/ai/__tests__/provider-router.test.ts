@@ -1,8 +1,17 @@
 import { selectOptimalProvider, invalidateHealthCache, getAllProviderHealth } from "@/lib/core/ai/provider-router"
 
 describe("ProviderRouter", () => {
+  const savedEnv = process.env.FF_AI_REAL_PROVIDERS
+
   beforeEach(() => {
     invalidateHealthCache()
+    // Explicitly disable real providers to test deterministic fallback
+    process.env.FF_AI_REAL_PROVIDERS = "false"
+  })
+
+  afterEach(() => {
+    if (savedEnv === undefined) delete process.env.FF_AI_REAL_PROVIDERS
+    else process.env.FF_AI_REAL_PROVIDERS = savedEnv
   })
 
   describe("selectOptimalProvider", () => {

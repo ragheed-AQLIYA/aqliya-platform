@@ -1,13 +1,15 @@
 // CSV/Excel file importer for ERP data
 // Parses CSV with configurable delimiter and encoding.
-// Parses Excel (.xlsx, .xls) files via SheetJS.
+// Parses Excel (.xlsx, .xls) files via @/lib/xlsx (ExcelJS).
 // Validates rows, reports errors, computes SHA-256 evidence hash.
 
 import "server-only";
 
 import crypto from "crypto";
 import { parse as parseCsv } from "csv-parse/sync";
-import * as XLSX from "xlsx";
+import { readBuffer, sheetToJsonObjects } from "@/lib/xlsx";
+import type { Workbook } from "@/lib/xlsx";
+import { validateXlsxArchive } from "@/lib/security/xlsx-validation";
 import type {
   ParsedImportRow,
   FileImportResult,
@@ -271,9 +273,24 @@ export async function parseExcelFile(
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const fileHash = computeSha256(buffer);
 
-  let workbook: XLSX.WorkBook;
+  // ZIP bomb defense: validate archive structure before XLSX.read()
+  const zipCheck = validateXlsxArchive(buffer);
+  if (!zipCheck.valid) {
+    return {
+      totalRows: 0,
+      validRows: [],
+      errorRows: [
+        { rowNumber: 0, data: {}, errors: [`XLSX rejected: ${zipCheck.reason}`], warnings: [] },
+      ],
+      fileHash,
+      headers: [],
+      columnMapping: [],
+    };
+  }
+
+  let workbook: Workbook;
   try {
-    workbook = XLSX.read(buffer, { type: "buffer" });
+    workbook = await readBuffer(buffer);
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Excel parse failed";
     return {
@@ -288,8 +305,8 @@ export async function parseExcelFile(
     };
   }
 
-  const firstSheet = workbook.Sheets[workbook.SheetNames[0]!];
-  if (!firstSheet) {
+  const firstWorksheet = workbook.worksheets[0];
+  if (!firstWorksheet) {
     return {
       totalRows: 0,
       validRows: [],
@@ -302,10 +319,7 @@ export async function parseExcelFile(
     };
   }
 
-  const jsonData = XLSX.utils.sheet_to_json<Record<string, unknown>>(
-    firstSheet,
-    { defval: "" },
-  );
+  const jsonData = sheetToJsonObjects(firstWorksheet, { defval: "" });
 
   if (jsonData.length === 0) {
     return {

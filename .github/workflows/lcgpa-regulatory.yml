@@ -1,0 +1,74 @@
+name: LCGPA Regulatory Monitor
+
+# Continuous regulatory intelligence for the LCGPA Mandatory List.
+#
+# WHAT THIS JOB DOES:  fetches the official LCGPA sources that are due, detects
+#                      changes, runs impact analysis, and records everything at
+#                      PENDING_REVIEW.
+# WHAT IT NEVER DOES:  approve, reject, or activate anything. A regulatory change
+#                      only reaches production after a human approves it and its
+#                      effective date arrives.
+#
+# The activation sweep runs separately and only acts on already-approved datasets.
+
+on:
+  schedule:
+    # 02:00 AST (UTC+3) daily — matches the DAILY check frequency in the registry.
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Persist the cycle (unchecked = dry run)"
+        type: boolean
+        default: false
+      force:
+        description: "Check every source, ignoring the schedule"
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    # Requires DATABASE_URL and outbound access to lcgpa.gov.sa.
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run monitoring cycle
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm run lc:regulatory:monitor -- \
+            ${{ (github.event_name == 'schedule' || inputs.commit) && '--commit' || '' }} \
+            ${{ inputs.force && '--force' || '' }}
+
+      - name: Activation sweep (already-approved datasets only)
+        if: github.event_name == 'schedule' || inputs.commit
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run lc:regulatory:activate -- --commit
+
+      - name: Upload cycle log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcgpa-regulatory-cycle
+          path: |
+            *.log
+          if-no-files-found: ignore
+          retention-days: 30

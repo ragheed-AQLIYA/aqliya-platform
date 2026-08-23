@@ -30,49 +30,19 @@ async function main() {
     throw new Error("Seeding in production is not allowed. Set ALLOW_SEED_IN_PROD to override.");
   }
 
-  // Clean existing data
-  await prisma.salesApproval.deleteMany();
-  await prisma.salesReview.deleteMany();
-  await prisma.salesProposal.deleteMany();
-  await prisma.salesEvidenceLink.deleteMany();
-  await prisma.salesInteraction.deleteMany();
-  await prisma.salesContact.deleteMany();
-  await prisma.salesDeal.deleteMany();
-  await prisma.salesAccount.deleteMany();
-  await prisma.salesPipelineStage.deleteMany();
-  await prisma.salesPipeline.deleteMany();
-  await prisma.decisionReport.deleteMany();
-  await prisma.approval.deleteMany();
-  await prisma.recommendation.deleteMany();
-  await prisma.simulationResult.deleteMany();
-  await prisma.scenario.deleteMany();
-  await prisma.risk.deleteMany();
-  await prisma.alternative.deleteMany();
-  await prisma.assumption.deleteMany();
-  await prisma.constraint.deleteMany();
-  await prisma.objective.deleteMany();
-  await prisma.tenderProfile.deleteMany();
-  await prisma.decision.deleteMany();
-  await prisma.auditRiskProcedure.deleteMany();
-  await prisma.auditRiskAssessment.deleteMany();
-  await prisma.auditRiskModel.deleteMany();
-  await prisma.workflowEvidence.deleteMany();
-  await prisma.workflowRecord.deleteMany();
-  await prisma.workflowTemplate.deleteMany();
-  await prisma.intelligenceGraphEdge.deleteMany();
-  await prisma.intelligenceGraphNode.deleteMany();
-  await prisma.institutionalMemoryEvent.deleteMany();
-  await prisma.institutionalMemoryCollection.deleteMany();
-  await prisma.officeAiFile.deleteMany();
-  await prisma.officeAiOutput.deleteMany();
-  await prisma.officeAiTask.deleteMany();
-  await prisma.contentVersion.deleteMany();
-  await prisma.contentItem.deleteMany();
-  await prisma.contentTemplate.deleteMany();
-  await prisma.contentWorkspace.deleteMany();
-  await prisma.tenantIntegration.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.organization.deleteMany();
+  // Clean existing data — TRUNCATE CASCADE avoids Prisma 7 FK-check ordering issues
+  const tables: Array<{ tablename: string }> = await prisma.$queryRawUnsafe(
+    `SELECT tablename FROM pg_tables WHERE schemaname = 'public'`,
+  );
+  const tableList = tables
+    .map((t) => `"${t.tablename}"`)
+    .join(", ");
+  if (tableList) {
+    await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tableList} CASCADE`);
+    console.log(`Truncated ${tables.length} tables (CASCADE)`);
+  } else {
+    console.log("No tables to truncate");
+  }
 
   console.log("Seeding database...");
 

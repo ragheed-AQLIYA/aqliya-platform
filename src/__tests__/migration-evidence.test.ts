@@ -18,10 +18,15 @@ const KNOWLEDGE_FOUNDATION_VERSIONING = "20260622100000_knowledge_foundation_ver
     const KF_RELEASE_TRUST_CHAIN = "20260622140000_knowledge_foundation_release_trust_chain"
     const KNOLEDGE_CANDIDATE_FK = "20260623000000_add_knowledge_candidate_fk"
     const CONTENT_EVIDENCE = "20260703000001_add_content_evidence"
-const LATEST_APPLIED_MIGRATION = "20260803150000_add_user_preferences"
+const LCGPA_REGULATORY_INTELLIGENCE = "20260822000000_lcgpa_regulatory_intelligence"
+const REPAIR_SCHEMA_DRIFT = "20260822010000_repair_schema_drift"
+const LATEST_APPLIED_MIGRATION = REPAIR_SCHEMA_DRIFT
 
 /** Migrations excluded from applied-chain ordering (e.g. create-only, not yet applied). */
-const MIGRATIONS_EXCLUDED_FROM_APPLIED_CHAIN = [INSTITUTIONAL_MEMORY_MIGRATION, "20260724232330_drop_deprecated_audit_models"] as const
+const MIGRATIONS_EXCLUDED_FROM_APPLIED_CHAIN = [
+  INSTITUTIONAL_MEMORY_MIGRATION,
+  "20260724232330_drop_deprecated_audit_models",
+] as const
 
 function listTimestampedMigrations(): string[] {
   return readdirSync(migrationsDir)
@@ -571,6 +576,206 @@ describe("Migration Evidence", () => {
       const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
       expect(sql).not.toContain("DROP")
       expect(sql).not.toContain("RENAME")
+    })
+  })
+
+  describe("20260822000000_lcgpa_regulatory_intelligence", () => {
+    const migrationDir = join(migrationsDir, LCGPA_REGULATORY_INTELLIGENCE)
+
+    /** Executable statements only: the review header legitimately mentions DROP. */
+    function executableSql(): string {
+      return readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+        .split("\n")
+        .filter((line) => !line.trimStart().startsWith("--"))
+        .join("\n")
+    }
+
+    function addForeignKeyStatements(): string[] {
+      return executableSql()
+        .split("\n")
+        .filter((line) => line.includes("ADD CONSTRAINT") && line.includes("FOREIGN KEY"))
+    }
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    it("creates the regulatory intelligence tables", () => {
+      const sql = executableSql()
+      for (const table of [
+        "LcRegulatorySource",
+        "LcRegulatoryArtifact",
+        "LcRegulatoryDataset",
+        "LcRegulatoryProduct",
+        "LcRegulatoryChange",
+        "LcRegulatoryConflict",
+        "LcRegulatoryImpactAssessment",
+        "LcRegulatoryEffectiveDateEvidence",
+      ]) {
+        expect(sql).toContain(`CREATE TABLE "${table}"`)
+      }
+    })
+
+    it("binds every calculation run to the exact regulatory dataset version it used", () => {
+      const sql = executableSql()
+      expect(sql).toContain('"regulatoryDatasetVersion" TEXT')
+      expect(sql).toContain('"regulatoryArtifactSha256" TEXT')
+      expect(sql).toContain('"regulatoryParserVersion" TEXT')
+      expect(sql).toContain(
+        'ADD CONSTRAINT "LcCalculationRun_regulatoryDatasetVersion_fkey" FOREIGN KEY ("regulatoryDatasetVersion") REFERENCES "LcRegulatoryDataset"("datasetVersion") ON DELETE RESTRICT'
+      )
+    })
+
+    // Historical regulatory state must not be destroyable by a single DELETE.
+    it("makes every regulatory foreign key ON DELETE RESTRICT", () => {
+      const regulatoryFks = addForeignKeyStatements().filter(
+        (line) => /ADD CONSTRAINT "LcRegulatory/.test(line) || /REFERENCES "LcRegulatory/.test(line)
+      )
+
+      expect(regulatoryFks.length).toBeGreaterThanOrEqual(15)
+      for (const statement of regulatoryFks) {
+        expect(statement).toContain("ON DELETE RESTRICT")
+        expect(statement).not.toContain("ON DELETE CASCADE")
+        expect(statement).not.toContain("ON DELETE SET NULL")
+      }
+    })
+
+    it("is additive-only (no DROP, RENAME or TRUNCATE)", () => {
+      const sql = executableSql()
+      expect(sql).not.toContain("DROP")
+      expect(sql).not.toContain("RENAME")
+      expect(sql).not.toContain("TRUNCATE")
+    })
+
+    it("only ever adds columns to already-populated tables", () => {
+      const alterStatements = executableSql()
+        .split(/;\s*\n/)
+        .filter((stmt) => stmt.trimStart().startsWith("ALTER TABLE"))
+        .filter((stmt) => !stmt.includes("ADD CONSTRAINT"))
+
+      expect(alterStatements.length).toBeGreaterThan(0)
+      for (const statement of alterStatements) {
+        expect(statement).toContain("ADD COLUMN")
+        expect(statement).not.toContain("ALTER COLUMN")
+      }
+    })
+
+    // Applied to the development database on 2026-08-22 by `prisma migrate
+    // deploy`, after the chain was repaired and the database baselined.
+    it("is in the applied migration chain", () => {
+      expect(listAppliedMigrations()).toContain(LCGPA_REGULATORY_INTELLIGENCE)
+    })
+
+    it("records how it was promoted", () => {
+      const sql = readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+      expect(sql).toContain("Promoted 2026-08-22")
+      expect(sql).toContain("docs/regulatory/LCGPA_RUNBOOK.md")
+      expect(sql).not.toContain("NOT APPLIED")
+    })
+  })
+
+  describe("20260822010000_repair_schema_drift", () => {
+    const migrationDir = join(migrationsDir, REPAIR_SCHEMA_DRIFT)
+
+    function sql(): string {
+      return readFileSync(join(migrationDir, "migration.sql"), "utf-8")
+    }
+
+    it("migration directory exists", () => {
+      expect(existsSync(migrationDir)).toBe(true)
+    })
+
+    it("migration SQL file exists", () => {
+      expect(existsSync(join(migrationDir, "migration.sql"))).toBe(true)
+    })
+
+    // Notification lives in schema.prisma and in every running database, but no
+    // migration ever created it. This closes that gap for fresh environments.
+    it("creates the Notification table the chain never created", () => {
+      expect(sql()).toContain('CREATE TABLE IF NOT EXISTS "Notification"')
+      expect(sql()).toContain('CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")')
+    })
+
+    it("creates the ten indexes the chain never created", () => {
+      const statements = sql().match(/CREATE INDEX IF NOT EXISTS/g) ?? []
+      expect(statements).toHaveLength(10)
+    })
+
+    // It must be a no-op wherever the objects already exist, which is every
+    // environment built by db push.
+    it("is idempotent: every statement is guarded", () => {
+      const body = sql()
+        .split("\n")
+        .filter((line) => !line.trimStart().startsWith("--"))
+        .join("\n")
+
+      const tables = body.match(/CREATE TABLE/g) ?? []
+      const guardedTables = body.match(/CREATE TABLE IF NOT EXISTS/g) ?? []
+      expect(guardedTables.length).toBe(tables.length)
+
+      const indexes = body.match(/CREATE (?:UNIQUE )?INDEX/g) ?? []
+      const guardedIndexes = body.match(/CREATE (?:UNIQUE )?INDEX IF NOT EXISTS/g) ?? []
+      expect(guardedIndexes.length).toBe(indexes.length)
+
+      // Foreign keys have no IF NOT EXISTS in PostgreSQL, so they are wrapped.
+      const fks = body.match(/ADD CONSTRAINT/g) ?? []
+      const guards = body.match(/IF NOT EXISTS \(SELECT 1 FROM pg_constraint/g) ?? []
+      expect(guards.length).toBe(fks.length)
+    })
+
+    it("is additive-only (no DROP, RENAME, TRUNCATE or ALTER COLUMN)", () => {
+      const body = sql()
+        .split("\n")
+        .filter((line) => !line.trimStart().startsWith("--"))
+        .join("\n")
+      expect(body).not.toContain("DROP")
+      expect(body).not.toContain("RENAME")
+      expect(body).not.toContain("TRUNCATE")
+      expect(body).not.toContain("ALTER COLUMN")
+    })
+
+    it("is the latest applied migration in the repository", () => {
+      expect(latestAppliedMigration()).toBe(LATEST_APPLIED_MIGRATION)
+    })
+  })
+
+  // Both of these blocked `prisma migrate deploy` outright before 2026-08-22.
+  describe("migration chain health", () => {
+    it("no migration.sql begins with a UTF-8 byte-order mark", () => {
+      const offenders = listTimestampedMigrations().filter((m) => {
+        const file = join(migrationsDir, m, "migration.sql")
+        if (!existsSync(file)) return false
+        const bytes = readFileSync(file)
+        return bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf
+      })
+      expect(offenders).toEqual([])
+    })
+
+    // PostgreSQL refuses DROP INDEX on an index owned by a UNIQUE constraint
+    // (SQLSTATE 2BP01). Prisma names those indexes with a `_key` suffix, so a
+    // bare DROP INDEX on one is a latent deploy failure. Plain `_idx` indexes
+    // are safe to drop directly.
+    it("no migration drops a constraint-backed index directly", () => {
+      const offenders: string[] = []
+      for (const m of listTimestampedMigrations()) {
+        const file = join(migrationsDir, m, "migration.sql")
+        if (!existsSync(file)) continue
+        const body = readFileSync(file, "utf-8")
+          .split("\n")
+          .filter((line) => !line.trimStart().startsWith("--"))
+          .join("\n")
+          // A DROP INDEX inside a DO block that first checks pg_constraint is
+          // the guarded form, and is exactly what this test asks for.
+          .replace(/DO \$[a-z]*\$[\s\S]*?END \$[a-z]*\$;/g, "")
+        for (const stmt of body.match(/DROP INDEX\s+(?:IF EXISTS\s+)?"([^"]+)"/g) ?? []) {
+          if (/_key"$/.test(stmt)) offenders.push(`${m}: ${stmt}`)
+        }
+      }
+      expect(offenders).toEqual([])
     })
   })
 })

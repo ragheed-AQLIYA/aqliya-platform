@@ -103,8 +103,8 @@ describe("isSocpaRulesEnabled", () => {
     else process.env.FF_AUDIT_SOCPA_RULES = prev;
   });
 
-  it("defaults off", () => {
+  it("defaults on", () => {
     delete process.env.FF_AUDIT_SOCPA_RULES;
-    expect(isSocpaRulesEnabled()).toBe(false);
+    expect(isSocpaRulesEnabled()).toBe(true);
   });
 });

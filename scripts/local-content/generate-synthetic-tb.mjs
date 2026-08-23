@@ -2,7 +2,7 @@
 // Creates a realistic trial balance for "شركة المصنع السعودي للصناعات المعدنية"
 // npx tsx --env-file .env scripts/local-content/generate-synthetic-tb.mjs
 
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
@@ -104,21 +104,23 @@ if (diff > 0) {
 }
 
 // Create XLSX
-const ws = XLSX.utils.aoa_to_sheet([
-  ["#", "رقم الحساب", "اسم الحساب", "رصيد مدين", "رصيد دائن"],
-  ...accounts.map((a, i) => [i + 1, a.code, a.name, a.debit, a.credit]),
-]);
+const workbook = new ExcelJS.Workbook();
+const ws = workbook.addWorksheet("ميزان المراجعة");
+
+ws.columns = [{ width: 5 }, { width: 14 }, { width: 35 }, { width: 15 }, { width: 15 }];
+
+ws.addRow(["#", "رقم الحساب", "اسم الحساب", "رصيد مدين", "رصيد دائن"]);
+for (let i = 0; i < accounts.length; i++) {
+  const a = accounts[i];
+  ws.addRow([i + 1, a.code, a.name, a.debit, a.credit]);
+}
 
 // Add totals row
 const finalDebit = accounts.reduce((s, a) => s + a.debit, 0);
 const finalCredit = accounts.reduce((s, a) => s + a.credit, 0);
-XLSX.utils.sheet_add_aoa(ws, [["", "", "الإجمالي", finalDebit, finalCredit]], { origin: -1 });
+ws.addRow(["", "", "الإجمالي", finalDebit, finalCredit]);
 
-ws["!cols"] = [{ wch: 5 }, { wch: 14 }, { wch: 35 }, { wch: 15 }, { wch: 15 }];
-
-const wb = XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(wb, ws, "ميزان المراجعة");
-XLSX.writeFile(wb, OUTPUT_PATH);
+await workbook.xlsx.writeFile(OUTPUT_PATH);
 
 console.log("=".repeat(60));
 console.log("  SYNTHETIC TB GENERATED");

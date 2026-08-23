@@ -5,7 +5,9 @@ process.env.DATABASE_URL =
   process.env.DATABASE_URL ??
   "postgresql://postgres:postgres@localhost:5434/aqliya?schema=public";
 
-import XLSX from "xlsx";
+import ExcelJS from "exceljs";
+
+function cellText(v) { if (v == null) return ""; if (typeof v === "object" && v.text) return String(v.text); return String(v); }
 
 const engagementId = process.argv[2] ?? "eng-gulf-2025";
 const tbFile = process.env.TB_FILE ?? process.argv[3];
@@ -31,11 +33,27 @@ const tb = await prisma.auditTrialBalance.findFirst({
   include: { lines: true },
 });
 
-const wb = XLSX.readFile(tbFile);
-const sheetRows = XLSX.utils.sheet_to_json(
-  wb.Sheets[wb.SheetNames[0]],
-  { defval: "" },
-);
+const workbook = new ExcelJS.Workbook();
+await workbook.xlsx.readFile(tbFile);
+const ws = workbook.worksheets[0];
+if (!ws) { console.error("No worksheet found"); process.exit(1); }
+
+const sheetRows = [];
+let headers = [];
+ws.eachRow((row, rowNumber) => {
+  if (rowNumber === 1) {
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      headers[colNumber] = cellText(cell.value).trim();
+    });
+    return;
+  }
+  const obj = {};
+  row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+    const key = headers[colNumber];
+    if (key) obj[key] = cell.value ?? "";
+  });
+  sheetRows.push(obj);
+});
 const map1Key = Object.keys(sheetRows[0] ?? {}).find((k) => k.trim() === "Mapping 1");
 const hintByCode = new Map();
 for (const r of sheetRows) {

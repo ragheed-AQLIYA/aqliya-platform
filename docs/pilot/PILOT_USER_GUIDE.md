@@ -137,6 +137,33 @@ Financial audit and review is the foundational product of AQLIYA.
 **الوصول:** انتقل إلى /audit
 **Access:** Navigate to /audit
 
+### مراقبة RAG / RAG Monitoring
+
+لوحة تحكم RAG تعرض صحة محرك البحث الدلالي لمعايير IFRS داخل AuditOS.
+The RAG dashboard shows the health of the IFRS semantic search engine inside AuditOS.
+
+**الوصول:** من الشريط الجانبي للتدقيق: **مراقبة RAG**، أو مباشرة عبر `/audit/knowledge/rag`
+**Access:** AuditOS sidebar → **"مراقبة RAG"**, or navigate directly to `/audit/knowledge/rag`
+
+**ماذا تعرض اللوحة / What the dashboard shows:**
+
+| البطاقة / Card | المعنى / Meaning |
+|----------------|------------------|
+| عدد عمليات البحث / Search count | إجمالي عمليات البحث الدلالي / Total semantic searches |
+| زمن الاستجابة / Latency | المتوسط والمئين 95 / Average and P95 |
+| معدل الكاش / Cache hit rate | نسبة النتائج المخدومة من التخزين المؤقت / Share of results served from cache |
+| معدل الطلبات المتبقية / Rate-limit quota | ما تبقى قبل حد معدل الطلبات / Remaining requests before the platform rate limit |
+| الحالة / Status | صحة خدمة البحث — "سليم" تعني طبيعي / Service health — "سليم" means healthy |
+
+**اختبار استعلام / Testing a query:**
+
+1. استخدم مربع "اختبار البحث الدلالي" أسفل الصفحة / Use the semantic search test box at the bottom of the page
+2. أدخل استعلاماً بالعربية أو الإنجليزية (مثال: "قياس المخزون" أو "inventory measurement") / Enter a query in Arabic or English (e.g., "inventory measurement")
+3. ستظهر مراجع IFRS مع رمز المعيار ورقم الفقرة ونسبة الصلة لكل نتيجة / Results show IFRS citations with the standard code, paragraph reference, and relevance percentage
+
+> ℹ️ المقاييس محفوظة في الذاكرة افتراضياً وتُصفَّر عند إعادة تشغيل الخدمة، إلا إذا فعّل مشغل المنصة `RAG_METRICS_PERSISTENCE=redis`.
+> Metrics are in-memory by default and reset on service restart unless the platform operator enables `RAG_METRICS_PERSISTENCE=redis`.
+
 ---
 
 ### 2. DecisionOS — اتخاذ القرارات
@@ -361,16 +388,21 @@ A: The error will be logged. Check the audit trail or contact support.
 
 ### Demo Users / المستخدمين التجريبيين
 
-| Email | Name / الاسم | Role / الدور | Password |
-|-------|-------------|--------------|----------|
-| admin.pilot@aqliya.com | أحمد المنصوري | ADMIN | pilot123 |
-| partner.pilot@aqliya.com | خالد العتيبي | ADMIN | pilot123 |
-| manager.pilot@aqliya.com | سارة القحطاني | OPERATOR | pilot123 |
-| auditor.pilot@aqliya.com | محمد السبيعي | OPERATOR | pilot123 |
-| reviewer.pilot@aqliya.com | نورة الحربي | OPERATOR | pilot123 |
-| operator.pilot@aqliya.com | فهد الدوسري | OPERATOR | pilot123 |
-| analyst.pilot@aqliya.com | لينا الشمري | OPERATOR | pilot123 |
-| viewer.pilot@aqliya.com | عبدالله المطيري | VIEWER | pilot123 |
+Every pilot login is provisioned explicitly by `prisma/seed-pilot.ts` as both a
+platform `User` and an AuditOS `AuditUser`. AuditOS authorization reads the
+**AuditOS role**, not the platform role — engagement approval requires `admin`
+or `partner`.
+
+| Email | Name / الاسم | Platform Role | AuditOS Role | Password |
+|-------|-------------|---------------|--------------|----------|
+| admin.pilot@aqliya.com | أحمد المنصوري | ADMIN | admin | pilot123 |
+| partner.pilot@aqliya.com | خالد العتيبي | ADMIN | partner | pilot123 |
+| manager.pilot@aqliya.com | سارة القحطاني | OPERATOR | operator | pilot123 |
+| auditor.pilot@aqliya.com | محمد السبيعي | OPERATOR | operator | pilot123 |
+| reviewer.pilot@aqliya.com | نورة الحربي | OPERATOR | reviewer | pilot123 |
+| operator.pilot@aqliya.com | فهد الدوسري | OPERATOR | operator | pilot123 |
+| analyst.pilot@aqliya.com | لينا الشمري | OPERATOR | operator | pilot123 |
+| viewer.pilot@aqliya.com | عبدالله المطيري | VIEWER | viewer | pilot123 |
 
 ### PlatformAuditLog Coverage / تغطية سجل التدقيق الموحد
 

@@ -1,0 +1,7 @@
+AccountCode,AccountName,Debit,Credit
+1000,Cash,120000,0
+1100,Bank,380000,0
+1200,Accounts Receivable,250000,0
+2000,Accounts Payable,0,180000
+3000,Share Capital,0,400000
+4000,Revenue,0,170000

@@ -1,8 +1,9 @@
-import * as XLSX from 'xlsx'
+import { createWorkbook, aoaToSheet, writeBuffer } from '@/lib/xlsx'
+import type { Workbook } from '@/lib/xlsx'
 import type { ExportInput, ExportResult, Exporter } from './types'
 
-function buildCoverSheet(input: ExportInput): XLSX.WorkSheet {
-  const data: string[][] = []
+function buildCoverSheet(wb: Workbook, input: ExportInput): void {
+  const data: (string | number)[][] = []
   const m = input.metadata
   data.push([`${'AQLIYA'} AuditOS`, '', ''])
   data.push(['Financial Statements Export', '', ''])
@@ -32,91 +33,77 @@ function buildCoverSheet(input: ExportInput): XLSX.WorkSheet {
   if (input.findings) data.push(['Findings:', String(input.findings.length), ''])
   if (input.recommendations) data.push(['Recommendations:', String(input.recommendations.length), ''])
 
-  const ws = XLSX.utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 30 }, { wch: 40 }, { wch: 15 }]
-  return ws
+  aoaToSheet(wb, data, { sheetName: 'Cover', colWidths: [30, 40, 15] })
 }
 
-function buildStatementsSheet(input: ExportInput): XLSX.WorkSheet {
+function buildStatementsSheet(wb: Workbook, input: ExportInput): void {
   const data: (string | number)[][] = []
   for (const stmt of input.statements) {
     data.push([stmt.title, '', ''])
     data.push(['Account', 'Amount (SAR)', ''])
     for (const line of stmt.lines) {
       const indent = line.indentLevel > 0 ? '  '.repeat(line.indentLevel) : ''
-      const label = line.isTotal ? `${indent}${line.label}` : `${indent}${line.label}`
+      const label = `${indent}${line.label}`
       data.push([label, line.amount, ''])
     }
     data.push(['', '', ''])
   }
-  const ws = XLSX.utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 55 }, { wch: 20 }, { wch: 10 }]
-  return ws
+  aoaToSheet(wb, data, { sheetName: 'Statements', colWidths: [55, 20, 10] })
 }
 
-function buildNotesSheet(input: ExportInput): XLSX.WorkSheet {
-  const data: (string | number | string[])[][] = []
+function buildNotesSheet(wb: Workbook, input: ExportInput): void {
+  const data: (string | number)[][] = []
   data.push(['Note #', 'Title', 'Status', 'Missing Information'])
   for (const note of input.notes) {
     data.push([note.noteNumber, note.title, note.status, note.missingInformation.join(', ')])
   }
-  const ws = XLSX.utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 10 }, { wch: 40 }, { wch: 12 }, { wch: 35 }]
-  return ws
+  aoaToSheet(wb, data, { sheetName: 'Notes', colWidths: [10, 40, 12, 35] })
 }
 
-function buildEvidenceSheet(input: ExportInput): XLSX.WorkSheet | null {
-  if (!input.evidence || input.evidence.length === 0) return null
+function buildEvidenceSheet(wb: Workbook, input: ExportInput): boolean {
+  if (!input.evidence || input.evidence.length === 0) return false
   const data: (string | number)[][] = []
   data.push(['Filename', 'Type', 'State', 'Size (KB)', 'Hash'])
   for (const ev of input.evidence) {
     data.push([ev.filename, ev.fileType, ev.state, Math.round(ev.fileSize / 1024), ev.fileHash.substring(0, 12)])
   }
-  const ws = XLSX.utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 35 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 16 }]
-  return ws
+  aoaToSheet(wb, data, { sheetName: 'Evidence', colWidths: [35, 8, 12, 12, 16] })
+  return true
 }
 
-function buildFindingsSheet(input: ExportInput): XLSX.WorkSheet | null {
-  if (!input.findings || input.findings.length === 0) return null
+function buildFindingsSheet(wb: Workbook, input: ExportInput): boolean {
+  if (!input.findings || input.findings.length === 0) return false
   const data: (string | number)[][] = []
   data.push(['Title', 'Type', 'Severity', 'Status'])
   for (const f of input.findings) {
     data.push([f.title, f.findingType, f.severity, f.status])
   }
-  const ws = XLSX.utils.aoa_to_sheet(data)
-  ws['!cols'] = [{ wch: 35 }, { wch: 18 }, { wch: 10 }, { wch: 12 }]
-  return ws
+  aoaToSheet(wb, data, { sheetName: 'Findings', colWidths: [35, 18, 10, 12] })
+  return true
 }
 
 export const xlsxExporter: Exporter = {
   format: 'xlsx',
 
   async generate(input: ExportInput): Promise<ExportResult> {
-    const wb = XLSX.utils.book_new()
+    const wb = createWorkbook()
 
-    const coverSheet = buildCoverSheet(input)
-    XLSX.utils.book_append_sheet(wb, coverSheet, 'Cover')
-
-    const stmtSheet = buildStatementsSheet(input)
-    XLSX.utils.book_append_sheet(wb, stmtSheet, 'Statements')
+    buildCoverSheet(wb, input)
+    buildStatementsSheet(wb, input)
 
     if (input.notes.length > 0) {
-      const notesSheet = buildNotesSheet(input)
-      XLSX.utils.book_append_sheet(wb, notesSheet, 'Notes')
+      buildNotesSheet(wb, input)
     }
 
     if (input.evidence && input.evidence.length > 0) {
-      const evSheet = buildEvidenceSheet(input)
-      if (evSheet) XLSX.utils.book_append_sheet(wb, evSheet, 'Evidence')
+      buildEvidenceSheet(wb, input)
     }
 
     if (input.findings && input.findings.length > 0) {
-      const findSheet = buildFindingsSheet(input)
-      if (findSheet) XLSX.utils.book_append_sheet(wb, findSheet, 'Findings')
+      buildFindingsSheet(wb, input)
     }
 
-    const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }) as Buffer
+    const buffer = await writeBuffer(wb)
 
     return {
       format: 'xlsx',

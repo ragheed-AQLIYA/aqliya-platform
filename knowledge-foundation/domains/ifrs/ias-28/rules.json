@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-6-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-28-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-28",
+    "standardCode": "IAS 28",
+    "versionLabel": "IAS 28:2024",
+    "wave": 6,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-006",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-28-r001",
+      "paragraphReference": "IAS 28.10",
+      "ruleText": "An entity shall use the equity method to account for its investments in associates and joint ventures in its consolidated financial statements.",
+      "topic": "equity-method-application",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-28",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-28-r002",
+      "paragraphReference": "IAS 28.24",
+      "ruleText": "Under the equity method, the investment is initially recognised at cost and the carrying amount is increased or decreased to recognise the investor's share of the profit or loss of the investee after the acquisition date.",
+      "topic": "equity-method-initial-recognition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-28",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-28-r003",
+      "paragraphReference": "IAS 28.38",
+      "ruleText": "An entity shall discontinue the use of the equity method from the date that the investment ceases to be an associate or a joint venture and account for the investment in accordance with IFRS 9.",
+      "topic": "equity-method-cessation",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-28",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-28-r004",
+      "paragraphReference": "IAS 28.50",
+      "ruleText": "An entity shall disclose significant judgements and assumptions made in determining whether it has significant influence or joint control, and summarised financial information about associates and joint ventures.",
+      "topic": "equity-method-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-28",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

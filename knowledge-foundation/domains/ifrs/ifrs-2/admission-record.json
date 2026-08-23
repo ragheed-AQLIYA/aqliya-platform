@@ -64,9 +64,11 @@
     }
   },
   "blockedTechnologies": [
-    "RAG",
     "Ollama",
     "Fine-tuning",
     "Vector DB"
-  ]
+  ],
+  "ragUnblockedAt": "2026-08-19T00:00:00.000Z",
+  "ragUnblockedBy": "system-admin",
+  "ragUnblockReason": "Knowledge foundation admission complete. RAG ingestion approved for pilot expansion."
 }

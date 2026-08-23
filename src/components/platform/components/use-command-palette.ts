@@ -15,6 +15,20 @@ import {
   FolderOpen,
 } from "lucide-react"
 
+/**
+ * True when the keyboard event originates from a field the user is typing into.
+ * Global single-letter shortcuts must never fire for those events — otherwise
+ * typing ordinary prose ("recognised", "obligation") triggers the "g then a"
+ * chord and navigates the user away mid-edit, losing their input.
+ */
+function isTypingTarget(event: KeyboardEvent): boolean {
+  const target = event.target as HTMLElement | null
+  if (!target) return false
+  if (target.isContentEditable) return true
+  const tag = target.tagName
+  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT"
+}
+
 export type CommandCategory = "navigate" | "module" | "create" | "review" | "recent" | "settings" | "entity"
 
 export interface CommandEntry {
@@ -105,12 +119,15 @@ export function useCommandPalette({ open, onOpenChange }: PlatformCommandPalette
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (open) return
+      if (isTypingTarget(e)) return
+      if (e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === "g") {
         const nextKey = (e2: KeyboardEvent) => {
+          window.removeEventListener("keydown", nextKey)
+          if (isTypingTarget(e2)) return
           if (e2.key === "d") { router.push("/decisions"); e2.preventDefault() }
           if (e2.key === "a") { router.push("/audit"); e2.preventDefault() }
           if (e2.key === "s") { router.push("/sales"); e2.preventDefault() }
-          window.removeEventListener("keydown", nextKey)
         }
         window.addEventListener("keydown", nextKey, { once: true })
         setTimeout(() => window.removeEventListener("keydown", nextKey), 1000)

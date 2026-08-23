@@ -69,14 +69,14 @@ describe("AI Reliability — Feature flags", () => {
   })
 
   it("FF_AI_REAL_PROVIDERS gates ai.real-providers", () => {
-    delete process.env.FF_AI_REAL_PROVIDERS
+    process.env.FF_AI_REAL_PROVIDERS = "false"
     expect(isEnabled("ai.real-providers")).toBe(false)
     process.env.FF_AI_REAL_PROVIDERS = "true"
     expect(isEnabled("ai.real-providers")).toBe(true)
   })
 
   it("FF_AI_RAG gates ai.rag", () => {
-    delete process.env.FF_AI_RAG
+    process.env.FF_AI_RAG = "false"
     expect(isEnabled("ai.rag")).toBe(false)
     process.env.FF_AI_RAG = "true"
     expect(isEnabled("ai.rag")).toBe(true)

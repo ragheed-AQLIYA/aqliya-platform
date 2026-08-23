@@ -9,7 +9,9 @@ process.env.DATABASE_URL =
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
+
+function cellText(v: unknown): string { if (v == null) return ""; if (typeof v === "object" && (v as any).text) return String((v as any).text); return String(v); }
 
 const CANONICAL_SEED = [
   {
@@ -86,21 +88,52 @@ const CANONICAL_SEED = [
   },
 ] as const;
 
-function parseFile(filePath: string): Array<Record<string, unknown>> {
+async function parseFile(filePath: string): Promise<Array<Record<string, unknown>>> {
   const ext = path.extname(filePath).toLowerCase();
   if (ext === ".xlsx" || ext === ".xls") {
-    const wb = XLSX.readFile(filePath);
-    const sheet = wb.Sheets[wb.SheetNames[0]!]!;
-    return XLSX.utils.sheet_to_json(sheet, { defval: "" }) as Array<
-      Record<string, unknown>
-    >;
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(filePath);
+    const ws = workbook.worksheets[0];
+    const rows: Array<Record<string, unknown>> = [];
+    let headers: string[] = [];
+    ws.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) {
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          headers[colNumber] = cellText(cell.value).trim();
+        });
+        return;
+      }
+      const obj: Record<string, unknown> = {};
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const key = headers[colNumber];
+        if (key) obj[key] = cell.value ?? "";
+      });
+      rows.push(obj);
+    });
+    return rows;
   }
   if (ext === ".csv") {
-    const wb = XLSX.read(fs.readFileSync(filePath), { type: "buffer" });
-    const sheet = wb.Sheets[wb.SheetNames[0]!]!;
-    return XLSX.utils.sheet_to_json(sheet, { defval: "" }) as Array<
-      Record<string, unknown>
-    >;
+    const buffer = fs.readFileSync(filePath);
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength));
+    const ws = workbook.worksheets[0];
+    const rows: Array<Record<string, unknown>> = [];
+    let headers: string[] = [];
+    ws.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) {
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          headers[colNumber] = cellText(cell.value).trim();
+        });
+        return;
+      }
+      const obj: Record<string, unknown> = {};
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        const key = headers[colNumber];
+        if (key) obj[key] = cell.value ?? "";
+      });
+      rows.push(obj);
+    });
+    return rows;
   }
   throw new Error(`Unsupported file type: ${ext}`);
 }
@@ -156,7 +189,7 @@ async function main() {
       noopCreate as typeof prisma.tBClassificationHistory.create;
   }
 
-  const rows = parseFile(resolved);
+  const rows = await parseFile(resolved);
   const codeKey =
     Object.keys(rows[0] ?? {}).find((k) => k.includes("رقم الحساب")) ??
     "Account Code";

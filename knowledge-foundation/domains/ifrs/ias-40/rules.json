@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-4-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-40-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-40",
+    "standardCode": "IAS 40",
+    "versionLabel": "IAS 40:2024",
+    "wave": 3,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-004",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-40-r001",
+      "paragraphReference": "IAS 40.5",
+      "ruleText": "Investment property is property held to earn rentals or for capital appreciation or both, rather than for use in production or supply of goods or services or for administrative purposes or for sale in the ordinary course of business.",
+      "topic": "ip-definition",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-40",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-40-r002",
+      "paragraphReference": "IAS 40.30",
+      "ruleText": "An entity shall choose either the fair value model or the cost model as its accounting policy for investment property and shall apply that policy to all of its investment property.",
+      "topic": "ip-measurement",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-40",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-40-r003",
+      "paragraphReference": "IAS 40.55",
+      "ruleText": "Under the fair value model, investment property shall be measured at fair value, with changes in fair value recognised in profit or loss.",
+      "topic": "ip-fair-value",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-40",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "mapping-engine"
+      }
+    },
+    {
+      "ruleId": "ias-40-r004",
+      "paragraphReference": "IAS 40.75",
+      "ruleText": "An entity shall disclose the measurement model applied, the basis of fair value determination, and the amount of investment property recognised in the financial statements.",
+      "topic": "ip-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-40",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

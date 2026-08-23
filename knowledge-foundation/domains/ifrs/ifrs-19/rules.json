@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-7-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ifrs-19-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ifrs-19",
+    "standardCode": "IFRS 19",
+    "versionLabel": "IFRS 19:2024",
+    "wave": 8,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-008",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ifrs-19-r001",
+      "paragraphReference": "IFRS 19.3",
+      "ruleText": "A subsidiary that does not have public accountability may elect to apply the disclosure requirements in IFRS 19 instead of the disclosure requirements in other IFRSs, provided it applies them consistently.",
+      "topic": "subsidiary-scope-election",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-19",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-19-r002",
+      "paragraphReference": "IFRS 19.6",
+      "ruleText": "A subsidiary applying IFRS 19 shall disclose that it is a subsidiary without public accountability and that it has elected to apply the reduced disclosure requirements.",
+      "topic": "subsidiary-election-disclosure",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-19",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    },
+    {
+      "ruleId": "ifrs-19-r003",
+      "paragraphReference": "IFRS 19.B2",
+      "ruleText": "A subsidiary without public accountability is a subsidiary that does not file or is not in the process of filing its financial statements with a securities regulator or similar authority for the purpose of issuing instruments in a public market.",
+      "topic": "subsidiary-eligibility-assessment",
+      "usage": "mapping-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-19",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "mapping-engine" }
+    },
+    {
+      "ruleId": "ifrs-19-r004",
+      "paragraphReference": "IFRS 19.C5",
+      "ruleText": "An entity shall apply IFRS 19 for annual reporting periods beginning on or after 1 January 2027, with earlier application permitted.",
+      "topic": "subsidiary-effective-date",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ifrs-19",
+      "confidenceScore": 90,
+      "validationStatus": "validated",
+      "ontology": { "domain": "accounting", "subdomain": "ifrs-standards", "entity": "standard", "relationship": "implements", "authority": "ifrs-foundation", "usage": "disclosure-engine" }
+    }
+  ]
+}

@@ -10,9 +10,19 @@ import type { Prisma } from "@prisma/client";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { parse } from "csv-parse/sync";
-import * as XLSX from "xlsx";
+import {
+  readBuffer,
+  sheetToJsonArrays,
+} from "@/lib/xlsx";
 import * as mammoth from "mammoth";
 import { PDFParse, VerbosityLevel } from "pdf-parse";
+import {
+  validateXlsxArchive,
+  MAX_XLSX_BUFFER_SIZE,
+} from "@/lib/security/xlsx-validation";
+
+// Re-export for backward compatibility — new code should import from @/lib/security/xlsx-validation
+export { validateXlsxArchive as prevalidateZipBuffer } from "@/lib/security/xlsx-validation";
 
 // ─── Module-level audit logger ───
 const alog = auditLogger({ productKey: Product.OFFICE_AI_ASSISTANT });
@@ -21,7 +31,6 @@ const alog = auditLogger({ productKey: Product.OFFICE_AI_ASSISTANT });
 
 const MAX_TXT_SIZE = 1 * 1024 * 1024; // 1 MB
 const MAX_CSV_SIZE = 5 * 1024 * 1024; // 5 MB
-const MAX_XLSX_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_DOCX_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_CONTENT_LENGTH = 50 * 1000; // 50,000 chars
@@ -110,7 +119,7 @@ function extractTextFromCsv(buffer: Buffer): {
 // Layer 1 — Compressed size limit (MAX_XLSX_SIZE = 10MB)
 //     Rejects oversized compressed files before any processing.
 //
-// Layer 2 — ZIP Central Directory pre-validation (prevalidateZipBuffer)
+// Layer 2 — ZIP Central Directory pre-validation (validateXlsxArchive)
 //     Parses the ZIP central directory structure WITHOUT decompressing
 //     file entries. Counts entries, sums declared uncompressed sizes,
 //     and checks per-entry compression ratios. This runs BEFORE
@@ -121,149 +130,29 @@ function extractTextFromCsv(buffer: Buffer): {
 //     After XLSX.read() successfully parses the workbook, validates
 //     total cell count across all sheets.
 //
-// NOTE: XLSX.read() with type:"buffer" fully decompresses the ZIP
-// into memory. A crafted ZIP with valid central directory entries
-// but malicious compressed data could still cause issues. Layers 1+2
-// protect against the practical attack surface:
-//   - 10MB compressed size limit prevents large payloads
-//   - Central directory validation catches entry count and ratio bombs
-//   - Cell count check catches bombs that slip through both layers
-// For true isolation (untrusted XLSX from external sources), consider
-// worker-process sandboxing or WASM-based parsing. For Office AI
-// extraction (internal documents), these three layers are sufficient.
+// Validator is shared from @/lib/security/xlsx-validation for reuse
+// across ERP, workbook, and other XLSX entry points.
 
-const MAX_ZIP_ENTRIES = 200;
-const MAX_ZIP_UNCOMPRESSED_SIZE = 50 * 1024 * 1024; // 50 MB
-const MAX_ENTRY_COMPRESSION_RATIO = 100; // 100:1 compressed:uncompressed
-
-/**
- * Pre-validate a ZIP/XLSX buffer by parsing the Central Directory.
- * Does NOT decompress any entries — reads only metadata from the
- * fixed-size central directory structure at the end of the ZIP.
- *
- * Returns { valid: true } if safe, or { valid: false, reason } if bomb detected.
- *
- * Exported for security testing.
- */
-export function prevalidateZipBuffer(
-  buffer: Buffer,
-): { valid: true } | { valid: false; reason: string } {
-  if (buffer.length < 22) {
-    return { valid: false, reason: "XLSX buffer too small to be valid ZIP" };
-  }
-
-  // Find End of Central Directory (EOCD) record — scans backwards from end
-  // EOCD signature: 0x50 0x4B 0x05 0x06 (little-endian)
-  let eocdOffset = -1;
-  const searchLimit = Math.max(0, buffer.length - 65557);
-  for (let i = buffer.length - 22; i >= searchLimit; i--) {
-    if (
-      buffer[i] === 0x50 &&
-      buffer[i + 1] === 0x4b &&
-      buffer[i + 2] === 5 &&
-      buffer[i + 3] === 6
-    ) {
-      eocdOffset = i;
-      break;
-    }
-  }
-
-  if (eocdOffset < 0) {
-    return { valid: false, reason: "XLSX buffer missing ZIP End of Central Directory" };
-  }
-
-  const entryCount = buffer.readUInt16LE(eocdOffset + 10);
-  const cdSize = buffer.readUInt32LE(eocdOffset + 12);
-  const cdOffset = buffer.readUInt32LE(eocdOffset + 16);
-
-  if (entryCount > MAX_ZIP_ENTRIES) {
-    return {
-      valid: false,
-      reason: `XLSX ZIP contains ${entryCount} entries (max ${MAX_ZIP_ENTRIES}) — possible ZIP bomb`,
-    };
-  }
-
-  if (cdOffset + cdSize > buffer.length) {
-    return { valid: false, reason: "XLSX ZIP central directory extends beyond buffer" };
-  }
-
-  // Parse Central Directory entries to check compression ratios
-  let totalUncompressedSize = 0;
-  const seenNames = new Set<string>();
-
-  let pos = cdOffset;
-  for (let i = 0; i < entryCount && pos + 46 <= cdOffset + cdSize; i++) {
-    const sig = buffer.readUInt32LE(pos);
-    if (sig !== 0x02014b50) {
-      return { valid: false, reason: `XLSX ZIP invalid central directory entry at offset ${pos}` };
-    }
-
-    const compMethod = buffer.readUInt16LE(pos + 10);
-    const compSize = buffer.readUInt32LE(pos + 20);
-    const uncompSize = buffer.readUInt32LE(pos + 24);
-    const nameLen = buffer.readUInt16LE(pos + 28);
-    const extraLen = buffer.readUInt16LE(pos + 30);
-    const commentLen = buffer.readUInt16LE(pos + 32);
-    const name = buffer.toString("utf8", pos + 46, pos + 46 + nameLen);
-
-    // Check for duplicate entries (ZIP bomb technique)
-    if (seenNames.has(name)) {
-      return {
-        valid: false,
-        reason: `XLSX ZIP contains duplicate entry "${name}" — possible ZIP bomb`,
-      };
-    }
-    seenNames.add(name);
-
-    // Check per-entry compression ratio (deflate method only)
-    if (compMethod === 8 && compSize > 0 && uncompSize > 0) {
-      const ratio = uncompSize / compSize;
-      if (ratio > MAX_ENTRY_COMPRESSION_RATIO) {
-        return {
-          valid: false,
-          reason: `XLSX ZIP entry "${name}" has compression ratio ${ratio.toFixed(0)}:1 (max ${MAX_ENTRY_COMPRESSION_RATIO}:1) — possible decompression bomb`,
-        };
-      }
-    }
-
-    totalUncompressedSize += uncompSize;
-    pos += 46 + nameLen + extraLen + commentLen;
-  }
-
-  if (totalUncompressedSize > MAX_ZIP_UNCOMPRESSED_SIZE) {
-    return {
-      valid: false,
-      reason: `XLSX ZIP total uncompressed size ${(totalUncompressedSize / 1024 / 1024).toFixed(1)} MB (max ${MAX_ZIP_UNCOMPRESSED_SIZE / 1024 / 1024} MB) — possible ZIP bomb`,
-    };
-  }
-
-  return { valid: true };
-}
-
-function extractTextFromXlsx(buffer: Buffer): {
+async function extractTextFromXlsx(buffer: Buffer): Promise<{
   text: string;
   meta: Record<string, unknown>;
-} {
+}> {
   // Layer 2: Pre-decompression ZIP structure validation
-  const zipCheck = prevalidateZipBuffer(buffer);
+  const zipCheck = validateXlsxArchive(buffer);
   if (!zipCheck.valid) {
     throw new Error(`XLSX rejected: ${zipCheck.reason}`);
   }
 
-  const workbook = XLSX.read(buffer, {
-    type: "buffer",
-    cellFormula: false,
-    cellHTML: false,
-  });
+  const workbook = await readBuffer(buffer);
 
   // Layer 3: Post-parse cell count check (catches bombs that bypass layers 1-2)
   const MAX_TOTAL_CELLS = 100_000;
   let totalCells = 0;
-  for (const name of workbook.SheetNames) {
-    const sheet = workbook.Sheets[name];
-    const ref = sheet["!ref"] || "A1";
-    const range = XLSX.utils.decode_range(ref);
-    totalCells += (range.e.r - range.s.r + 1) * (range.e.c - range.s.c + 1);
+  for (const ws of workbook.worksheets) {
+    const dims = ws.dimensions;
+    if (dims && dims.bottom > 0 && dims.right > 0) {
+      totalCells += (dims.bottom - dims.top + 1) * (dims.right - dims.left + 1);
+    }
   }
   if (totalCells > MAX_TOTAL_CELLS) {
     throw new Error(
@@ -271,21 +160,22 @@ function extractTextFromXlsx(buffer: Buffer): {
     );
   }
 
-  const sheetNames = workbook.SheetNames.slice(0, MAX_XLSX_SHEETS);
-  const truncated = workbook.SheetNames.length > MAX_XLSX_SHEETS;
+  const allSheets = workbook.worksheets;
+  const sheetNames = allSheets
+    .slice(0, MAX_XLSX_SHEETS)
+    .map((ws) => ws.name);
+  const truncated = allSheets.length > MAX_XLSX_SHEETS;
 
   let output = `**Excel Workbook Analysis**\n\n`;
-  output += `Total sheets: ${workbook.SheetNames.length}\n`;
+  output += `Total sheets: ${allSheets.length}\n`;
   output += `Sheets sampled: ${sheetNames.length}\n\n`;
 
   const sheetsMeta: Record<string, unknown>[] = [];
 
   for (const name of sheetNames) {
-    const sheet = workbook.Sheets[name];
-    const json = XLSX.utils.sheet_to_json(sheet, {
-      header: 1,
-      defval: "",
-    }) as unknown[][];
+    const ws = workbook.getWorksheet(name);
+    if (!ws) continue;
+    const json = sheetToJsonArrays(ws, { includeEmpty: true }) as unknown[][];
     const totalRows = json.length;
     const maxRows = Math.min(totalRows, MAX_XLSX_ROWS_PER_SHEET);
     const headers =
@@ -326,7 +216,7 @@ function extractTextFromXlsx(buffer: Buffer): {
 
   const meta: Record<string, unknown> = {
     type: "xlsx",
-    sheetCount: workbook.SheetNames.length,
+    sheetCount: allSheets.length,
     sheetsSampled: sheetNames.length,
     sheets: sheetsMeta,
     truncated,
@@ -472,9 +362,9 @@ export async function extractOfficeAiFileContent(
         `CSV exceeds max size (${MAX_CSV_SIZE / 1024 / 1024} MB)`,
       );
     }
-    if (extractType === "xlsx" && buffer.length > MAX_XLSX_SIZE) {
+    if (extractType === "xlsx" && buffer.length > MAX_XLSX_BUFFER_SIZE) {
       throw new Error(
-        `XLSX exceeds max size (${MAX_XLSX_SIZE / 1024 / 1024} MB)`,
+        `XLSX exceeds max size (${MAX_XLSX_BUFFER_SIZE / 1024 / 1024} MB)`,
       );
     }
     if (extractType === "docx" && buffer.length > MAX_DOCX_SIZE) {
@@ -503,7 +393,7 @@ export async function extractOfficeAiFileContent(
       extractedContent = normalizeExtractedText(result.text);
       extractionMeta = { ...result.meta, length: extractedContent.length };
     } else if (extractType === "xlsx") {
-      const result = extractTextFromXlsx(buffer);
+      const result = await extractTextFromXlsx(buffer);
       extractedContent = normalizeExtractedText(result.text);
       extractionMeta = { ...result.meta, length: extractedContent.length };
     } else if (extractType === "docx") {

@@ -157,7 +157,11 @@
     "eng:memory": "node engineering/intelligence/architecture-memory/sync.mjs",
     "eng:os": "node engineering/os/run.mjs",
     "eng:impact": "node engineering/os/run.mjs --impact",
-    "eng:programs": "node engineering/programs/run.mjs"
+    "eng:programs": "node engineering/programs/run.mjs",
+    "lc:regulatory:ingest": "tsx -r ./scripts/mock-server-only.cjs scripts/localcontent/lcgpa-regulatory-ingest.ts",
+    "lc:regulatory:monitor": "tsx -r ./scripts/mock-server-only.cjs scripts/localcontent/lcgpa-regulatory-monitor.ts",
+    "lc:regulatory:activate": "tsx -r ./scripts/mock-server-only.cjs scripts/localcontent/lcgpa-regulatory-activate.ts",
+    "lc:regulatory:bootstrap": "tsx -r ./scripts/mock-server-only.cjs scripts/localcontent/lcgpa-regulatory-bootstrap.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
@@ -200,6 +204,7 @@
     "cookies-next": "^6.1.1",
     "csv-parse": "^6.2.1",
     "date-fns": "^4.1.0",
+    "exceljs": "^4.4.0",
     "glob": "^13.0.6",
     "ioredis": "^5.11.0",
     "lucide-react": "^1.14.0",
@@ -218,7 +223,6 @@
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.5.0",
     "tw-animate-css": "^1.4.0",
-    "xlsx": "^0.18.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

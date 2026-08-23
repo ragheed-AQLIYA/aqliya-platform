@@ -4,6 +4,7 @@ import {
   exportAuditFileAction,
   exportBilingualAction,
 } from "@/actions/audit-export-actions";
+import { renderExportPackage } from "@/lib/audit/export-service";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
 import { createLogger } from "@/lib/observability/logger";
 import { getCurrentUser } from "@/lib/auth";
@@ -25,20 +26,23 @@ export async function GET(
     const user = await getCurrentUser();
     const organizationId = user.platformOrganizationId ?? user.organizationId;
     void organizationId; // tenant-scoped: verified via assertEngagementAccess inside actions
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let result: any;
 
+    // 1. Get structured export data from the server action
+    let pkg;
     if (format === "bilingual") {
-      result = await exportBilingualAction(engagementId, "bilingual");
+      pkg = await exportBilingualAction(engagementId, "bilingual");
     } else if (format === "xlsx") {
-      result = await exportAuditFileAction(engagementId);
+      pkg = await exportAuditFileAction(engagementId);
     } else {
-      result = await exportFinancialStatementsAction(engagementId);
+      pkg = await exportFinancialStatementsAction(engagementId);
     }
 
-    const buffer = Buffer.from(result.buffer as string, "base64");
+    // 2. Render to the requested format (PDF or XLSX)
+    const renderFormat = format === "bilingual" ? "pdf" : format as "pdf" | "xlsx";
+    const result = await renderExportPackage(pkg, renderFormat);
 
-    return new NextResponse(buffer, {
+    // 3. Return the rendered buffer
+    return new NextResponse(new Uint8Array(result.buffer), {
       status: 200,
       headers: {
         "Content-Type": result.mimeType,

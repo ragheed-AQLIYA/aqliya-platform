@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "charterVersion": "1.0",
+    "authorityId": "ifrs-foundation",
+    "authorityLevel": "A",
+    "licenseId": "ifrs-foundation-standard",
+    "domain": "accounting",
+    "subdomain": "ifrs-standards",
+    "jurisdiction": "global",
+    "producedBy": "session-5-ingestion",
+    "ingestionMethod": "structured-json",
+    "validationStatus": "validated",
+    "reviewStatus": "approved",
+    "admissionWorkflowStage": "productionAdmission",
+    "storageTier": "canonical",
+    "ragIngest": false,
+    "vectorIndex": false,
+    "assetId": "kf-accounting-a-ias-33-rules",
+    "assetType": "A",
+    "parentAssetId": "kf-accounting-a-ias-33",
+    "standardCode": "IAS 33",
+    "versionLabel": "IAS 33:2024",
+    "wave": 5,
+    "ruleCount": 4,
+    "executableRules": true,
+    "llmGenerated": false,
+    "humanApprovalRequired": true,
+    "productionAdmittedAt": "2026-08-18",
+    "reviewerApproval": {
+      "roleId": "KNOWLEDGE_REVIEWER",
+      "reviewerId": "kf-reviewer-batch-005",
+      "decision": "approved",
+      "timestamp": "2026-08-18"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "ias-33-r001",
+      "paragraphReference": "IAS 33.9",
+      "ruleText": "An entity shall calculate basic earnings per share by dividing the profit or loss attributable to ordinary equity holders of the parent entity by the weighted average number of ordinary shares outstanding during the period.",
+      "topic": "basic-eps",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-33",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ias-33-r002",
+      "paragraphReference": "IAS 33.30",
+      "ruleText": "An entity shall calculate diluted earnings per share by adjusting profit or loss attributable to ordinary equity holders and the weighted average number of shares outstanding for the effects of all dilutive potential ordinary shares.",
+      "topic": "diluted-eps",
+      "usage": "tb-intelligence",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-33",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "tb-intelligence"
+      }
+    },
+    {
+      "ruleId": "ias-33-r003",
+      "paragraphReference": "IAS 33.48",
+      "ruleText": "An entity shall disclose the amounts used as the numerator in calculating basic and diluted EPS, and a reconciliation of those amounts to profit or loss attributable to the parent entity.",
+      "topic": "eps-reconciliation",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-33",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    },
+    {
+      "ruleId": "ias-33-r004",
+      "paragraphReference": "IAS 33.66",
+      "ruleText": "An entity shall disclose the weighted average number of ordinary shares used as the denominator in calculating basic and diluted EPS, and a reconciliation of those denominators to each other.",
+      "topic": "eps-share-reconciliation",
+      "usage": "disclosure-engine",
+      "assetType": "A",
+      "lineageParentId": "kf-accounting-a-ias-33",
+      "confidenceScore": 95,
+      "validationStatus": "validated",
+      "ontology": {
+        "domain": "accounting",
+        "subdomain": "ifrs-standards",
+        "entity": "standard",
+        "relationship": "implements",
+        "authority": "ifrs-foundation",
+        "usage": "disclosure-engine"
+      }
+    }
+  ]
+}

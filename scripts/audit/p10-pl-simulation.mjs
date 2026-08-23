@@ -3,7 +3,13 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import XLSX from "xlsx";
+import ExcelJS from "exceljs";
+
+function cellText(v) {
+  if (v == null) return "";
+  if (typeof v === "object" && v.text) return String(v.text);
+  return String(v);
+}
 
 const { CANONICAL_COA_ACCOUNTS } = await import(
   "../../src/lib/audit/coa/canonical-coa.ts"
@@ -29,12 +35,30 @@ function parseAmount(value) {
   return Number(String(value ?? "").replace(/,/g, "")) || 0;
 }
 
-function parseTb(filePath) {
-  const wb = XLSX.readFile(filePath);
-  const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
-    defval: "",
+async function parseTb(filePath) {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(filePath);
+  const ws = workbook.worksheets[0];
+  if (!ws) return [];
+
+  const excelRows = [];
+  let headers = [];
+  ws.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+        headers[colNumber] = cellText(cell.value);
+      });
+      return;
+    }
+    const obj = {};
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const key = headers[colNumber];
+      if (key) obj[key] = cellText(cell.value);
+    });
+    excelRows.push(obj);
   });
-  const keys = Object.keys(rows[0] ?? {});
+
+  const keys = Object.keys(excelRows[0] ?? {});
   const codeKey = keys.find((k) => k.includes("رقم الحساب")) ?? "Account Code";
   const nameKey = keys.find((k) => k.includes("اسم الحساب")) ?? "Account Name";
   const closeDK = keys.find((k) => k.includes("الرصيد الحالي مدين"));
@@ -45,7 +69,7 @@ function parseTb(filePath) {
   const bsKey = keys.find((k) => k.includes("BS/IS"));
   const hintKeys = keys.filter((k) => /^mapping\s*\d/i.test(k.trim()));
 
-  return rows
+  return excelRows
     .map((r) => {
       const accountCode = String(r[codeKey] ?? "").trim();
       const accountName = String(r[nameKey] ?? "").trim();
@@ -169,7 +193,7 @@ function legacyNetProfit(mappings) {
   );
 }
 
-const tbRows = parseTb(tbFile);
+const tbRows = await parseTb(tbFile);
 const mappings = buildMappings(tbRows);
 
 // Legacy totals (gross closing on all income_statement canonical)

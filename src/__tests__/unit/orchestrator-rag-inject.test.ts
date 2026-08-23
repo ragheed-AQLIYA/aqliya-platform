@@ -66,7 +66,7 @@ describe("orchestrator-rag-inject", () => {
   })
 
   it("returns request unchanged when ai.rag is off", async () => {
-    delete process.env.FF_AI_RAG
+    process.env.FF_AI_RAG = "false"
     const out = await injectGovernedRagIntoRequest(baseRequest, "org-1")
     expect(out.taskInput.ragContext).toBeUndefined()
   })

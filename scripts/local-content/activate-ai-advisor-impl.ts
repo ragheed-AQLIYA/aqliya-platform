@@ -48,7 +48,7 @@ async function main() {
   // ── Step 2: Parse XLSX ──
 
   console.log(`\n[2/7] Parsing TB: ${TB_FILE_PATH}`)
-  const { lines: tbLines, stats: tbStats } = parseTbXlsxWithStats(TB_FILE_PATH)
+  const { lines: tbLines, stats: tbStats } = await parseTbXlsxWithStats(TB_FILE_PATH)
 
   console.log(`  ✓ ${tbStats.totalAccounts} unique accounts`)
   console.log(`  ✓ ${tbStats.totalRows} raw rows processed`)

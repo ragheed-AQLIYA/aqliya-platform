@@ -1,4 +1,5 @@
 import type { ParsedRow, ColumnMapping, AmountColumnMap, ValidationCheck } from "./types"
+import { sheetToJsonObjects } from "@/lib/xlsx"
 
 export function parseAmount(raw: string | undefined | null): number {
   if (raw == null) return 0
@@ -245,31 +246,25 @@ export function parseCSV(text: string): ParsedRow[] {
   return rows
 }
 
-export function parseXLSX(file: File): Promise<ParsedRow[]> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const data = new Uint8Array(e.target?.result as ArrayBuffer)
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const XLSX = require("xlsx")
-        const workbook = XLSX.read(data, { type: "array" })
-        const sheet = workbook.Sheets[workbook.SheetNames[0]]
-        const json: Record<string, string>[] = XLSX.utils.sheet_to_json(sheet, { defval: "" })
-        const headers = Object.keys(json[0] ?? {})
-        const rows: ParsedRow[] = json.map((row: Record<string, string>) => {
-          const parsed: ParsedRow = {}
-          headers.forEach(h => { parsed[h] = String(row[h] ?? "") })
-          return parsed
-        })
-        resolve(rows)
-      } catch {
-        reject(new Error("فشل في تحليل ملف XLSX"))
-      }
-    }
-    reader.onerror = () => reject(new Error("فشل في قراءة الملف"))
-    reader.readAsArrayBuffer(file)
-  })
+export async function parseXLSX(file: File): Promise<ParsedRow[]> {
+  try {
+    const data = await file.arrayBuffer()
+    const ExcelJS = (await import("exceljs")).default
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(data)
+    const sheet = workbook.worksheets[0]
+    if (!sheet) throw new Error("No sheet found")
+    const json: Record<string, unknown>[] = sheetToJsonObjects(sheet, { defval: "" })
+    const headers = Object.keys(json[0] ?? {})
+    const rows: ParsedRow[] = json.map((row: Record<string, unknown>) => {
+      const parsed: ParsedRow = {}
+      headers.forEach(h => { parsed[h] = String(row[h] ?? "") })
+      return parsed
+    })
+    return rows
+  } catch {
+    throw new Error("فشل في تحليل ملف XLSX")
+  }
 }
 
 export function extractClassificationHints(row: ParsedRow): string[] {
