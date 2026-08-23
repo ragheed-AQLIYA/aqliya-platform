@@ -20,6 +20,7 @@ import {
 } from "./bound-calculation";
 import type { RankedSupplier } from "./types";
 import { loadResolvableDatasets } from "./regulatory/persistence";
+import { canonicalEtimadCode } from "./regulatory/parsers/lcgpa-mandatory-list";
 
 // ─── Input ───
 
@@ -90,21 +91,51 @@ export interface LcgpaWorkbookScoreResult {
 export async function loadProjectSuppliersFromSpend(
   db: PrismaClient,
   projectId: string,
-): Promise<{ suppliers: RankedSupplier[]; totalGoodsServicesCost: number }> {
-  // Aggregate spend per supplier
-  const grouped = await db.localContentSpendRecord.groupBy({
-    by: ["supplierId"],
-    where: { projectId },
-    _sum: { amount: true },
+): Promise<{
+  suppliers: RankedSupplier[];
+  totalGoodsServicesCost: number;
+  regulatoryProductCodes: string[];
+}> {
+  // Load the actual project-scoped spend rows. Product identity belongs to
+  // each procurement line, not to the supplier (one supplier may provide
+  // multiple regulated products).
+  const spendRows = await db.localContentSpendRecord.findMany({
+    where: { projectId, category: { in: ["goods", "services"] } },
+    select: { supplierId: true, amount: true, metadata: true },
   });
 
-  if (grouped.length === 0) {
-    return { suppliers: [], totalGoodsServicesCost: 0 };
+  if (spendRows.length === 0) {
+    return { suppliers: [], totalGoodsServicesCost: 0, regulatoryProductCodes: [] };
+  }
+
+  const grouped = new Map<string, { spend: number; productCodes: Set<string> }>();
+  for (const row of spendRows) {
+    const amount = row.amount;
+    if (!Number.isFinite(amount) || amount <= 0) continue;
+    const current = grouped.get(row.supplierId) ?? {
+      spend: 0,
+      productCodes: new Set<string>(),
+    };
+    current.spend += amount;
+    const metadata = row.metadata;
+    if (metadata && typeof metadata === "object" && !Array.isArray(metadata)) {
+      const rawCode = (metadata as { lcgpaProductCode?: unknown }).lcgpaProductCode;
+      if (typeof rawCode === "string") {
+        const code = canonicalEtimadCode(rawCode);
+        if (code) current.productCodes.add(code);
+      }
+    }
+    grouped.set(row.supplierId, current);
+  }
+
+  const supplierIds = [...grouped.keys()];
+  if (supplierIds.length === 0) {
+    return { suppliers: [], totalGoodsServicesCost: 0, regulatoryProductCodes: [] };
   }
 
   // Fetch classification data for the referenced suppliers
   const supplierRows = await db.localContentSupplier.findMany({
-    where: { id: { in: grouped.map((g) => g.supplierId) } },
+    where: { id: { in: supplierIds }, projectId },
     select: {
       id: true,
       name: true,
@@ -117,9 +148,10 @@ export async function loadProjectSuppliersFromSpend(
 
   const VALID_LOCALITY = new Set<string>(["local", "non_local", "mixed"]);
 
-  const enriched = grouped
-    .map((g) => {
-      const row = byId.get(g.supplierId);
+  const enriched = supplierIds
+    .map((supplierId) => {
+      const aggregate = grouped.get(supplierId)!;
+      const row = byId.get(supplierId);
       const rawLocality = row?.localityClassification ?? null;
       const locality = (
         rawLocality && VALID_LOCALITY.has(rawLocality)
@@ -127,11 +159,12 @@ export async function loadProjectSuppliersFromSpend(
           : "unclassified"
       ) as RankedSupplier["localityClassification"];
       return {
-        supplierId: g.supplierId,
-        name: row?.name ?? g.supplierId,
-        spend: g._sum.amount ?? 0,
+        supplierId,
+        name: row?.name ?? supplierId,
+        spend: aggregate.spend,
         localityClassification: locality,
         localContentPercentage: row?.localContentPercentage ?? null,
+        regulatoryProductCodes: [...aggregate.productCodes].sort(),
       };
     })
     .filter((s) => s.spend > 0);
@@ -148,7 +181,11 @@ export async function loadProjectSuppliersFromSpend(
 
   const totalGoodsServicesCost = suppliers.reduce((sum, s) => sum + s.spend, 0);
 
-  return { suppliers, totalGoodsServicesCost };
+  const regulatoryProductCodes = [
+    ...new Set(suppliers.flatMap((s) => s.regulatoryProductCodes ?? [])),
+  ].sort();
+
+  return { suppliers, totalGoodsServicesCost, regulatoryProductCodes };
 }
 
 // ─── Core Service ───
@@ -184,15 +221,28 @@ export async function computeLcgpaWorkbookScore(
   const explicitSuppliers = input.suppliers;
   let suppliers: RankedSupplier[];
   let totalGoodsServicesCost: number;
+  let productCodes: string[];
   if (explicitSuppliers && explicitSuppliers.length > 0) {
     suppliers = explicitSuppliers;
     totalGoodsServicesCost =
       input.totalGoodsServicesCost ??
       explicitSuppliers.reduce((sum, s) => sum + s.spend, 0);
+    productCodes = [
+      ...new Set(explicitSuppliers.flatMap((s) => s.regulatoryProductCodes ?? [s.supplierId])),
+    ];
   } else {
     const loaded = await loadProjectSuppliersFromSpend(db, projectId);
     suppliers = loaded.suppliers;
     totalGoodsServicesCost = loaded.totalGoodsServicesCost;
+    productCodes = loaded.regulatoryProductCodes;
+    // Preserve unresolved supplier identity as an UNKNOWN sentinel for every
+    // spend-bearing supplier without an explicit product mapping. This keeps
+    // strict binding fail-closed rather than silently dropping spend.
+    productCodes.push(
+      ...suppliers
+        .filter((s) => !s.regulatoryProductCodes?.length)
+        .map((s) => s.supplierId),
+    );
   }
 
   // 3. Extract LCGPA pillar inputs from workbook lines
@@ -201,12 +251,7 @@ export async function computeLcgpaWorkbookScore(
   // 4. Load resolvable regulatory datasets from DB
   const datasets = await loadResolvableDatasets(db);
 
-  // 5. Collect product codes from suppliers (for binding resolution)
-  const productCodes = suppliers
-    .map((s) => s.supplierId)
-    .filter((id): id is string => Boolean(id));
-
-  // 6. Run bound calculation (binding resolves BEFORE computation)
+  // 5. Run bound calculation (binding resolves BEFORE computation)
   const calculationDate = new Date();
   const bound = computeLcgpaWithBinding({
     datasets,
@@ -218,7 +263,7 @@ export async function computeLcgpaWorkbookScore(
     policy,
   });
 
-  // 7. Create audit-grade trace
+  // 6. Create audit-grade trace
   const trace = createBoundCalculationTrace(
     {
       datasets,
@@ -231,7 +276,7 @@ export async function computeLcgpaWorkbookScore(
     bound,
   );
 
-  // 8. Persist if recordable
+  // 7. Persist if recordable
   if (bound.recordable) {
     await recordBoundCalculationRun(db, {
       projectId,

@@ -42,6 +42,7 @@ function makeDbMock(
   lines = [],
   opts: {
     spendGroups?: Array<{ supplierId: string; _sum: { amount: number | null } }>;
+    spendRows?: Array<{ supplierId: string; amount: number; metadata: unknown }>;
     supplierRows?: Array<{
       id: string;
       name: string;
@@ -63,6 +64,7 @@ function makeDbMock(
     } as unknown as PrismaClient["lcCalculationRun"],
     localContentSpendRecord: {
       groupBy: async () => opts.spendGroups ?? [],
+      findMany: async () => opts.spendRows ?? [],
     } as unknown as PrismaClient["localContentSpendRecord"],
     localContentSupplier: {
       findMany: async () => opts.supplierRows ?? [],
@@ -340,14 +342,19 @@ describe("loadProjectSuppliersFromSpend", () => {
 
   it("aggregates spend per supplier, ranks descending, totals consistently", async () => {
     const db = makeDbMock([], [], {
-      spendGroups: SPEND_GROUPS,
+      spendRows: [
+        { supplierId: "s-b", amount: 3000, metadata: {} },
+        { supplierId: "s-a", amount: 7000, metadata: { lcgpaProductCode: "0002801" } },
+        { supplierId: "s-c", amount: 0, metadata: {} },
+        { supplierId: "s-ghost", amount: 500, metadata: {} },
+      ],
       supplierRows: SUPPLIER_ROWS,
     }) as PrismaClient;
 
     const { suppliers, totalGoodsServicesCost } =
       await loadProjectSuppliersFromSpend(db, "proj-1");
 
-    // s-c has null sum → filtered out (spend must be > 0)
+    // s-c has zero spend → filtered out (spend must be > 0)
     expect(suppliers).toHaveLength(3);
 
     // Rank order: s-a (7000) → s-b (3000) → s-ghost (500)
@@ -382,10 +389,10 @@ describe("loadProjectSuppliersFromSpend", () => {
 
   it("breaks spend ties by supplierId lexicographically", async () => {
     const db = makeDbMock([], [], {
-      spendGroups: [
-        { supplierId: "t-2", _sum: { amount: 1000 } },
-        { supplierId: "t-1", _sum: { amount: 1000 } },
-        { supplierId: "t-10", _sum: { amount: 1000 } },
+      spendRows: [
+        { supplierId: "t-2", amount: 1000, metadata: {} },
+        { supplierId: "t-1", amount: 1000, metadata: {} },
+        { supplierId: "t-10", amount: 1000, metadata: {} },
       ],
       supplierRows: [],
     }) as PrismaClient;
@@ -405,10 +412,10 @@ describe("computeLcgpaWorkbookScore — supplier auto-load fallback", () => {
       effectiveFrom: new Date("2026-01-01"),
     });
     const db = makeDbMock([dataset], [], {
-      spendGroups: [{ supplierId: "2801", _sum: { amount: 4000 } }],
+      spendRows: [{ supplierId: "supplier-cuid", amount: 4000, metadata: { lcgpaProductCode: "2801" } }],
       supplierRows: [
         {
-          id: "2801",
+          id: "supplier-cuid",
           name: "Local Supplier",
           localityClassification: "local",
           localContentPercentage: 75,
@@ -438,7 +445,7 @@ describe("computeLcgpaWorkbookScore — supplier auto-load fallback", () => {
       effectiveFrom: new Date("2026-01-01"),
     });
     const db = makeDbMock([dataset], [], {
-      spendGroups: [{ supplierId: "9999", _sum: { amount: 999999 } }],
+      spendRows: [{ supplierId: "9999", amount: 999999, metadata: { lcgpaProductCode: "9999" } }],
       supplierRows: [
         {
           id: "9999",

@@ -419,19 +419,6 @@ export async function computeWorkbookScoreAction(workbookId: string) {
  */
 export async function computeLcgpaWorkbookScoreAction(
   workbookId: string,
-  options?: {
-    suppliers?: Array<{
-      supplierId: string;
-      name: string;
-      spend: number;
-      localityClassification: "local" | "non_local" | "mixed" | "unclassified";
-      localContentPercentage?: number | null;
-      sectorLcRate?: number;
-    }>;
-    totalGoodsServicesCost?: number;
-    allowUnboundDataset?: boolean;
-    allowIncompleteResolution?: boolean;
-  },
 ) {
   await requireWorkbookAccess(workbookId);
   await requirePermission(Permission.WORKBOOK_MANAGEMENT, ResourceType.WORKBOOK);
@@ -451,29 +438,10 @@ export async function computeLcgpaWorkbookScoreAction(
     // Get current user
     const user = await getCurrentUser();
 
-    // Build ranked suppliers with rank assignment (descending spend).
-    // When no suppliers are provided, the service auto-loads them from the
-    // project's spend records (loadProjectSuppliersFromSpend).
-    const suppliers = (options?.suppliers ?? [])
-      .sort((a, b) => b.spend - a.spend)
-      .map((s, i) => ({
-        ...s,
-        localContentPercentage: s.localContentPercentage ?? null,
-        rank: i + 1,
-      }));
-
     const result = await computeLcgpaWorkbookScore(prisma, {
       workbookId,
       projectId: workbook.projectId,
-      ...(suppliers.length > 0 ? { suppliers } : {}),
-      ...(options?.totalGoodsServicesCost !== undefined
-        ? { totalGoodsServicesCost: options.totalGoodsServicesCost }
-        : {}),
       computedById: user?.id ?? null,
-      policy: {
-        ...(options?.allowUnboundDataset ? { allowUnboundDataset: true } : {}),
-        ...(options?.allowIncompleteResolution ? { allowIncompleteResolution: true } : {}),
-      },
     });
 
     try {

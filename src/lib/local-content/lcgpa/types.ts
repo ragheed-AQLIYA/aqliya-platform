@@ -71,6 +71,11 @@ export interface RankedSupplier {
   /** Rank in descending spend order (1 = highest spender) */
   rank: number;
   /**
+   * Explicit official LCGPA/Etimad product codes represented by this
+   * supplier's spend lines. Supplier IDs are never regulatory product codes.
+   */
+  regulatoryProductCodes?: string[];
+  /**
    * Official sector LC% rate from Appendix B (0-100).
    * Used as fallback when localityClassification is "unclassified" and
    * localContentPercentage is not declared.

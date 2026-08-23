@@ -61,9 +61,12 @@ describe("Download Token — Constant-Time Comparison (H-03 Deep Tests)", () => 
     });
 
     const [payload, sig] = token.split(".");
-    const lastIndex = sig.length - 1;
-    const flipped = sig[lastIndex] === "A" ? "B" : "A";
-    const tamperedSig = sig.slice(0, lastIndex) + flipped;
+    // Mutate the decoded final byte rather than swapping the final base64url
+    // character. For HMAC lengths divisible by three, unused padding bits in
+    // the final character can otherwise change without changing the bytes.
+    const decodedSig = Buffer.from(sig, "base64url");
+    decodedSig[decodedSig.length - 1] ^= 0x01;
+    const tamperedSig = decodedSig.toString("base64url");
 
     await expect(verifyDownloadToken(`${payload}.${tamperedSig}`)).rejects.toThrow(
       "Invalid token signature",
