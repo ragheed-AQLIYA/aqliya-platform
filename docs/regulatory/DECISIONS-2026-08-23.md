@@ -89,4 +89,31 @@ The script is idempotent: re-running does not duplicate cases. Cases `case-dr-20
 
 ---
 
-*Issued 2026-08-23 under delegated owner authority. Human re-verification pending per §4.*
+## 6. Independent Review Record — RV-2026-08-23-01
+
+> **⚠️ Nature of this review:** performed by a system delegate filling the human-reviewer role under the same Owner Directive. It is an independent *evidence* examination (adversarial, source-first), **not** an external human seal. Both verdicts are recorded in ledger history with kind `INDEPENDENT_REVIEW`.
+
+**Verdict for both DRs: ACCEPTED WITH CONDITIONS.**
+
+### Evidence verified against live DB and on-disk official artifacts
+
+| # | Check | Result |
+|---|---|---|
+| V1 | MIN_LC product date distribution | **Exact match:** 2 @ 2026-08-01, 231 @ 2027-08-01, 965 @ 2028-06-01 (total 1,198) |
+| V2 | Dataset-level date provenance | Artifacts state dates only per-product; anchor `2026-08-01` = earliest cohort → valid ASSERTED evidence |
+| V3 | Artifact integrity chain | All three XLSX SHA-256 on disk match DB identities; binding target `f613722d4017…` = SOC list file hash — chain closed: file → hash → dataset → calculation run |
+| V4 | Six conflict codes | All six ABSENT from GOV/SOC lists, present ONLY in MIN_LC with `effectiveFrom=2028-06-01` **and `minLcPct=NULL`** — membership without stated percentage strengthens exclusion (no enforceable obligation exists to waive) |
+| V5 | Resolver adversarial read | No code path binds a future-dated dataset or product row before its instant (concurs with security verdict) |
+
+### Conditions that keep this review non-final
+
+1. **Permanent-open:** direct LCGPA inquiry on codes 2802/2804/2805/2808/2809/2814 (OPEN_ITEMS 5.6). No system review can substitute an authority response.
+2. External confirmation that LCGPA published no contradicting dataset-level effective date.
+3. SPA N2514218 amendment covering the 231-product phase split.
+4. Strict-audit follow-up (`writePlatformAuditLog` non-strict default) before production promotion.
+
+Ledger writer: `scripts/localcontent/lcgpa-record-review.ts` (idempotent via `RV-2026-08-23-01` marker).
+
+---
+
+*Issued 2026-08-23 under delegated owner authority. Independently reviewed same-day (§6) with conditions open; external human seal still required.*
