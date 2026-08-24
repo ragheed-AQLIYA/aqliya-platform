@@ -13,6 +13,8 @@ export interface ValidImportRow {
   contractReference?: string;
   description?: string;
   supplierRegistrationNumber?: string;
+  /** Official LCGPA/Etimad product code — digits only when present. */
+  lcgpaProductCode?: string;
 }
 
 export interface RejectedRow {
@@ -40,6 +42,14 @@ function normalizeHeader(raw: string): string {
     supplierregistrationnumber: "supplierRegistrationNumber",
     invoicenumber: "invoiceNumber",
     evidencereference: "evidenceReference",
+    lcgpaproductcode: "lcgpaProductCode",
+    productcode: "lcgpaProductCode",
+    etimadcode: "lcgpaProductCode",
+    كودالمنتج: "lcgpaProductCode",
+    كودالمنتجالوطني: "lcgpaProductCode",
+    الرمزالتنظيمي: "lcgpaProductCode",
+    كودالايتيماد: "lcgpaProductCode",
+    رقمالمنتج: "lcgpaProductCode",
     المبلغ: "amount",
     اسمالمورد: "supplierName",
     تصنيفالإنفاق: "category",
@@ -80,6 +90,15 @@ function parseRow(
     return { rowNumber, reason: "Missing period", raw };
   }
 
+  const lcgpaProductCode = (raw.lcgpaProductCode || "").trim() || undefined;
+  if (lcgpaProductCode && !/^\d{1,12}$/.test(lcgpaProductCode)) {
+    return {
+      rowNumber,
+      reason: `Invalid lcgpaProductCode: "${lcgpaProductCode}" — digits only, max 12`,
+      raw,
+    };
+  }
+
   return {
     rowNumber,
     supplierName,
@@ -91,6 +110,7 @@ function parseRow(
     description: (raw.description || "").trim() || undefined,
     supplierRegistrationNumber:
       (raw.supplierRegistrationNumber || "").trim() || undefined,
+    lcgpaProductCode,
   };
 }
 

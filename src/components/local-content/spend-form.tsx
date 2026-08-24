@@ -147,6 +147,22 @@ export function SpendForm({
             />
           </div>
           <div>
+            <Label htmlFor="lcgpaProductCode">كود المنتج الوطني (إيتيماد) — اختياري</Label>
+            <Input
+              id="lcgpaProductCode"
+              name="lcgpaProductCode"
+              inputMode="numeric"
+              pattern="\d*"
+              maxLength={12}
+              placeholder="مثال: 2801"
+              className="h-9"
+              dir="ltr"
+            />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              يُستخدم للربط التنظيمي مع قوائم LCGPA — اتركه فارغاً إن لم ينطبق.
+            </p>
+          </div>
+          <div>
             <Label htmlFor="description">الوصف</Label>
             <Input id="description" name="description" className="h-9" />
           </div>

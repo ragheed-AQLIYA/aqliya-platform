@@ -145,6 +145,18 @@ export async function runErpImport(
             );
           }
 
+          // Carry an optional LCGPA/Etimad product code from the provider
+          // payload when the connector supplies one (canonicalization happens
+          // at read time in the scoring loader).
+          const rawRecord = spendRecords[i] as
+            | { metadata?: { lcgpaProductCode?: unknown } }
+            | undefined;
+          const rawCode = rawRecord?.metadata?.lcgpaProductCode;
+          const lcgpaProductCode =
+            typeof rawCode === "string" && rawCode.trim()
+              ? { lcgpaProductCode: rawCode.trim() }
+              : {};
+
           await prisma.localContentSpendRecord.create({
             data: {
               projectId,
@@ -161,6 +173,7 @@ export async function runErpImport(
                 sourceId: mapped.sourceId,
                 erpBatchId: batch.id,
                 erpConnectionId: options.connectionId,
+                ...lcgpaProductCode,
               } as Prisma.InputJsonValue,
             },
           });

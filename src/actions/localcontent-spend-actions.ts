@@ -58,7 +58,7 @@ export async function createLocalContentSpendRecordAction(
   if (!parsed.success) {
     return { ok: false as const, error: parsed.details[0]?.message || "Invalid input", code: "VALIDATION_ERROR" };
   }
-  const { supplierId, amount, category, currency, contractReference, period, description } = parsed.data;
+  const { supplierId, amount, category, currency, contractReference, period, description, lcgpaProductCode } = parsed.data;
 
   return safe(async () => {
     const { user, project } = await assertProjectAccess(projectId, "create_spend");
@@ -75,6 +75,7 @@ export async function createLocalContentSpendRecordAction(
         contractReference: contractReference || undefined,
         period,
         description: description || undefined,
+        lcgpaProductCode: lcgpaProductCode || undefined,
       },
       { id: user.id, name: user.name },
     );
@@ -226,6 +227,7 @@ export async function importLocalContentSpendCsvAction(
             contractReference: row.contractReference,
             period: row.period,
             description: row.description,
+            lcgpaProductCode: row.lcgpaProductCode,
           },
           { id: user.id, name: user.name },
         );

@@ -22,6 +22,16 @@ export const createSpendRecordSchema = z.object({
   contractReference: optionalText,
   period: requiredText,
   description: optionalText,
+  /**
+   * Official LCGPA/Etimad product code (digits only, leading zeros allowed).
+   * Optional — unmapped lines remain UNKNOWN under strict regulatory binding.
+   */
+  lcgpaProductCode: z
+    .string()
+    .trim()
+    .regex(/^\d{1,12}$/, "كود المنتج يجب أن يكون أرقاماً فقط (حتى 12 رقماً)")
+    .optional()
+    .or(z.literal("")),
 });
 
 /**

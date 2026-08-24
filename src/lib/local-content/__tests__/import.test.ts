@@ -102,4 +102,46 @@ describe("LocalContentOS CSV import", () => {
     expect(result.validRows).toHaveLength(1);
     expect(result.validRows[0]!.contractReference).toBe("PO-001");
   });
+
+  it("parses lcgpaProductCode from English and Arabic headers", () => {
+    const en = parseLocalContentCSV(
+      [
+        "amount,supplierName,category,period,lcgpaProductCode",
+        "1000,Supplier A,goods,Q1,002801",
+      ].join("\n"),
+    );
+    expect(en.validRows).toHaveLength(1);
+    expect(en.validRows[0]!.lcgpaProductCode).toBe("002801");
+
+    const ar = parseLocalContentCSV(
+      [
+        "المبلغ,اسم المورد,تصنيف الإنفاق,الفترة,كود المنتج",
+        "2000,مورد ب,سلع,Q2,2802",
+      ].join("\n"),
+    );
+    expect(ar.validRows).toHaveLength(1);
+    expect(ar.validRows[0]!.lcgpaProductCode).toBe("2802");
+  });
+
+  it("rejects rows with non-numeric lcgpaProductCode", () => {
+    const csv = [
+      "amount,supplierName,category,period,lcgpaProductCode",
+      "1000,Supplier A,goods,Q1,ABC12",
+    ].join("\n");
+
+    const result = parseLocalContentCSV(csv);
+    expect(result.validRows).toHaveLength(0);
+    expect(result.rejectedRows[0]!.reason).toContain("Invalid lcgpaProductCode");
+  });
+
+  it("keeps rows valid when lcgpaProductCode column is absent", () => {
+    const csv = [
+      "amount,supplierName,category,period",
+      "1000,Supplier A,goods,Q1",
+    ].join("\n");
+
+    const result = parseLocalContentCSV(csv);
+    expect(result.validRows).toHaveLength(1);
+    expect(result.validRows[0]!.lcgpaProductCode).toBeUndefined();
+  });
 });

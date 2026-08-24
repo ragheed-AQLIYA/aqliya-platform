@@ -171,6 +171,8 @@ export interface CreateSpendRecordInput {
   contractReference?: string;
   period: string;
   description?: string;
+  /** Official LCGPA/Etimad product code (raw digits; canonicalized at read). */
+  lcgpaProductCode?: string | null;
 }
 
 export interface CreateClassificationInput {

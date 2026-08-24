@@ -28,6 +28,7 @@ export async function createSpendRecord(
   input: CreateSpendRecordInput,
   actor?: { id: string; name: string },
 ) {
+  const code = input.lcgpaProductCode?.trim() || null;
   const record = await prisma.localContentSpendRecord.create({
     data: {
       projectId: input.projectId,
@@ -38,6 +39,14 @@ export async function createSpendRecord(
       contractReference: input.contractReference ?? null,
       period: input.period,
       description: input.description ?? null,
+      ...(code
+        ? {
+            metadata: {
+              lcgpaProductCode: code,
+              lcgpaCodeSource: "manual_entry" as const,
+            },
+          }
+        : {}),
     },
     include: { supplier: { select: { name: true } } },
   });

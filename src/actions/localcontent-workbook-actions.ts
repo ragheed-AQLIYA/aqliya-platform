@@ -447,8 +447,11 @@ export async function computeLcgpaWorkbookScoreAction(
     // Audit is BLOCKING for regulatory scores (security review 2026-08-23,
     // MEDIUM finding): an unlogged LCGPA score must never be returned, since
     // the audit event is the operator-facing record that the calculation ran.
+    // writePlatformAuditLog is non-strict by default and returns {ok:false}
+    // on failure — so we check the result explicitly (strict-audit follow-up,
+    // security re-review 2026-08-23).
     const alog = auditLogger({ productKey: Product.LOCAL_CONTENT, sourceSystem: "localcontent", actor: { id: user?.id, name: user?.name, email: user?.email } });
-    await alog.record(
+    const auditResult = await alog.record(
       "localcontent.workbook.lcgpa_score_computed",
       { type: "LcWorkbook", id: workbookId },
       {
@@ -462,6 +465,9 @@ export async function computeLcgpaWorkbookScoreAction(
         },
       },
     );
+    if (!auditResult.ok) {
+      throw new Error(`AUDIT_WRITE_FAILED: ${auditResult.error ?? "audit log write failed"}`);
+    }
 
     return result;
   });
