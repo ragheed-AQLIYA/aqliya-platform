@@ -1,9 +1,10 @@
 ﻿# AQLIYA Production Deployment Runbook
 
-> **Version:** 1.6  
-> **Last updated:** 2026-07-25  
+> **Version:** 1.7  
+> **Last updated:** 2026-08-23  
 > **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
 > **Changelog:**
+> - v1.7 (2026-08-23): Apex/`www` TLS incident documented — ACM certificate covers `app.aqliya.com` only; apex DNS points at the same ALB causing `ERR_CERT_COMMON_NAME_INVALID`. Canonical production URL confirmed as `app.aqliya.com`; promote workflow smoke tests repointed.
 > - v1.6 (2026-07-25): Audit model merge complete — PlatformAuditLog is sole audit model (no legacy AuditEvent/AuditLog). Added health endpoint matrix (4 endpoints). Added PlatformAuditLog migration verification steps. Updated rollback to include audit model integrity checks. Updated all model references.
 > - v1.5 (2026-06-21): Pilot Launch Closure — ClamAV ECS sidecar in Terraform, `RATE_LIMITER=redis` + `SCANNER_PROVIDER=clamav` env vars, closure scripts (`platform:pilot-closure`, scanner smoke, rate-limit load), restore-drill RTO/RPO reporting, Pilot Launch Certificate.
 > - v1.4 (2026-06-21): Tier 3 enterprise prep — Intelligence Core operator APIs, SSO/SCIM hardening checklist, Redis rate limiter verification, ABAC enforce pilot env vars.
@@ -536,6 +537,29 @@ aws ecs update-service \
 # 3. Confirm rollback
 aws ecs describe-services --cluster aqliya-prod --services aqliya-app
 ```
+
+---
+
+## 11. Known Incident — Apex Domain TLS Mismatch (2026-08-23)
+
+**Symptom:** Visiting `https://aqliya.com` or `https://www.aqliya.com` in Chrome fails with `net::ERR_CERT_COMMON_NAME_INVALID` (HSTS prevents bypass).
+
+**Root cause (verified 2026-08-23):**
+
+| Hostname | DNS target | Certificate served |
+|----------|-----------|-------------------|
+| `app.aqliya.com` | ALB (eu-north-1) | ✅ ACM cert `CN=app.aqliya.com` (SAN: `app.aqliya.com`, `*.app.aqliya.com`) |
+| `aqliya.com` | Same ALB | ❌ Serves the `app.aqliya.com` cert → name mismatch |
+| `www.aqliya.com` | CNAME → apex, same ALB | ❌ Same mismatch |
+
+The Route53 apex (`aws_route53_record.root`) and wildcard records alias to the ALB, but the only certificate on the :443 listener covers `app.aqliya.com`. **Canonical production URL is `https://app.aqliya.com`** (per ADR-108, DEPLOYMENT_CHECKLIST.md) — the platform itself is NOT broken; only the apex/`www` hostnames are.
+
+**Remediation options (requires AWS access — operator action):**
+
+1. **Immediate mitigation (recommended):** Remove or repoint the Route53 apex + `www` A/CNAME records away from the ALB until a marketing site exists at the apex. This stops serving an invalid TLS endpoint.
+2. **Serve + redirect:** Request an ACM certificate covering `aqliya.com` + `www.aqliya.com` in eu-north-1, attach it via `aws elbv2 add-listener-certificates` to the ALB :443 listener, then add a host-header rule returning `301` to `https://app.aqliya.com`.
+3. **Housekeeping:** The deprecated stack `infra/terraform/environments/production/terraform.tfvars` still sets `domain_name = "aqliya.com"` — do not apply it (ADR-108 deprecates it); archive it to prevent accidental re-application.
+4. **Verify:** Port 80 on the ALB currently returns HTTP 200 directly instead of the configured 301 redirect. After remediation, confirm `curl -I http://<host>/` returns `301` for all hostnames per SECURITY_WHITEPAPER.md.
 
 ---
 

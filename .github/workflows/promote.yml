@@ -13,7 +13,9 @@ permissions:
   contents: read
   deployments: write
 
-# Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
+# Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.
+# See infra/terraform/environments/prod/README.md for the full convention.
+env:
   AWS_REGION: me-south-1
   ECR_REPOSITORY: aqliya/prod/app  # aligned with deploy.yml prod convention (2026-07-12)
 
@@ -46,7 +48,10 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://aqliya.com
+      # Canonical production URL is app.aqliya.com (see docs/operations/DEPLOYMENT_CHECKLIST.md).
+      # The apex aqliya.com currently resolves to the ALB without a covering ACM certificate
+      # and must not be used for health checks or smoke tests until TLS is fixed.
+      url: https://app.aqliya.com
     steps:
       - uses: actions/checkout@v4
 
@@ -62,7 +67,9 @@ jobs:
 
       - name: Determine Image Tag
         id: image
-        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
+        # ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.
+        # See infra/terraform/environments/prod/README.md for the full convention.
+        env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           TAG="${{ inputs.commit_sha || github.sha }}"
@@ -71,7 +78,7 @@ jobs:
           echo "Promoting image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${TAG}"
 
       - name: Verify Image Exists
-        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
+        env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           aws ecr describe-images \
@@ -83,7 +90,7 @@ jobs:
           }
 
       - name: Update Production ECS Service
-        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
+        env:
           IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.image.outputs.tag }}
         run: |
           echo "Deploying ${IMAGE_URI} to production ECS (force new deployment)."
@@ -113,8 +120,8 @@ jobs:
         run: sleep 60
 
       - name: Run Smoke Test
-        run: node scripts/platform/post-deploy-smoke.mjs --base-url https://aqliya.com
-        # Naming convention: ECR/ECS use "prod" shorthand; GitHub Environment uses "production" full form.`r`n# See infra/terraform/environments/prod/README.md for the full convention.`r`nenv:
+        run: node scripts/platform/post-deploy-smoke.mjs --base-url https://app.aqliya.com
+        env:
           AUTH_TOKEN: ${{ secrets.SMOKE_TEST_TOKEN || '' }}
 
   rollback:
