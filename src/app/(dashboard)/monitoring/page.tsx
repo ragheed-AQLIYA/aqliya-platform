@@ -5,8 +5,7 @@ import { EnterpriseHealthPanel } from "@/components/monitoring/enterprise-health
 import { EvidenceHealthPanel } from "@/components/monitoring/evidence-health-panel";
 import { TbFirmMemoryKpisPanel } from "@/components/monitoring/tb-firm-memory-kpis-panel";
 import { LiveHealthCardsWrapper } from "@/components/monitoring/live-health-cards-wrapper";
-import { LiveMetricCards } from "@/components/monitoring/live-metric-cards";
-import { SystemUptime } from "@/components/monitoring/system-uptime";
+import { PlatformOpsSection } from "@/components/monitoring/platform-ops-section";
 import { MonitoringAutoRefresh } from "@/components/monitoring/monitoring-auto-refresh";
 
 export const dynamic = "force-dynamic";
@@ -123,18 +122,15 @@ export default function MonitoringPage() {
         <LiveHealthCardsWrapper />
       </Suspense>
 
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">حالة الخدمات</h2>
-            <p className="text-sm text-muted-foreground">
-              مؤشرات حية لخدمات المنصة الأساسية
-            </p>
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل حالة الخدمات…
           </div>
-          <SystemUptime />
-        </div>
-        <LiveMetricCards />
-      </section>
+        }
+      >
+        <PlatformOpsSection />
+      </Suspense>
     </div>
     </MonitoringAutoRefresh>
   );

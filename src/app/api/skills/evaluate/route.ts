@@ -12,7 +12,7 @@ import { z } from "zod"
 import { NextRequest, NextResponse } from "next/server"
 import { readdirSync, existsSync } from "fs"
 import { join } from "path"
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
 import { loadManifest } from "@/lib/skill-runtime/runtime"
 import {
   evaluateSkill,
@@ -25,6 +25,7 @@ import type {
   BatchEvaluationResult,
 } from "@/lib/skill-runtime/evaluator-types"
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error"
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin"
 
 const skillEvaluateSchema = z.object({
   skillId: z.string().optional(),
@@ -116,9 +117,7 @@ function skillsAuthErrorResponse(error: unknown): NextResponse | null {
 
 async function requireSkillsEvaluateAccess(): Promise<void> {
   const user = await getCurrentUser();
-  if (!hasRequiredRole(user, "ADMIN")) {
-    throw new Error("Access denied: ADMIN role required");
-  }
+  assertPlatformAdmin(user);
 }
 
 // ─── GET — List evaluatable skills ───

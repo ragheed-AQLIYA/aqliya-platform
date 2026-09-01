@@ -4,6 +4,7 @@ import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { getAllPolicies, setPolicyOverride, resetPolicyOverride } from "@/lib/core/policy/retention/policies";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 const policyOverrideSchema = z.object({
   modelName: z.string().min(1).max(200),
@@ -13,13 +14,19 @@ const policyOverrideSchema = z.object({
   notifyBeforeDelete: z.boolean().optional(),
 });
 
+function assertRetentionPolicyAccess(user: Awaited<ReturnType<typeof getCurrentUser>>) {
+  if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
+    throw new Error("Access denied: ADMIN role required");
+  }
+}
+
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
-    const policies = getAllPolicies(user.platformOrganizationId);
+    assertRetentionPolicyAccess(user);
+    const policies = isPlatformAdmin(user)
+      ? getAllPolicies()
+      : getAllPolicies(user.organizationId);
     return NextResponse.json({ policies });
   } catch (err) {
     const { message, code } = sanitizeError(err);
@@ -30,9 +37,7 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertRetentionPolicyAccess(user);
     let body: unknown;
     try {
       body = await request.json();
@@ -49,6 +54,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const { modelName, retentionDays, action, enabled, notifyBeforeDelete } = parsed.data;
+    const organizationId = isPlatformAdmin(user) ? undefined : user.organizationId;
 
     const entry = setPolicyOverride({
       modelName,
@@ -56,7 +62,7 @@ export async function PUT(request: NextRequest) {
       action: action ?? "delete",
       enabled: enabled ?? true,
       notifyBeforeDelete: notifyBeforeDelete ?? false,
-      organizationId: user.platformOrganizationId,
+      organizationId,
     });
 
     await writePlatformAuditLog({
@@ -67,7 +73,7 @@ export async function PUT(request: NextRequest) {
       targetType: "RetentionPolicy",
       targetId: modelName,
       severity: "info",
-      metadata: { retentionDays, action, enabled },
+      metadata: { retentionDays, action, enabled, organizationId: organizationId ?? null },
     });
 
     return NextResponse.json({ policy: entry });
@@ -80,15 +86,14 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertRetentionPolicyAccess(user);
     const { searchParams } = new URL(request.url);
     const modelName = searchParams.get("modelName");
     if (!modelName) {
       return NextResponse.json({ error: "modelName query param required" }, { status: 400 });
     }
-    const reset = resetPolicyOverride(modelName, user.platformOrganizationId);
+    const organizationId = isPlatformAdmin(user) ? undefined : user.organizationId;
+    const reset = resetPolicyOverride(modelName, organizationId);
 
     await writePlatformAuditLog({
       productKey: "platform",
@@ -98,6 +103,7 @@ export async function DELETE(request: NextRequest) {
       targetType: "RetentionPolicy",
       targetId: modelName,
       severity: "info",
+      metadata: { organizationId: organizationId ?? null },
     });
 
     return NextResponse.json({ reset });

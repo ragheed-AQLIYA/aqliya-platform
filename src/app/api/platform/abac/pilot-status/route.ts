@@ -7,6 +7,7 @@ import {
 import { getAbacShadowMismatchReport } from "@/lib/core/policy/access/abac-shadow-report";
 import { isEnabled } from "@/lib/platform/feature-flags/registry";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +15,12 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       throw new Error("Access denied: ADMIN role required");
     }
     const report = await getAbacShadowMismatchReport(user.organizationId, 30);
     const enforceOrgIds = listAbacEnforceOrgIds();
+    const platform = isPlatformAdmin(user);
 
     return NextResponse.json({
       ok: true,
@@ -29,7 +31,9 @@ export async function GET() {
       },
       pilot: {
         enforceEnabledForOrg: isAbacEnforceEnabledForOrg(user.organizationId),
-        configuredEnforceOrgIds: enforceOrgIds,
+        configuredEnforceOrgIds: platform
+          ? enforceOrgIds
+          : enforceOrgIds.filter((id) => id === user.organizationId),
         readyForEnforce: report.enforce.readyForPilot,
         recommendation: report.enforce.recommendation,
       },

@@ -263,7 +263,7 @@ describe("GET /api/platform/retention/history — Error Sanitization (H-07)", ()
     const body = await response.json();
 
     expect(response.status).toBe(401);
-    expect(body.error).toBe("Unauthorized");
+    expect(body.error).toBe("Authentication required");
   });
 
   // NOTE: The history route's catch block returns 401 for ALL errors including
@@ -277,8 +277,8 @@ describe("GET /api/platform/retention/history — Error Sanitization (H-07)", ()
     const body = await response.json();
 
     // The catch block returns 401 for all errors including permission denied
-    expect(response.status).toBe(401);
-    expect(body.error).toBe("Unauthorized");
+    expect(response.status).toBe(403);
+    expect(body.error).toBe("Access denied");
   });
 });
 

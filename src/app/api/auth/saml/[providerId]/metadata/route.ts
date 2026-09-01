@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSamlSpMetadataXml } from "@/lib/auth/saml/saml-sp";
+import { decryptStoredSsoSecret } from "@/lib/auth/sso-service";
 
 export async function GET(
   _req: NextRequest,
@@ -35,7 +36,8 @@ export async function GET(
     userInfoUrl: provider.userInfoUrl,
     jwksUri: provider.jwksUri,
     clientId: provider.clientId,
-    clientSecret: provider.clientSecret,
+    hasClientSecret: Boolean(provider.clientSecret),
+    clientSecret: decryptStoredSsoSecret(provider.clientSecret),
     samlEntryPoint: provider.samlEntryPoint,
     samlIssuer: provider.samlIssuer,
     samlCert: provider.samlCert,

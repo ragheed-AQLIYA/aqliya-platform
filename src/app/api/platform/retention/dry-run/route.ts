@@ -4,6 +4,7 @@ import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { dryRun } from "@/lib/core/policy/retention/engine";
 import { getPolicyForModel } from "@/lib/core/policy/retention/policies";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 const dryRunSchema = z.object({
   modelName: z.string().optional(),
@@ -12,8 +13,14 @@ const dryRunSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       throw new Error("Access denied: ADMIN role required");
+    }
+    const organizationId = isPlatformAdmin(user)
+      ? (user.organizationId)
+      : user.organizationId;
+    if (!organizationId) {
+      throw new Error("Access denied: organization context required");
     }
     let rawBody: unknown;
     try {
@@ -26,13 +33,13 @@ export async function POST(request: NextRequest) {
 
     let targetPolicy;
     if (data.modelName) {
-      targetPolicy = getPolicyForModel(data.modelName, user.platformOrganizationId);
+      targetPolicy = getPolicyForModel(data.modelName, organizationId);
       if (!targetPolicy) {
         return NextResponse.json({ error: "Unknown model" }, { status: 400 });
       }
     }
 
-    const results = await dryRun(targetPolicy, user.platformOrganizationId);
+    const results = await dryRun(targetPolicy, organizationId);
     return NextResponse.json({ results });
   } catch (err) {
     const { message, code } = sanitizeError(err);

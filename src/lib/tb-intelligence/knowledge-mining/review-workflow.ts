@@ -152,13 +152,20 @@ export async function submitForReview(
 /**
  * Get candidates pending review (CANDIDATE or UNDER_REVIEW).
  */
-export async function getPendingReviewCandidates() {
+export async function getPendingReviewCandidates(organizationId?: string) {
   const { listCandidates } = await import("./knowledge-candidate-service");
 
   const [candidates, underReview] = await Promise.all([
-    listCandidates({ status: "CANDIDATE", sortBy: "supportCount", sortDir: "desc", limit: 100 }),
+    listCandidates({
+      status: "CANDIDATE",
+      organizationId,
+      sortBy: "supportCount",
+      sortDir: "desc",
+      limit: 100,
+    }),
     listCandidates({
       status: "UNDER_REVIEW",
+      organizationId,
       sortBy: "createdAt",
       sortDir: "asc",
       limit: 100,

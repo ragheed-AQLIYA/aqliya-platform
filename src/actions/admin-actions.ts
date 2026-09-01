@@ -2,6 +2,7 @@
 
 import { getCurrentUser } from "@/lib/auth"
 import { enforce } from "@/lib/kernel"
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import type { $Enums } from "@prisma/client"
@@ -10,8 +11,12 @@ import { createNotification } from "./notification-actions"
 async function assertAdmin(_organizationId?: string) {
   const user = await getCurrentUser()
   if (!user) throw new Error("Authentication required")
-  if (user.role !== "ADMIN") throw new Error("Admin access required")
-  await enforce(user, { type: "settings", id: _organizationId ?? user.organizationId, tenantId: _organizationId ?? user.organizationId }, "admin")
+  if (user.role !== "ADMIN" && !isPlatformAdmin(user)) throw new Error("Admin access required")
+  const targetOrg = _organizationId ?? user.organizationId
+  if (!isPlatformAdmin(user) && targetOrg !== user.organizationId) {
+    throw new Error("Access denied: organization access required")
+  }
+  await enforce(user, { type: "settings", id: targetOrg, tenantId: targetOrg }, "admin")
   return user
 }
 
@@ -85,7 +90,8 @@ export async function getSystemConfig(organizationId: string) {
 }
 
 export async function getPlatformStats(organizationId: string) {
-  await assertAdmin(organizationId)
+  const user = await assertAdmin(organizationId)
+  const platformScope = isPlatformAdmin(user)
   const [
     userCount,
     orgCount,
@@ -95,11 +101,19 @@ export async function getPlatformStats(organizationId: string) {
     evidenceCount,
   ] = await Promise.all([
     prisma.user.count({ where: { organizationId } }),
-    prisma.organization.count(),
+    platformScope
+      ? prisma.organization.count()
+      : prisma.organization.count({ where: { id: organizationId } }),
     prisma.auditEngagement.count({ where: { organizationId } }),
     prisma.decision.count({ where: { organizationId } }),
-    prisma.platformAuditLog.count({ where: { productKey: "audit_os" } }),
-    prisma.auditEvidence.count(),
+    prisma.platformAuditLog.count({
+      where: platformScope
+        ? { productKey: "audit_os" }
+        : { productKey: "audit_os", organizationId },
+    }),
+    platformScope
+      ? prisma.auditEvidence.count()
+      : prisma.auditEvidence.count({ where: { engagement: { organizationId } } }),
   ])
 
   return {
@@ -156,15 +170,41 @@ export async function checkDatabaseHealth() {
 }
 
 export async function getSunbulStats() {
-  await assertAdmin();
+  const actor = await assertAdmin();
+  if (!isPlatformAdmin(actor)) {
+    return {
+      adminCount: 0,
+      operatorCount: 0,
+      viewerCount: 0,
+      totalUsers: 0,
+      sunbulClientCount: 0,
+      sunbulMembershipCount: 0,
+      sunbulRecordCount: 0,
+      sunbulStatus: "غير متاح — يتطلب صلاحية مدير المنصة",
+    };
+  }
+  const organizationId = actor.organizationId;
+  const platformOrgId = actor.platformOrganizationId ?? organizationId;
+
   const allUsers = await prisma.user.findMany({
+    where: { organizationId },
     select: { role: true },
   });
 
+  const tenantClients = await prisma.sunbulClient.findMany({
+    where: { platformOrganizationId: platformOrgId },
+    select: { id: true },
+  });
+  const clientIds = tenantClients.map((c) => c.id);
+
   const [sunbulClientCount, sunbulMembershipCount, sunbulRecordCount] = await Promise.all([
-    prisma.sunbulClient.count(),
-    prisma.sunbulUserMembership.count(),
-    prisma.sunbulRecord.count(),
+    Promise.resolve(clientIds.length),
+    clientIds.length === 0
+      ? Promise.resolve(0)
+      : prisma.sunbulUserMembership.count({ where: { clientId: { in: clientIds } } }),
+    clientIds.length === 0
+      ? Promise.resolve(0)
+      : prisma.sunbulRecord.count({ where: { clientId: { in: clientIds } } }),
   ]);
 
   return {

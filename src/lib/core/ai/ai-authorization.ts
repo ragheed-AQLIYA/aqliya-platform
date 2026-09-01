@@ -38,12 +38,15 @@ const ROLE_AI_RESTRICTIONS: Record<string, AITaskType[]> = {
 export function authorizeAIAction(
   request: AIAuthorizationRequest,
 ): AIAuthorizationResult {
-  if (!isEnabled("platform.ai-authorization")) {
-    return { allowed: true };
+  if (!request.organizationId || !request.actorId) {
+    return {
+      allowed: false,
+      reason: "AI actions require authenticated tenant context",
+    };
   }
 
   const restrictions = ROLE_AI_RESTRICTIONS[request.actorRoles[0]];
-  if (restrictions?.includes(request.taskType)) {
+  if (isEnabled("platform.ai-authorization") && restrictions?.includes(request.taskType)) {
     return {
       allowed: false,
       reason: `Role "${request.actorRoles[0]}" is not authorized for AI task type "${request.taskType}"`,

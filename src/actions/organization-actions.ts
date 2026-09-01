@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import {
   listOrganizations,
@@ -26,7 +27,11 @@ export async function listOrganizationsAction() {
   const user = await getCurrentUser();
   await enforce(user, { type: "organization" }, "read");
 
-  const orgs = await listOrganizations(resolvePlatformOrgId(user));
+  const orgs = await listOrganizations(
+    isPlatformAdmin(user)
+      ? { platformOrganizationId: resolvePlatformOrgId(user) }
+      : { organizationId: user.organizationId },
+  );
 
   return { ok: true, data: orgs };
 }
@@ -39,7 +44,8 @@ export async function getOrganizationAction(orgId: string) {
 
   const detail = await getOrganizationDetail(
     orgId,
-    resolvePlatformOrgId(user),
+    isPlatformAdmin(user) ? resolvePlatformOrgId(user) : undefined,
+    isPlatformAdmin(user),
   );
 
   if (!detail) {
@@ -53,6 +59,9 @@ export async function getOrganizationAction(orgId: string) {
 
 export async function createOrganizationAction(data: { name: string }) {
   const user = await getCurrentUser();
+  if (!isPlatformAdmin(user)) {
+    return { ok: false, error: "Access denied: platform administrator required" };
+  }
   await enforce(user, { type: "organization" }, "admin");
 
   if (!data.name || data.name.trim().length < 2) {
@@ -87,7 +96,7 @@ export async function updateOrganizationAction(
   data: { name?: string },
 ) {
   const user = await getCurrentUser();
-  await enforce(user, { type: "organization", id: orgId }, "admin");
+  await enforce(user, { type: "organization", id: orgId, tenantId: orgId }, "admin");
 
   if (data.name !== undefined && data.name.trim().length < 2) {
     return { ok: false, error: "اسم المؤسسة يجب أن يكون حرفين على الأقل" };
@@ -134,7 +143,7 @@ export async function updateOrganizationAction(
 
 export async function deleteOrganizationAction(orgId: string) {
   const user = await getCurrentUser();
-  await enforce(user, { type: "organization", id: orgId }, "admin");
+  await enforce(user, { type: "organization", id: orgId, tenantId: orgId }, "admin");
 
   const org = await prisma.organization.findUnique({
     where: { id: orgId },

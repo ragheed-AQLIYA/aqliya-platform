@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getAIGovernanceMetrics } from "@/lib/core/ai/governance-metrics"
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       throw new Error("Access denied: ADMIN role required");
     }
     const { searchParams } = new URL(request.url)
     const days = parseInt(searchParams.get("days") ?? "30", 10)
-    const metrics = await getAIGovernanceMetrics(days)
+    const organizationId = isPlatformAdmin(user) ? undefined : user.organizationId
+    const metrics = await getAIGovernanceMetrics(days, organizationId)
     return NextResponse.json({ success: true, data: metrics })
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error"

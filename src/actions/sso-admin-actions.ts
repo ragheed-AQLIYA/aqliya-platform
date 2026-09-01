@@ -37,6 +37,7 @@ export interface SsoProviderFormData {
 
 export async function listSsoProvidersAction() {
   const user = await getCurrentUser();
+  await enforce(user, { type: "settings", tenantId: user.organizationId }, "admin");
   return getSsoProviders(user.organizationId);
 }
 
@@ -151,6 +152,7 @@ export async function toggleSsoProviderAction(
 
 export async function getSsoProviderAction(providerId: string) {
   const user = await getCurrentUser();
+  await enforce(user, { type: "settings", tenantId: user.organizationId }, "admin");
   return getProviderById(user.organizationId, providerId);
 }
 

@@ -76,7 +76,7 @@ export interface SsoProviderResponse {
   userInfoUrl: string | null;
   jwksUri: string | null;
   clientId: string | null;
-  clientSecret: string | null;
+  hasClientSecret: boolean;
   samlEntryPoint: string | null;
   samlIssuer: string | null;
   samlCert: string | null;
@@ -88,7 +88,16 @@ export interface SsoProviderResponse {
   updatedAt: Date;
 }
 
-function toResponse(provider: SsoProvider): SsoProviderResponse {
+/** Internal auth material — never returned from Server Actions or list APIs. */
+export interface SsoProviderAuthConfig extends SsoProviderResponse {
+  clientSecret: string | null;
+}
+
+export function decryptStoredSsoSecret(stored: string | null): string | null {
+  return decryptSecret(stored);
+}
+
+function toPublicResponse(provider: SsoProvider): SsoProviderResponse {
   return {
     id: provider.id,
     organizationId: provider.organizationId,
@@ -100,7 +109,7 @@ function toResponse(provider: SsoProvider): SsoProviderResponse {
     userInfoUrl: provider.userInfoUrl,
     jwksUri: provider.jwksUri,
     clientId: provider.clientId,
-    clientSecret: decryptSecret(provider.clientSecret),
+    hasClientSecret: Boolean(provider.clientSecret),
     samlEntryPoint: provider.samlEntryPoint,
     samlIssuer: provider.samlIssuer,
     samlCert: provider.samlCert,
@@ -113,6 +122,13 @@ function toResponse(provider: SsoProvider): SsoProviderResponse {
   };
 }
 
+function toAuthResponse(provider: SsoProvider): SsoProviderAuthConfig {
+  return {
+    ...toPublicResponse(provider),
+    clientSecret: decryptSecret(provider.clientSecret),
+  };
+}
+
 // ─── Service ───
 
 export async function getSsoProviders(organizationId: string): Promise<SsoProviderResponse[]> {
@@ -120,15 +136,15 @@ export async function getSsoProviders(organizationId: string): Promise<SsoProvid
     where: { organizationId },
     orderBy: { createdAt: "asc" },
   });
-  return providers.map(toResponse);
+  return providers.map(toPublicResponse);
 }
 
-export async function getEnabledSsoProviders(organizationId: string): Promise<SsoProviderResponse[]> {
+export async function getEnabledSsoProviders(organizationId: string): Promise<SsoProviderAuthConfig[]> {
   const providers = await prisma.ssoProvider.findMany({
     where: { organizationId, enabled: true },
     orderBy: { createdAt: "asc" },
   });
-  return providers.map(toResponse);
+  return providers.map(toAuthResponse);
 }
 
 export async function createProvider(
@@ -170,7 +186,7 @@ export async function createProvider(
     metadata: { providerType: data.providerType },
   });
 
-  return toResponse(provider);
+  return toPublicResponse(provider);
 }
 
 export async function updateProvider(
@@ -226,7 +242,7 @@ export async function updateProvider(
     severity: "info",
   });
 
-  return toResponse(updated);
+  return toPublicResponse(updated);
 }
 
 export async function deleteProvider(
@@ -260,11 +276,11 @@ export async function deleteProvider(
 export async function getProviderConfig(
   organizationId: string,
   providerType: string,
-): Promise<SsoProviderResponse | null> {
+): Promise<SsoProviderAuthConfig | null> {
   const provider = await prisma.ssoProvider.findFirst({
     where: { organizationId, providerType, enabled: true },
   });
-  return provider ? toResponse(provider) : null;
+  return provider ? toAuthResponse(provider) : null;
 }
 
 export async function getProviderById(
@@ -274,5 +290,5 @@ export async function getProviderById(
   const provider = await prisma.ssoProvider.findFirst({
     where: { id: providerId, organizationId },
   });
-  return provider ? toResponse(provider) : null;
+  return provider ? toPublicResponse(provider) : null;
 }

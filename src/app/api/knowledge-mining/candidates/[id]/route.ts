@@ -36,8 +36,14 @@ export async function GET(
     }
     requireRole(session.user as Record<string, unknown>, "VIEWER");
 
+    const user = session.user as Record<string, unknown>;
+    const organizationId = user.organizationId as string | undefined;
+    if (!organizationId) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     const { id } = await params;
-    const result = await getCandidate(id);
+    const result = await getCandidate(id, organizationId);
     if (!result.candidate) {
       return NextResponse.json({ error: "Candidate not found" }, { status: 404 });
     }
@@ -59,8 +65,14 @@ export async function DELETE(
     }
     requireRole(session.user as Record<string, unknown>, "ADMIN");
 
+    const user = session.user as Record<string, unknown>;
+    const organizationId = user.organizationId as string | undefined;
+    if (!organizationId) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     const { id } = await params;
-    const success = await deleteCandidate(id);
+    const success = await deleteCandidate(id, organizationId);
     if (!success) {
       return NextResponse.json({ error: "Candidate not found" }, { status: 404 });
     }

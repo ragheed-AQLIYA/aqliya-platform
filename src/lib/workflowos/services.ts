@@ -125,6 +125,7 @@ export async function createWorkflowMembership(input: {
   role: string;
 }) {
   const user = await requireWorkflowAdmin();
+  await requireClientAccess(input.clientId);
 
   const validRoles = ["PlatformAdmin", "Operator", "Reviewer"];
   if (!validRoles.includes(input.role)) {
@@ -214,9 +215,9 @@ export async function updateWorkflowMembershipStatus(
   return membership;
 }
 
-export async function findUserByEmail(email: string) {
-  return prisma.user.findUnique({
-    where: { email },
+export async function findUserByEmail(email: string, organizationId: string) {
+  return prisma.user.findFirst({
+    where: { email, organizationId },
     select: { id: true, name: true, email: true },
   });
 }

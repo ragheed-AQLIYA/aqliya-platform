@@ -30,13 +30,17 @@ export async function addHold(params: {
   return hold;
 }
 
-export async function removeHold(holdId: string): Promise<boolean> {
+export async function removeHold(
+  holdId: string,
+  organizationId?: string,
+): Promise<boolean> {
   const index = HOLD_STORE.findIndex((h) => h.id === holdId);
-  if (index >= 0) {
-    HOLD_STORE.splice(index, 1);
-    return true;
+  if (index < 0) return false;
+  if (organizationId && HOLD_STORE[index].organizationId !== organizationId) {
+    return false;
   }
-  return false;
+  HOLD_STORE.splice(index, 1);
+  return true;
 }
 
 export async function listHolds(organizationId?: string): Promise<RetentionHold[]> {

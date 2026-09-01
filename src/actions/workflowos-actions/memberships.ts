@@ -45,7 +45,12 @@ export async function workflow_addMembershipByEmail(data: {
   role: string;
 }) {
   try {
-    const user = await findUserByEmail(data.email);
+    const { requireWorkflowAdmin, requireClientAccess } = await import(
+      "@/lib/workflowos/tenant-guard"
+    );
+    const actor = await requireWorkflowAdmin();
+    await requireClientAccess(data.clientId);
+    const user = await findUserByEmail(data.email, actor.organizationId);
     if (!user) {
       return { success: false, error: "المستخدم غير موجود حالياً" };
     }

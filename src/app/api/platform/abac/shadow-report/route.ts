@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
 import { getAbacShadowMismatchReport } from "@/lib/core/policy/access/abac-shadow-report";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
-/** ADMIN — ABAC shadow mismatch summary for pilot rollout review. */
+/** ADMIN — ABAC shadow mismatch summary for the caller's organization. */
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       throw new Error("Access denied: ADMIN role required");
     }
     const report = await getAbacShadowMismatchReport(user.organizationId);

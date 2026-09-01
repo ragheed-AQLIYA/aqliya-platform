@@ -204,12 +204,12 @@ describe("L0-07: Cross-Tenant Isolation", () => {
       }
     })
 
-    it("allows cross-org access for ADMIN on any resource", async () => {
+    it("blocks cross-org access for tenant ADMIN on any resource", async () => {
       const admin = makeAdmin({ organizationId: "org-alpha" })
       for (const resource of ["organization", "sales", "audit", "platform"] as const) {
         await expect(
           enforce(admin, { type: resource, tenantId: "org-beta" }, "admin"),
-        ).resolves.toBeUndefined()
+        ).rejects.toThrow("Tenant access denied")
       }
     })
 
@@ -383,6 +383,9 @@ describe("L0-07: Cross-Tenant Isolation", () => {
     const matcherSection = middleware.match(
       /export const config = \{[^}]*matcher: \[([\s\S]*?)\]/,
     )?.[1]
+    const routePolicySection = middleware.match(
+      /const routeMinRoles: Record<string, string> = \{([\s\S]*?)\n  \};/,
+    )?.[1]
 
     const protectedRoutes = [
       "/audit",
@@ -407,14 +410,16 @@ describe("L0-07: Cross-Tenant Isolation", () => {
 
     for (const route of protectedRoutes) {
       it(`middleware protects route ${route}`, () => {
-        expect(matcherSection).toContain(`"${route}"`)
+        const baseRoute = route.replace("/:path*", "")
+        expect(routePolicySection).toContain(`"${baseRoute}"`)
+        expect(matcherSection).toContain("/((?!")
       })
     }
 
     it("intelligence and monitoring routes are also in matcher", () => {
-      expect(matcherSection).toContain('"/intelligence"')
-      expect(matcherSection).toContain('"/monitoring"')
-      expect(matcherSection).toContain('"/published/recommendation"')
+      expect(routePolicySection).toContain('"/intelligence"')
+      expect(routePolicySection).toContain('"/monitoring"')
+      expect(matcherSection).toContain("/((?!")
     })
 
     it("product API routes are in the matcher", () => {
@@ -429,7 +434,9 @@ describe("L0-07: Cross-Tenant Isolation", () => {
         "/api/metrics",
       ]
       for (const route of apiRoutes) {
-        expect(matcherSection).toContain(`"${route}"`)
+        const baseRoute = route.replace("/:path*", "")
+        expect(routePolicySection).toContain(`"${baseRoute}"`)
+        expect(matcherSection).toContain("/((?!")
       }
     })
 

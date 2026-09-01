@@ -24,6 +24,7 @@ export interface WebhookEventPayload {
   providerId: WebhookProvider;
   eventId: string;
   eventType: string;
+  organizationId: string;
   rawBody: Record<string, unknown>;
   headers: Record<string, string>;
   receivedAt: Date;
@@ -119,6 +120,7 @@ export async function receiveWebhook(
     providerId: config.providerId,
     eventId: `wh-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     eventType: "",
+    organizationId: config.organizationId,
     rawBody: {},
     headers,
     receivedAt: new Date(),

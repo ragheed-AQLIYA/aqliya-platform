@@ -22,10 +22,31 @@ export async function createNotification(params: {
   link?: string
   metadata?: Record<string, unknown>
 }) {
+  const actor = await assertUser()
+  const organizationId = actor.organizationId
+  if (params.organizationId !== organizationId) {
+    throw new Error("Access denied: organization access required")
+  }
+
+  let userId = actor.id
+  if (params.userId !== actor.id) {
+    if (actor.role !== "ADMIN") {
+      throw new Error("Access denied")
+    }
+    const target = await prisma.user.findUnique({
+      where: { id: params.userId },
+      select: { id: true, organizationId: true },
+    })
+    if (!target || target.organizationId !== organizationId) {
+      throw new Error("Access denied: user belongs to another organization")
+    }
+    userId = target.id
+  }
+
   return prisma.notification.create({
     data: {
-      organizationId: params.organizationId,
-      userId: params.userId,
+      organizationId,
+      userId,
       type: params.type,
       title: params.title,
       body: params.body,
@@ -37,7 +58,7 @@ export async function createNotification(params: {
       const alog = auditLogger({
         productKey: Product.PLATFORM,
         sourceSystem: "notifications",
-        actor: { id: params.userId },
+        actor: { id: actor.id, name: actor.name ?? undefined, email: actor.email ?? undefined },
       });
       await alog.record("notification.created", { type: "Notification", id: notification.id }, { severity: "info" });
     } catch { /* audit must not block */ }

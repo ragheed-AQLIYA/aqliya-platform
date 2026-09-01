@@ -59,8 +59,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const limit = Math.min(Number(url.searchParams.get("limit")) || 25, 100);
     const offset = Number(url.searchParams.get("offset")) || 0;
-    const organizationId =
-      user.platformOrganizationId ?? user.organizationId;
+    const organizationId = user.organizationId;
 
     const jobs = await getExportHistory(organizationId, limit, offset);
 
@@ -110,7 +109,7 @@ export async function POST(request: Request) {
     }
 
     const action = (rawBody as Record<string, unknown>)._action ?? "export";
-    const organizationId = user.platformOrganizationId ?? user.organizationId;
+    const organizationId = user.organizationId;
 
     if (action === "export") {
       const parsed = siemExportSchema.safeParse(rawBody);

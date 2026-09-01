@@ -24,12 +24,15 @@ export interface AbacEvaluationResult {
   policyName?: string;
 }
 
+function isAbacEnforceRequested(): boolean {
+  return process.env.FF_ABAC_ENFORCE === "true";
+}
+
 /**
  * Evaluate ABAC conditions for a given request.
  *
- * If the ABAC service is unavailable or no policies match,
- * defaults to allowed (fail-open for ABAC — the base RBAC
- * check has already passed at this point).
+ * Shadow (FF_ABAC_ENFORCE unset/false): engine errors fail-open after RBAC.
+ * Enforce (FF_ABAC_ENFORCE=true): engine errors fail-closed.
  */
 export async function evaluateAbac(
   request: AbacEvaluationRequest,
@@ -58,8 +61,12 @@ export async function evaluateAbac(
 
     return { allowed: true };
   } catch {
-    // ABAC is optional — if the engine or policies are not configured,
-    // the base RBAC check is sufficient.
+    if (isAbacEnforceRequested()) {
+      return {
+        allowed: false,
+        reason: "ABAC engine unavailable",
+      };
+    }
     return { allowed: true };
   }
 }

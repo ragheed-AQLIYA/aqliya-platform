@@ -15,7 +15,7 @@ export interface AIGovernanceMetrics {
   period: { from: string; to: string }
 }
 
-export async function getAIGovernanceMetrics(days = 30): Promise<AIGovernanceMetrics> {
+export async function getAIGovernanceMetrics(days = 30, organizationId?: string): Promise<AIGovernanceMetrics> {
   const from = new Date(Date.now() - days * 86400000)
   const to = new Date()
 
@@ -24,6 +24,14 @@ export async function getAIGovernanceMetrics(days = 30): Promise<AIGovernanceMet
       productKey: "ai_core",
       action: "ai_generation",
       createdAt: { gte: from, lte: to },
+      ...(organizationId
+        ? {
+            OR: [
+              { organizationId },
+              { platformOrganizationId: organizationId },
+            ],
+          }
+        : {}),
     },
     orderBy: { createdAt: "desc" },
     take: 10000,

@@ -12,7 +12,7 @@ export interface EscalationResult {
   errors: string[];
 }
 
-export async function checkPendingExports(): Promise<EscalationResult> {
+export async function checkPendingExports(organizationId?: string): Promise<EscalationResult> {
   const result: EscalationResult = { escalated: 0, skipped: 0, errors: [] };
 
   const cutoff = new Date();
@@ -23,6 +23,7 @@ export async function checkPendingExports(): Promise<EscalationResult> {
       exportStatus: "requested",
       exportRequestedAt: { lte: cutoff },
       escalatedAt: null,
+      ...(organizationId ? { organizationId } : {}),
     },
     select: {
       id: true,

@@ -33,7 +33,7 @@ function toCurrency(n: number): number {
   return Math.round(n * 10000) / 10000
 }
 
-export async function getAISpendSummary(days = 30): Promise<SpendSummary> {
+export async function getAISpendSummary(days = 30, organizationId?: string): Promise<SpendSummary> {
   const from = new Date(Date.now() - days * 86400000)
   const to = new Date()
 
@@ -42,6 +42,14 @@ export async function getAISpendSummary(days = 30): Promise<SpendSummary> {
       productKey: "ai_core",
       action: "ai_generation",
       createdAt: { gte: from, lte: to },
+      ...(organizationId
+        ? {
+            OR: [
+              { organizationId },
+              { platformOrganizationId: organizationId },
+            ],
+          }
+        : {}),
     },
     orderBy: { createdAt: "desc" },
     take: 10000,

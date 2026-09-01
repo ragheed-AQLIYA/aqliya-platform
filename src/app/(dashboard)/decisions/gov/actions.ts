@@ -153,7 +153,8 @@ export async function getGovernanceEvents() {
 
 export async function getActiveEscalationsAction() {
   try {
-    const escalations = await svcGetActiveEscalations();
+    const user = await getCurrentUser();
+    const escalations = await svcGetActiveEscalations(user.organizationId);
     return { success: true as const, data: escalations };
   } catch (err) {
     return {
@@ -166,7 +167,7 @@ export async function getActiveEscalationsAction() {
 export async function processEscalationsAction() {
   try {
     const user = await getCurrentUser();
-    const count = await svcProcessEscalations();
+    const count = await svcProcessEscalations(user.organizationId);
 
     await writePlatformAuditLog({
       productKey: "decision",
@@ -188,6 +189,14 @@ export async function processEscalationsAction() {
 
 export async function getDecisionEventLogAction(decisionId: string) {
   try {
+    const user = await getCurrentUser();
+    const decision = await prisma.decision.findUnique({
+      where: { id: decisionId },
+      select: { organizationId: true },
+    });
+    if (!decision || decision.organizationId !== user.organizationId) {
+      return { success: false as const, error: "Access denied" };
+    }
     const events = await svcGetDecisionEventLog(decisionId);
     return { success: true as const, data: events };
   } catch (err) {

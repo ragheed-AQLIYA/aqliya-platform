@@ -10,6 +10,7 @@ import {
 } from "./intelligence-core-rag"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import type { CurrentUser } from "@/lib/auth"
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin"
 import type { HybridRetrievalMode } from "./hybrid-search"
 
 // DocumentChunk model exists in schema — typed access used directly
@@ -19,7 +20,7 @@ export function resolveKnowledgeOrganizationId(
   requested?: string | null,
 ): string {
   const orgId = requested?.trim() || user.organizationId
-  if (orgId !== user.organizationId && user.role !== "ADMIN") {
+  if (orgId !== user.organizationId && !isPlatformAdmin(user)) {
     throw new Error("Access denied: organization scope mismatch")
   }
   return orgId

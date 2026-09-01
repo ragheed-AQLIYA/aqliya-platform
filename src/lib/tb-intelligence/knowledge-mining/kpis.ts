@@ -25,17 +25,23 @@ type CoverageRow = {
 /**
  * Get operational KPIs for the knowledge mining pipeline.
  */
-export async function getKnowledgeMiningKPIs(): Promise<KnowledgeMiningKPIs> {
+export async function getKnowledgeMiningKPIs(
+  organizationId?: string,
+): Promise<KnowledgeMiningKPIs> {
+  const where = organizationId ? { organizationId } : {};
   const [totalCandidates, byStatusGrouped, evidenceCount, patternsResult] =
     await Promise.all([
-      prisma.knowledgeCandidate.count(),
+      prisma.knowledgeCandidate.count({ where }),
       prisma.knowledgeCandidate.groupBy({
         by: ["status"],
+        where,
         _count: { _all: true },
       }),
-      prisma.knowledgeCandidateEvidence.count(),
+      prisma.knowledgeCandidateEvidence.count({
+        where: organizationId ? { organizationId } : {},
+      }),
       prisma.knowledgeCandidate.findMany({
-        where: { status: { not: "REJECTED" } },
+        where: { status: { not: "REJECTED" }, ...where },
         orderBy: { supportCount: "desc" },
         take: 10,
         select: {
@@ -66,6 +72,7 @@ export async function getKnowledgeMiningKPIs(): Promise<KnowledgeMiningKPIs> {
 
   const coverageResult = (await prisma.knowledgeCandidate.groupBy({
     by: ["canonicalCode"],
+    where,
     _count: { canonicalCode: true },
   })) as unknown as CoverageRow[];
 

@@ -75,14 +75,15 @@ describe("SSO Service", () => {
       expect(resultA[0].label).toBe("Org A");
     });
 
-    it("decrypts clientSecret in response", async () => {
+    it("does not return clientSecret; reports hasClientSecret", async () => {
       await seedProvider({
         clientSecret: storedSecret("my-secret"),
         label: "Secret Test",
       });
 
       const result = await getSsoProviders("test-org-id");
-      expect(result[0].clientSecret).toBe("my-secret");
+      expect(result[0]).not.toHaveProperty("clientSecret");
+      expect(result[0].hasClientSecret).toBe(true);
     });
 
     it("orders by createdAt ascending", async () => {
@@ -139,8 +140,8 @@ describe("SSO Service", () => {
         clientSecret: "plain-secret",
       });
 
-      // Decrypted value should match
-      expect(result.clientSecret).toBe("plain-secret");
+      expect(result.hasClientSecret).toBe(true);
+      expect(result).not.toHaveProperty("clientSecret");
     });
 
     it("creates provider with all optional fields", async () => {
@@ -211,7 +212,8 @@ describe("SSO Service", () => {
         { clientSecret: "new-plain-secret" },
       );
 
-      expect(result!.clientSecret).toBe("new-plain-secret");
+      expect(result!.hasClientSecret).toBe(true);
+      expect(result!).not.toHaveProperty("clientSecret");
     });
 
     it("clears clientSecret when set to empty string", async () => {
@@ -223,7 +225,8 @@ describe("SSO Service", () => {
         { clientSecret: "" },
       );
 
-      expect(result!.clientSecret).toBeNull();
+      expect(result!.hasClientSecret).toBe(false);
+      expect(result!).not.toHaveProperty("clientSecret");
     });
 
     it("updates SAML fields", async () => {
@@ -392,14 +395,19 @@ describe("SSO Service", () => {
         clientSecret: "0okta-s3cret-value!",
       });
 
-      expect(created.clientSecret).toBe("0okta-s3cret-value!");
+      expect(created.hasClientSecret).toBe(true);
+      expect(created).not.toHaveProperty("clientSecret");
       expect(created.clientId).toBe("okta-client");
 
-      // Verify via getSsoProviders
       const providers = await getSsoProviders("test-org-id");
       const found = providers.find((p) => p.id === created.id);
       expect(found).toBeDefined();
-      expect(found!.clientSecret).toBe("0okta-s3cret-value!");
+      expect(found!).not.toHaveProperty("clientSecret");
+      expect(found!.hasClientSecret).toBe(true);
+
+      const authProviders = await getEnabledSsoProviders("test-org-id");
+      const authFound = authProviders.find((p) => p.id === created.id);
+      expect(authFound!.clientSecret).toBe("0okta-s3cret-value!");
     });
 
     it("handles legacy plaintext clientSecret", async () => {
@@ -417,7 +425,10 @@ describe("SSO Service", () => {
 
       const result = await getProviderById("test-org-id", raw.id);
       expect(result).not.toBeNull();
-      expect(result!.clientSecret).toBe("legacy-plain-secret");
+      expect(result!).not.toHaveProperty("clientSecret");
+      expect(result!.hasClientSecret).toBe(true);
+      const auth = await getProviderConfig("test-org-id", "google");
+      expect(auth!.clientSecret).toBe("legacy-plain-secret");
     });
   });
 });

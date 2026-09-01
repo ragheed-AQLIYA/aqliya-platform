@@ -17,22 +17,27 @@ import type { Prisma } from "@prisma/client";
 
 const logger = createLogger({ product: "platform", action: "unknown" });
 
+async function findContactInTenant(email: string, organizationId: string) {
+  if (!organizationId || !email) return null;
+  return prisma.salesContact.findFirst({
+    where: { email, organizationId },
+    select: { id: true, accountId: true, organizationId: true },
+  });
+}
+
 // ── SmartLead: Email replied → Update deal stage ──
 
 registerWebhookHandler("smartlead", "EMAIL_REPLIED", async (event) => {
   const outreachEvent = convertToOutreachEvent(event);
   if (!outreachEvent) return;
 
-  // Find the deal linked to this campaign/contact
-  const contact = await prisma.salesContact.findFirst({
-    where: { email: outreachEvent.contactId },
-    select: { id: true, accountId: true },
-  });
+  const contact = await findContactInTenant(outreachEvent.contactId, event.organizationId);
 
   if (contact?.accountId) {
     // Find active deals for this account
     const deals = await prisma.salesDeal.findMany({
       where: {
+        organizationId: event.organizationId,
         accountId: contact.accountId,
         status: { in: ["open", "qualified"] },
       },
@@ -58,8 +63,8 @@ registerWebhookHandler("smartlead", "EMAIL_REPLIED", async (event) => {
       await writePlatformAuditLog({
         productKey: "salesos",
         action: "deal.stage_advanced.via_outreach_reply",
-        platformOrganizationId: "system",
-        organizationId: contact.accountId,
+        platformOrganizationId: event.organizationId,
+        organizationId: event.organizationId,
         actorId: "system",
         actorName: "SmartLead Webhook",
         targetType: "SalesDeal",
@@ -81,14 +86,12 @@ registerWebhookHandler("smartlead", "MEETING_BOOKED", async (event) => {
   const outreachEvent = convertToOutreachEvent(event);
   if (!outreachEvent) return;
 
-  const contact = await prisma.salesContact.findFirst({
-    where: { email: outreachEvent.contactId },
-    select: { id: true, accountId: true },
-  });
+  const contact = await findContactInTenant(outreachEvent.contactId, event.organizationId);
 
   if (contact?.accountId) {
     const deals = await prisma.salesDeal.findMany({
       where: {
+        organizationId: event.organizationId,
         accountId: contact.accountId,
         status: { in: ["open", "qualified", "negotiation"] },
       },
@@ -105,8 +108,8 @@ registerWebhookHandler("smartlead", "MEETING_BOOKED", async (event) => {
       await writePlatformAuditLog({
         productKey: "salesos",
         action: "deal.qualified.via_meeting_booked",
-        platformOrganizationId: "system",
-        organizationId: contact.accountId,
+        platformOrganizationId: event.organizationId,
+        organizationId: event.organizationId,
         actorId: "system",
         actorName: "SmartLead Webhook",
         targetType: "SalesDeal",
@@ -126,17 +129,14 @@ registerWebhookHandler("smartlead", "EMAIL_BOUNCED", async (event) => {
   const outreachEvent = convertToOutreachEvent(event);
   if (!outreachEvent) return;
 
-  const contact = await prisma.salesContact.findFirst({
-    where: { email: outreachEvent.contactId },
-    select: { id: true, accountId: true },
-  });
+  const contact = await findContactInTenant(outreachEvent.contactId, event.organizationId);
 
   if (contact?.accountId) {
     await writePlatformAuditLog({
       productKey: "salesos",
       action: "outreach.bounced",
-      platformOrganizationId: "system",
-      organizationId: contact.accountId,
+      platformOrganizationId: event.organizationId,
+      organizationId: event.organizationId,
       actorId: "system",
       actorName: "SmartLead Webhook",
       targetType: "SalesContact",
@@ -158,7 +158,7 @@ registerWebhookHandler("apollo", "email_opened", async (event) => {
 
   await prisma.platformAuditLog.create({
     data: {
-      platformOrganizationId: "system",
+      platformOrganizationId: event.organizationId,
       productKey: "salesos",
       actorId: "system",
       actorName: "Apollo Webhook",
@@ -178,7 +178,7 @@ registerWebhookHandler("apollo", "email_opened", async (event) => {
 registerWebhookHandler("apollo", "*", async (event) => {
   await prisma.platformAuditLog.create({
     data: {
-      platformOrganizationId: "system",
+      platformOrganizationId: event.organizationId,
       productKey: "salesos",
       actorId: "system",
       actorName: `webhook-${event.providerId}`,
@@ -197,7 +197,7 @@ registerWebhookHandler("apollo", "*", async (event) => {
 registerWebhookHandler("smartlead", "*", async (event) => {
   await prisma.platformAuditLog.create({
     data: {
-      platformOrganizationId: "system",
+      platformOrganizationId: event.organizationId,
       productKey: "salesos",
       actorId: "system",
       actorName: `webhook-${event.providerId}`,

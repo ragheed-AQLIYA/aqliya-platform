@@ -54,6 +54,23 @@ describe("AI Authorization Gate", () => {
       expect(result.allowed).toBe(true);
     });
 
+    it("denies missing tenant or actor even when the feature flag is off", () => {
+      const { isEnabled } = require("@/lib/platform/feature-flags/registry");
+      isEnabled.mockReturnValue(false);
+
+      const { authorizeAIAction } = require("@/lib/core/ai/ai-authorization");
+      const result = authorizeAIAction(
+        makeRequest({ actorId: "", organizationId: "", actorRoles: ["viewer"], taskType: "generation" }),
+      );
+      expect(result.allowed).toBe(false);
+      expect(result.reason).toContain("authenticated tenant context");
+
+      isEnabled.mockImplementation((key: string) => {
+        if (key === "platform.ai-authorization") return true;
+        return false;
+      });
+    });
+
     it("allows any task when feature flag is off", () => {
       const { isEnabled } = require("@/lib/platform/feature-flags/registry");
       isEnabled.mockReturnValue(false);

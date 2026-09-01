@@ -19,17 +19,13 @@ export async function getRecentActivity(limit = 20): Promise<ActivityItem[]> {
   if (!user) return []
 
   const orgId = user.organizationId
-  const platformOrgId = user.platformOrganizationId ?? orgId
-  const activities: ActivityItem[] = []
+   const activities: ActivityItem[] = []
 
   // Primary source: PlatformAuditLog (cross-product activity log)
   try {
     const logs = await prisma.platformAuditLog.findMany({
       where: {
-        OR: [
-          { platformOrganizationId: platformOrgId },
-          { platformOrganizationId: null },
-        ],
+        organizationId: orgId,
       },
       orderBy: { createdAt: "desc" },
       take: limit,

@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { safeFetchJson } from "@/lib/security/ssrf";
 import type { Prisma } from "@prisma/client";
 import crypto from "node:crypto";
 
@@ -55,11 +56,11 @@ async function sendSingleWebhook(
     headers["X-Aqliya-Timestamp"] = Math.floor(Date.now() / 1000).toString();
   }
 
-  return fetch(url, {
+  return safeFetchJson(url, {
     method: "POST",
     headers,
     body,
-    signal: AbortSignal.timeout(15000),
+    timeoutMs: 15000,
   });
 }
 

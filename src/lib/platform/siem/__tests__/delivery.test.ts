@@ -7,9 +7,19 @@ describe("deliverToFile", () => {
   const tmpDir = join(tmpdir(), "siem-test-delivery");
   const testData = JSON.stringify({ test: "data", timestamp: Date.now() });
   let filePath: string;
+  const previousExportDir = process.env.SIEM_EXPORT_DIR;
 
   beforeAll(async () => {
+    process.env.SIEM_EXPORT_DIR = tmpDir;
     await mkdir(tmpDir, { recursive: true });
+  });
+
+  afterAll(() => {
+    if (previousExportDir === undefined) {
+      delete process.env.SIEM_EXPORT_DIR;
+    } else {
+      process.env.SIEM_EXPORT_DIR = previousExportDir;
+    }
   });
 
   afterEach(async () => {
@@ -29,7 +39,7 @@ describe("deliverToFile", () => {
   it("returns ok: false on invalid path", async () => {
     const result = await deliverToFile(
       testData,
-      join(tmpDir, "missing-parent-dir", "file.json"),
+      join(tmpdir(), "siem-outside-jail", "file.json"),
     );
     expect(result.ok).toBe(false);
     expect(result.error).toBeDefined();

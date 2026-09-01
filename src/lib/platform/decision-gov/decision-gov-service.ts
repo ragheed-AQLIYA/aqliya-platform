@@ -318,13 +318,20 @@ export async function createEscalationRule(
   return rule
 }
 
-export async function getActiveEscalations(): Promise<EscalationCheck[]> {
+export async function getActiveEscalations(organizationId?: string): Promise<EscalationCheck[]> {
   const now = new Date()
 
   const activeRules = await prisma.decisionEscalationRule.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      ...(organizationId ? { organizationId } : {}),
+    },
     take: 100,
   })
+
+  if (activeRules.length === 0) {
+    return []
+  }
 
   const results: EscalationCheck[] = []
 
@@ -374,8 +381,8 @@ export async function getActiveEscalations(): Promise<EscalationCheck[]> {
   return results
 }
 
-export async function processEscalations(): Promise<number> {
-  const escalations = await getActiveEscalations()
+export async function processEscalations(organizationId?: string): Promise<number> {
+  const escalations = await getActiveEscalations(organizationId)
   if (escalations.length === 0) return 0
 
   const escDecisionIds = escalations.map(e => e.decisionId)

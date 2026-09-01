@@ -30,6 +30,10 @@ async function searchVector(
 
   const safeLimit = Math.max(1, Math.min(limit, 1000))
 
+  if (!orgId) {
+    return []
+  }
+
   const conditions = ['"embedding" IS NOT NULL']
   const params: unknown[] = []
   let paramIdx = 1

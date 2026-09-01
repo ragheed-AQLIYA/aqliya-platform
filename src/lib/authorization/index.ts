@@ -38,8 +38,10 @@ export {
 } from "./types";
 
 // Tenant isolation
-export { checkTenantAccess, assertTenantAccess } from "./tenant-guard";
+export { checkTenantAccess, assertTenantAccess, resolveCallerTenantId } from "./tenant-guard";
 export type { TenantAccessRequest, TenantAccessResult } from "./tenant-guard";
+
+export { isPlatformAdmin, assertPlatformAdmin } from "./platform-admin";
 
 // Permission resolution
 export {

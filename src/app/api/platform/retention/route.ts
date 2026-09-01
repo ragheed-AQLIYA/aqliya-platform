@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
 import { getAllPolicies } from "@/lib/core/policy/retention/policies";
 import { getCurrentUser } from "@/lib/auth";
-import { hasRequiredRole } from "@/lib/kernel";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
+import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!hasRequiredRole(user, "ADMIN")) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  try {
+    const user = await getCurrentUser();
+    assertPlatformAdmin(user);
+    const policies = getAllPolicies();
+    return NextResponse.json({ policies });
+  } catch (error) {
+    const { message, code } = sanitizeError(error);
+    return NextResponse.json({ error: message }, { status: httpStatusFromCode(code) });
   }
-
-  const policies = getAllPolicies();
-  return NextResponse.json({ policies });
 }

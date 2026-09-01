@@ -3,6 +3,7 @@ import { createLogger } from "@/lib/observability/logger";
 import { checkPendingExports } from "@/lib/workflowos/escalation-service";
 import { getCurrentUser } from "@/lib/auth";
 import { hasRequiredRole } from "@/lib/kernel";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 
 const logger = createLogger({ product: "platform", action: "unknown" });
@@ -10,11 +11,12 @@ const logger = createLogger({ product: "platform", action: "unknown" });
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "VIEWER")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const result = await checkPendingExports();
+    const organizationId = isPlatformAdmin(user) ? undefined : user.organizationId;
+    const result = await checkPendingExports(organizationId);
     return NextResponse.json({
       ok: true,
       escalated: result.escalated,

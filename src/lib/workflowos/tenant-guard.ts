@@ -3,6 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import type { WorkflowUserRole } from "@/lib/workflowos/types";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export interface WorkflowMembershipInfo {
   membershipId: string;
@@ -70,20 +71,26 @@ export async function requireClientAccess(
 ) {
   const user = await getCurrentUser();
 
+  if (isPlatformAdmin(user)) {
+    return { ...user, workflowRole: "PlatformAdmin" as WorkflowUserRole };
+  }
+
   if (user.role === "ADMIN") {
-    if (user.platformOrganizationId) {
-      const client = await prisma.sunbulClient.findUnique({
-        where: { id: clientId },
-        select: { platformOrganizationId: true },
-      });
-      if (
-        client?.platformOrganizationId &&
-        client.platformOrganizationId !== user.platformOrganizationId
-      ) {
-        throw new Error(
-          "Access denied: client belongs to a different organization",
-        );
-      }
+    const client = await prisma.sunbulClient.findUnique({
+      where: { id: clientId },
+      select: { platformOrganizationId: true },
+    });
+    if (!client) {
+      throw new Error("Access denied: client not found");
+    }
+    const tenantKey = user.platformOrganizationId ?? user.organizationId;
+    if (!client.platformOrganizationId) {
+      throw new Error("Access denied: client has no organization binding");
+    }
+    if (client.platformOrganizationId !== tenantKey) {
+      throw new Error(
+        "Access denied: client belongs to a different organization",
+      );
     }
     return { ...user, workflowRole: "PlatformAdmin" as WorkflowUserRole };
   }
@@ -122,8 +129,8 @@ export async function requireWorkflowAdmin() {
     where: { id: user.id },
     select: { role: true },
   });
-  if (record?.role !== "ADMIN") {
-    throw new Error("Access denied: Platform Admin role required");
+  if (record?.role !== "ADMIN" && !isPlatformAdmin(user)) {
+    throw new Error("Access denied: tenant administrator required");
   }
   return user;
 }
@@ -134,13 +141,27 @@ export async function getUserWorkflowRole(
   const user = await getCurrentUser();
 
   const isAdmin =
+    isPlatformAdmin(user) ||
     (
       await prisma.user.findUnique({
         where: { id: user.id },
         select: { role: true },
       })
     )?.role === "ADMIN";
-  if (isAdmin) return "PlatformAdmin";
+  if (isAdmin) {
+    if (isPlatformAdmin(user)) return "PlatformAdmin";
+    const client = await prisma.sunbulClient.findUnique({
+      where: { id: clientId },
+      select: { platformOrganizationId: true },
+    });
+    const tenantKey = user.platformOrganizationId ?? user.organizationId;
+    if (
+      client?.platformOrganizationId &&
+      client.platformOrganizationId === tenantKey
+    ) {
+      return "PlatformAdmin";
+    }
+  }
 
   const membership = await prisma.sunbulUserMembership.findUnique({
     where: {

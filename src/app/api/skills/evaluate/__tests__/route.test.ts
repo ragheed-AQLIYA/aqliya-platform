@@ -1,11 +1,9 @@
 import { describe, expect, it, jest } from "@jest/globals";
 
 const getCurrentUser = jest.fn();
-const hasRequiredRole = jest.fn();
 
 jest.mock("@/lib/auth", () => ({
   getCurrentUser: (...args: unknown[]) => getCurrentUser(...args),
-  hasRequiredRole: (...args: unknown[]) => hasRequiredRole(...args),
 }));
 
 jest.mock("@/lib/skill-runtime/runtime", () => ({
@@ -13,9 +11,18 @@ jest.mock("@/lib/skill-runtime/runtime", () => ({
 }));
 
 describe("GET /api/skills/evaluate", () => {
+  const previousIds = process.env.PLATFORM_ADMIN_USER_IDS;
+  const previousEmails = process.env.PLATFORM_ADMIN_EMAILS;
+
   beforeEach(() => {
     getCurrentUser.mockReset();
-    hasRequiredRole.mockReset();
+    delete process.env.PLATFORM_ADMIN_USER_IDS;
+    delete process.env.PLATFORM_ADMIN_EMAILS;
+  });
+
+  afterEach(() => {
+    process.env.PLATFORM_ADMIN_USER_IDS = previousIds;
+    process.env.PLATFORM_ADMIN_EMAILS = previousEmails;
   });
 
   it("returns 401 when unauthenticated", async () => {
@@ -26,9 +33,12 @@ describe("GET /api/skills/evaluate", () => {
     expect(res.status).toBe(401);
   });
 
-  it("returns 403 when caller is not ADMIN", async () => {
-    getCurrentUser.mockResolvedValue({ role: "VIEWER" });
-    hasRequiredRole.mockReturnValue(false);
+  it("returns 403 when caller is tenant ADMIN but not platform admin", async () => {
+    getCurrentUser.mockResolvedValue({
+      id: "tenant-admin",
+      email: "admin@org.com",
+      role: "ADMIN",
+    });
 
     const { GET } = await import("../route");
     const res = await GET();

@@ -2,8 +2,9 @@
 
 import { writeFile } from "node:fs/promises";
 import { createLogger } from "@/lib/observability/logger";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { getStorageProvider } from "@/lib/platform/storage";
+import { safeFetchJson } from "@/lib/security/ssrf";
 
 
 const logger = createLogger({ product: "platform", action: "unknown" });
@@ -49,14 +50,14 @@ export async function deliverToHttp(
 ): Promise<DeliveryResult> {
   try {
     await retryWithBackoff(() =>
-      fetch(url, {
+      safeFetchJson(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...headers,
         },
         body: data,
-        signal: AbortSignal.timeout(30000),
+        timeoutMs: 30000,
       }),
     );
     return { ok: true };
@@ -77,14 +78,14 @@ export async function deliverToSplunk(
 ): Promise<DeliveryResult> {
   try {
     await retryWithBackoff(() =>
-      fetch(hecUrl, {
+      safeFetchJson(hecUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Splunk ${token}`,
         },
         body: data,
-        signal: AbortSignal.timeout(30000),
+        timeoutMs: 30000,
       }),
     );
     return { ok: true };
@@ -103,7 +104,12 @@ export async function deliverToFile(
   filePath: string,
 ): Promise<DeliveryResult> {
   try {
-    await writeFile(filePath, data, "utf-8");
+    const allowedRoot = resolve(process.env.SIEM_EXPORT_DIR ?? join(process.cwd(), "uploads", "siem"));
+    const resolved = resolve(filePath);
+    if (resolved !== allowedRoot && !resolved.startsWith(allowedRoot + "\\") && !resolved.startsWith(allowedRoot + "/")) {
+      return { ok: false, error: "SIEM file path is outside the allowed export directory" };
+    }
+    await writeFile(resolved, data, "utf-8");
     return { ok: true };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

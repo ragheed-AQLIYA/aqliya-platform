@@ -1,6 +1,7 @@
 import "server-only";
 import { createLogger } from "@/lib/observability/logger";
 import { createHmac, timingSafeEqual } from "crypto";
+import { safeFetchJson } from "@/lib/security/ssrf";
 import type { DeliveryResult } from "./types";
 
 
@@ -34,14 +35,7 @@ async function fetchWithTimeout(
   options: RequestInit,
   timeoutMs: number,
 ): Promise<Response> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    return response;
-  } finally {
-    clearTimeout(timer);
-  }
+  return safeFetchJson(url, { ...options, timeoutMs });
 }
 
 export async function sendWebhook(

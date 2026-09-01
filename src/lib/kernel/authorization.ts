@@ -9,3 +9,5 @@
  * These sync wrappers provide the higher-level server action guard.
  */
 export { enforce, isAllowed } from "@/lib/authorization/action-guard";
+export { isPlatformAdmin, assertPlatformAdmin } from "@/lib/authorization/platform-admin";
+export { resolveCallerTenantId } from "@/lib/authorization/tenant-guard";

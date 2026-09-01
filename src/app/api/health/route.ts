@@ -60,15 +60,8 @@ async function livenessChecks(): Promise<{
   }
 
   const authSecret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET
-  if (authSecret) {
-    checks.auth_secret = { ok: true }
-    if (authSecret.length < 32) {
-      checks.auth_secret.detail =
-        "less than 32 characters (recommended minimum)"
-    }
-  } else {
-    checks.auth_secret = { ok: false, detail: "AUTH_SECRET is not set" }
-    failed.push("auth_secret")
+  if (!authSecret || authSecret.length < 32) {
+    failed.push("configuration")
   }
 
   return { checks, failed }

@@ -5,6 +5,7 @@ import { getAllCounters } from "@/lib/integration/metrics"
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error"
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin"
 
 /**
  * GET /api/integration/health
@@ -20,8 +21,8 @@ import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error"
 export async function GET() {
   try {
       const user = await getCurrentUser();
-      if (!hasRequiredRole(user, "VIEWER")) {
-        throw new Error("Access denied: VIEWER role required");
+      if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
+        throw new Error("Access denied: ADMIN role required");
       }
     // Run a health tick to get current state
     const snapshot = await getHealthRuntime().tick()
@@ -37,7 +38,9 @@ export async function GET() {
       updatedAt: c.updatedAt.toISOString(),
     }))
 
-    const lcos = await runLcosHealthCheck()
+    const lcos = await runLcosHealthCheck(
+      isPlatformAdmin(user) ? undefined : user.organizationId,
+    )
 
     const overallStatus =
       lcos.status === "unhealthy"
@@ -76,7 +79,7 @@ export async function GET() {
   }
 }
 
-async function runLcosHealthCheck() {
+async function runLcosHealthCheck(organizationId?: string) {
   const db: { status: string; projectCount: number } = { status: "unknown", projectCount: 0 }
   let erpConnector: { status: string; message: string } = {
     status: "not_configured",
@@ -84,9 +87,12 @@ async function runLcosHealthCheck() {
   }
   const scoringEngine: { status: string } = { status: "unknown" }
   let overall: "healthy" | "degraded" | "unhealthy" = "healthy"
+  const orgFilter = organizationId ? { organizationId } : undefined
 
   try {
-    const projectCount = await prisma.localContentProject.count()
+    const projectCount = await prisma.localContentProject.count({
+      where: orgFilter,
+    })
     db.status = "ok"
     db.projectCount = projectCount
   } catch {
@@ -96,7 +102,9 @@ async function runLcosHealthCheck() {
 
   try {
     if (process.env.ERP_PROVIDER) {
-      const erpCount = await prisma.erpConnection.count()
+      const erpCount = await prisma.erpConnection.count({
+        where: orgFilter,
+      })
       erpConnector = {
         status: erpCount > 0 ? "ok" : "degraded",
         message:

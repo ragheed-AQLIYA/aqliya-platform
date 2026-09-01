@@ -2,6 +2,7 @@ import "server-only";
 
 import { createRateLimiter } from "@/lib/platform/rate-limiter";
 import type { RateLimitConfig, RateLimiter } from "@/lib/platform/rate-limiter/types";
+import { getTrustedClientIp } from "@/lib/security/client-ip";
 
 const DEFAULT_CONFIG: RateLimitConfig = {
   maxRequests: 60,
@@ -31,11 +32,7 @@ export async function checkRateLimit(
   return _instance.check(key, config);
 }
 
-/** Rate-limit key for unauthenticated public POST endpoints (IP from proxy headers). */
+/** Rate-limit key for unauthenticated public POST endpoints (IP from trusted proxy only). */
 export function clientIpRateLimitKey(prefix: string, request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return `${prefix}:${forwarded.split(",")[0]?.trim()}`;
-  const realIp = request.headers.get("x-real-ip");
-  if (realIp) return `${prefix}:${realIp}`;
-  return `${prefix}:unknown`;
+  return `${prefix}:${getTrustedClientIp(request.headers)}`;
 }
