@@ -81,13 +81,13 @@ export function WorkflowRecordList({
       <table className="w-full text-sm">
         <thead className="bg-muted/50">
           <tr>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+            <th className="px-4 py-3 text-start font-medium text-muted-foreground">
               العنوان
             </th>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+            <th className="px-4 py-3 text-start font-medium text-muted-foreground">
               الحالة
             </th>
-            <th className="px-4 py-3 text-right font-medium text-muted-foreground">
+            <th className="px-4 py-3 text-start font-medium text-muted-foreground">
               التاريخ
             </th>
           </tr>

@@ -248,7 +248,7 @@ export default function DecisionRisksPage({
                   ? "أ-١٫٣ لا يمكن المتابعة قبل اكتمال أ-١٫١ الإطار."
                   : "أ-١٫٣ لا يمكن المتابعة قبل وجود ثلاثة سيناريوهات مكتملة على الأقل."}
             </p>
-            <ul className="mt-4 list-disc pl-5 text-sm">
+            <ul className="mt-4 list-disc ps-5 text-sm">
               {(intakeBlocked
                 ? intake?.requiredNextSteps
                 : frameworkBlocked
@@ -264,7 +264,7 @@ export default function DecisionRisksPage({
             {riskAnalysisState && !riskAnalysisState.isComplete && (
               <section className="mb-6 rounded-[24px] border border-border/70 p-4 shadow-sm">
                 <h3 className="text-sm font-bold">الخطوات التالية المطلوبة</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm">
+                <ul className="mt-2 list-disc ps-5 text-sm">
                   {riskAnalysisState.nextSteps.map((step) => (
                     <li key={step}>{step}</li>
                   ))}

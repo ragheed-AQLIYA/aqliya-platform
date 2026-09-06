@@ -14,7 +14,7 @@ export function WorkflowClientCard({
     <div className="flex items-center justify-between rounded-lg border bg-card p-3 hover:bg-muted/30 transition-colors">
       <button
         onClick={() => onSelectClient(client.id)}
-        className="flex items-center gap-3 min-w-0 text-right"
+        className="flex items-center gap-3 min-w-0 text-start"
       >
         <Building2 className="h-5 w-5 shrink-0 text-primary" />
         <div className="min-w-0">

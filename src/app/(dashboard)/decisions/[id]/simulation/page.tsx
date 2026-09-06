@@ -265,7 +265,7 @@ export default function SimulationPage({
                 {recommendation.recommendedAction && (
                   <div>
                     <span className="text-muted-foreground">الإجراء:</span>
-                    <span className="ml-2 font-medium">
+                    <span className="ms-2 font-medium">
                       {recommendation.recommendedAction}
                     </span>
                   </div>
@@ -289,7 +289,7 @@ export default function SimulationPage({
                 {isTender && recommendation.confidenceScore && (
                   <div>
                     <span className="text-muted-foreground">الثقة:</span>
-                    <span className="ml-2 font-medium">
+                    <span className="ms-2 font-medium">
                       {recommendation.confidenceScore}%
                     </span>
                   </div>

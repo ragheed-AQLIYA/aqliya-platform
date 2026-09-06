@@ -94,7 +94,7 @@ export function WorkflowClientSelector({
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute top-full right-0 z-20 mt-1 w-full rounded-lg border bg-popover p-1 shadow-md">
+          <div className="absolute top-full end-0 z-20 mt-1 w-full rounded-lg border bg-popover p-1 shadow-md">
             {clients.map((client) => (
               <button
                 key={client.id}
@@ -103,7 +103,7 @@ export function WorkflowClientSelector({
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors text-right",
+                  "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors text-start",
                   client.id === clientId
                     ? "bg-primary/10 text-primary font-medium"
                     : "text-popover-foreground hover:bg-muted",

@@ -32,7 +32,7 @@ function OutcomeBar({ pct, label }: { pct: number; label: string }) {
           style={{ width: `${Math.min(pct, 100)}%` }}
         />
       </div>
-      <span className="w-10 text-right font-medium">{pct}%</span>
+      <span className="w-10 text-start font-medium">{pct}%</span>
     </div>
   );
 }

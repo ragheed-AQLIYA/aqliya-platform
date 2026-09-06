@@ -201,7 +201,7 @@ export default function NewDecisionPage() {
           <div className="grid gap-4 md:grid-cols-2 text-sm">
             <div>
                 <h4 className="font-medium mb-1">الأهداف المقترحة</h4>
-              <ul className="list-disc pl-4 text-muted-foreground">
+              <ul className="list-disc ps-4 text-muted-foreground">
                 {selectedTemplate.suggestedObjectives.map((o, i) => (
                   <li key={i}>{o}</li>
                 ))}
@@ -209,7 +209,7 @@ export default function NewDecisionPage() {
             </div>
             <div>
                 <h4 className="font-medium mb-1">السيناريوهات المقترحة</h4>
-              <ul className="list-disc pl-4 text-muted-foreground">
+              <ul className="list-disc ps-4 text-muted-foreground">
                 {selectedTemplate.scenarioSuggestions.map((s, i) => (
                   <li key={i}><strong>{s.name}:</strong> {s.description}</li>
                 ))}
@@ -217,7 +217,7 @@ export default function NewDecisionPage() {
             </div>
             <div>
                 <h4 className="font-medium mb-1">المخاطر الشائعة</h4>
-              <ul className="list-disc pl-4 text-muted-foreground">
+              <ul className="list-disc ps-4 text-muted-foreground">
                 {selectedTemplate.commonRisks.slice(0, 3).map((r, i) => (
                   <li key={i}>{r}</li>
                 ))}

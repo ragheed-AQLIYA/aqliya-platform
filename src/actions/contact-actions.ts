@@ -55,6 +55,7 @@ export async function listContacts(
     if (user.organizationId !== organizationId) {
       throw new Error("Access denied: organization access required");
     }
+    await enforce(user, { type: "contact", id: "list", tenantId: organizationId }, "read");
 
     const where: Record<string, unknown> = {
       organizationId,
@@ -100,6 +101,7 @@ export async function listContacts(
 export async function createContact(data: CreateContactData) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id: "new", tenantId: user.organizationId }, "create");
 
     const tagsArray = data.tags
       ? data.tags.split(",").map((t) => t.trim()).filter(Boolean)
@@ -130,6 +132,7 @@ export async function createContact(data: CreateContactData) {
 export async function getContact(id: string) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id, tenantId: user.organizationId }, "read");
 
     const contact = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -162,6 +165,7 @@ export async function getContact(id: string) {
 export async function updateContact(id: string, data: Partial<CreateContactData>) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id, tenantId: user.organizationId }, "update");
 
     const existing = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -200,6 +204,7 @@ export async function updateContact(id: string, data: Partial<CreateContactData>
 export async function deleteContact(id: string) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id, tenantId: user.organizationId }, "delete");
 
     const existing = await prisma.localContact.findFirst({
       where: { id, organizationId: user.organizationId },
@@ -226,6 +231,7 @@ export async function createContactRelation(
 ) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id: sourceId, tenantId: user.organizationId }, "create");
 
     const [source, target] = await Promise.all([
       prisma.localContact.findFirst({
@@ -299,6 +305,7 @@ export async function logContactInteraction(
 ) {
   return safe(async () => {
     const user = await getCurrentUser();
+    await enforce(user, { type: "contact", id: contactId, tenantId: user.organizationId }, "create");
 
     const contact = await prisma.localContact.findFirst({
       where: { id: contactId, organizationId: user.organizationId },
@@ -374,6 +381,7 @@ export async function uploadContactEvidence(params: {
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
+    await enforce(user, { type: "contact", id: params.contactId, tenantId: user.organizationId }, "create");
 
     const evidence = await prisma.contactEvidence.create({
       data: {
@@ -435,6 +443,7 @@ export async function createContactReview(params: {
     if (!contact || contact.organizationId !== user.organizationId) {
       throw new Error("Contact not found or access denied");
     }
+    await enforce(user, { type: "contact", id: params.contactId, tenantId: user.organizationId }, "create");
 
     const review = await prisma.contactReview.create({
       data: {
