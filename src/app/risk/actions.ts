@@ -1,6 +1,7 @@
 "use server"
 
 import { getCurrentUser } from '@/lib/auth'
+import { enforce } from '@/lib/kernel'
 import { prisma } from '@/lib/prisma'
 import { getCachedOrFetch, DASHBOARD_CACHE_TTL_MS, invalidateCacheByPrefix } from '@/lib/platform/cache-strategy'
 import {
@@ -52,6 +53,7 @@ export async function getRiskModelAction(modelId: string): Promise<ActionResult>
 export async function createRiskModelAction(data: CreateRiskModelData): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    await enforce(user, { type: "engagement", id: user.organizationId }, "create")
     const model = await createRiskModel(user.organizationId, data, user.id)
     await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: model }
@@ -102,6 +104,7 @@ export async function createAssessmentAction(
 ): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    await enforce(user, { type: "engagement", id: user.organizationId }, "create")
     let resolvedEngagementId = engagementId
     if (!resolvedEngagementId || resolvedEngagementId === 'engagement-placeholder') {
       const engagements = await prisma.auditEngagement.findMany({
@@ -128,6 +131,7 @@ export async function updateProcedureAction(
 ): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    await enforce(user, { type: "engagement", id: user.organizationId }, "update")
     const hasAccess = await verifyOrgAccess('procedure', procedureId, user.organizationId)
     if (!hasAccess) return { ok: false, error: 'وصول مرفوض' }
     const updated = await updateProcedure(procedureId, data)
@@ -215,6 +219,7 @@ export async function transitionAssessmentAction(
 ): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    await enforce(user, { type: "engagement", id: user.organizationId }, "update")
     const updated = await transitionAssessmentStatus(assessmentId, targetStatus, user.id)
     await invalidateCacheByPrefix(`dashboard:risk:${user.organizationId}:stats`)
     return { ok: true, data: updated }
@@ -285,6 +290,7 @@ export async function getAssessmentProceduresAction(assessmentId: string): Promi
 export async function exportAssessmentAction(assessmentId: string): Promise<ActionResult> {
   try {
     const user = await getCurrentUser()
+    await enforce(user, { type: "engagement", id: user.organizationId }, "export")
     const assessment = await getAssessment(assessmentId)
     if (!assessment) return { ok: false, error: 'التقييم غير موجود' }
     const hasAccess = await verifyOrgAccess('assessment', assessmentId, user.organizationId)
