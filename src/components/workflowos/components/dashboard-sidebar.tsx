@@ -57,7 +57,7 @@ export function DashboardSidebar({
           <p className="mt-2 text-xs text-muted-foreground">
             طلبات التصدير
             {pendingExports > 0 && (
-              <span className="mr-1 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+              <span className="me-1 inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
                 {pendingExports}
               </span>
             )}

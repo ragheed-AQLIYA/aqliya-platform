@@ -68,7 +68,7 @@ export function RecommendationDiffCard({
                 size="sm"
                 onClick={onToggleDiff}
               >
-                <FileDiff className="h-4 w-4 mr-1" />
+                <FileDiff className="h-4 w-4 me-1" />
                 {showDiff
                   ? "إخفاء الفروقات"
                   : loadingDiff

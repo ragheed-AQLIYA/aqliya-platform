@@ -65,7 +65,7 @@ export function RecommendationForm({ formData, error, saving, onFieldChange, onT
       {error && <div className="text-destructive text-sm">{error}</div>}
 
       <Button type="submit" disabled={saving}>
-        {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {saving && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
         حفظ التوصية
       </Button>
     </form>

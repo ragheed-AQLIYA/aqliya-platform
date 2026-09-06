@@ -334,7 +334,7 @@ export default function NewWorkflowTemplatePage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>خطوات سير العمل</CardTitle>
           <Button variant="outline" size="sm" onClick={addStep}>
-            <Plus className="h-4 w-4 ml-1" />
+            <Plus className="h-4 w-4 ms-1" />
             إضافة خطوة
           </Button>
         </CardHeader>

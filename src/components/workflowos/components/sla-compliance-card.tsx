@@ -59,7 +59,7 @@ export function SlaComplianceCard({
                   </p>
                   <p className="text-sm font-bold">
                     {stats.rate}%
-                    <span className="text-xs text-muted-foreground mr-1">
+                    <span className="text-xs text-muted-foreground me-1">
                       ({stats.onTime}/{stats.total})
                     </span>
                   </p>

@@ -45,7 +45,7 @@ export function EvidenceSection({ evidence, uploadEvidence }: Props) {
               <Textarea name="description" placeholder="وصف الملف" />
             </div>
             <Button type="submit" size="sm">
-              <Upload className="ml-1 h-4 w-4" />
+              <Upload className="ms-1 h-4 w-4" />
               رفع
             </Button>
           </form>

@@ -43,7 +43,7 @@ export function ExportApprovalDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          <Download className="ml-1 h-4 w-4" />
+          <Download className="ms-1 h-4 w-4" />
           تصدير
           <ExportStatusBadge status={status} />
         </Button>
