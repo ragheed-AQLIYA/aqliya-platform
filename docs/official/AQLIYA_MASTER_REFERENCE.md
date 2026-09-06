@@ -7,9 +7,13 @@
 **File location:** `docs/official/AQLIYA_MASTER_REFERENCE.md`  
 **Authority:** Level 1 — secondary only to `docs/DOCUMENTATION_AUTHORITY.md`  
 **Owner:** Governance Team  
-**Last Reviewed:** 2026-07-22  
-**Updated per:** Platform Health Metrics Sync — ALL active products now L6 Production-hardened  
-**Last updated:** 2026-07-22 — Full L6 status sync across all products
+**Last Reviewed:** 2026-09-06  
+**Updated per:** P0 Governance Freeze (ADR-109) — L6 claims suspended to L5 Pilot-ready (conditional)  
+**Last updated:** 2026-09-06 — Status alignment with PRODUCT_STATUS_MATRIX.md
+
+> **⚠️ P0 GOVERNANCE FREEZE (ADR-109 — 2026-07-19):**
+> Unrestricted **L6 Production-hardened** claims are suspended. **Current Maturity** for active systems is **L5 Pilot-ready (conditional)** until external pen-test (B-01), Redis rate-limit + ClamAV verification, and commercial claim alignment are closed.
+> **Exception:** DecisionOS remains L6 per PRODUCT_STATUS_MATRIX.md (275 tests, full lifecycle, no outstanding blockers).
 
 ---
 
@@ -94,7 +98,7 @@ AQLIYA Platform Company
 │   ├── WorkflowOS
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
 ├── Operational Content Workspace
-│   └── ContentStudio (Operational Content Workspace — L6 Production-hardened, see AQLIYA_SYSTEM_TAXONOMY.md for scope definition)
+│   └── ContentStudio (Operational Content Workspace — L5 Pilot-ready conditional, see AQLIYA_SYSTEM_TAXONOMY.md for scope definition)
 ├── Governance & Risk Workspaces
 │   ├── RiskOS (L6 production-hardened workspace at /risk/* — not standalone product)
 │   ├── Knowledge Foundation (L6 governed versioning capability)
@@ -131,7 +135,7 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | **AQLIYA Platform**     | Production-hardened platform        | **L6**                             | Full platform foundation: tenant isolation, RBAC, ABAC shadow+enforce, audit trail, rate limiting (memory+Redis), file storage (S3/local), SSO/SAML, SCIM v2, feature flags, monitoring dashboard with 12 product metrics, operator panel, enterprise health. 167 route segments with error/loading/not-found boundaries. 0 TS errors, build passes, 5,691 tests PASS. Remaining enterprise gates: pentest, IaC apply — contract-gated. |
 | **AuditOS**             | Production-hardened product         | **L6**                             | First proof product. 8 L6 engines (ISQM1, Materiality, Client Acceptance, Independence, Working Papers, Review Notes SLA, Sampling Hardening, Knowledge Engine). Full workspace at `/audit/*`, demo at `/auditos/*`. Engagement management, trial balance, financial statements, evidence vault, findings, review/approval, exports, AI review, audit trail. Full error boundaries on all audit routes. 43 infra/tests. 9 Arabic dashboard label fixes. |
 | **DecisionOS**          | Active adjacent system              | **L6**                             | Production-hardened workspace at `/decisions/*`. Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, signal automation with dedup/status gating/severity mapping, sector intelligence wiring with benchmarks/patterns, cross-decision pattern analysis, decision portfolio view, outcome correlation analytics. Full error/loading/not-found boundaries on all 22 route segments. 275 tests (273 pass), seed data. |
-| **LocalContentOS**      | Strategic second product            | **L6 Production-hardened**         | Production-hardened workspace at `/local-content/*` (27 routes). All 9 L6 gaps closed: supplier scoring engine (4-factor weighted model), tender matching automation, multi-reviewer approval routing (state machine), classification rule admin interface, Arabic PDF font fidelity (Noto Naskh Arabic), spend analytics dashboard, localization-rate trend analytics, ERP/procurement integration (SAP/Oracle/CSV), Content Studio scope definition. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 321+ tests. Full error/loading/not-found boundaries on all routes. |
+| **LocalContentOS**      | Strategic second product            | **L5 Pilot-ready (conditional)**         | Production-hardened workspace at `/local-content/*` (27 routes). All 9 L6 gaps closed: supplier scoring engine (4-factor weighted model), tender matching automation, multi-reviewer approval routing (state machine), classification rule admin interface, Arabic PDF font fidelity (Noto Naskh Arabic), spend analytics dashboard, localization-rate trend analytics, ERP/procurement integration (SAP/Oracle/CSV), Content Studio scope definition. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 321+ tests. Full error/loading/not-found boundaries on all routes. |
 | **Office AI Assistant** | Governed shared application         | **L6**                             | Production-hardened workspace at `/assistant/*`. 6 task types (excel_analysis, document_summary, report_draft, presentation_outline, executive_summary, meeting_notes) with bilingual Arabic-first UX. Task lifecycle with full audit trail. Hardened cross-org access checks on all 12 server actions. 248 tests (all PASS). Seed data: 7 sample tasks. Loading/error/not-found boundaries on all routes. |
 | **SalesOS**             | Commercial intelligence workspace    | **L6**                             | Production-hardened workspace at `/sales/*` (32 routes). All 8 L6 gaps closed: intelligence tab with 12 sub-engines, forecasting engine with stage weights, CRM live sync (HubSpot/Salesforce), L5 acceptance criteria, bilingual UX parity, conversion funnel analytics, pipeline depth analytics, ICP/territory admin UI. Full error/loading/not-found boundaries on all 32 route segments. 878+ tests across 86 test files PASS. 13 Prisma models. |
 | **RiskOS**              | AuditOS-adjacent risk workspace     | **L6**                             | Production-hardened workspace at `/risk/*`. Dashboard with 4 KPI cards, risk distribution bar chart, status summary, assessments table. Assessment detail with DRAFT→REVIEWED→APPROVED workflow, procedure step tracking with interactive checkboxes, audit trail panel, JSON export. Seed data. Full error/loading/not-found boundaries on all 4 risk routes. Not marketed as standalone product. |
@@ -155,19 +159,19 @@ AQLIYA.com presents the company as an **institutional operating platform**, not 
 | -------------------------- | ------------------------------------------ | --------------------------- |
 | `/`                        | Company homepage                           | Active                      |
 | `/products/*`              | Product catalog and marketing pages        | Active                      |
-| `/audit/*`                 | AuditOS governed workspace                 | Active — L6                 |
+| `/audit/*`                 | AuditOS governed workspace                 | Active — L5 (P0 freeze)     |
 | `/auditos/*`               | AuditOS guided demo                        | Active — L1 demo            |
 | `/decisions/*`             | DecisionOS workspace                       | Active — L6                 |
-| `/assistant/*`             | Office AI Assistant                        | Active — L6                 |
-| `/local-content/*`         | LocalContentOS workspace (27 routes)       | Active — L6                 |
-| `/sales/*`                 | SalesOS commercial intelligence workspace  | Active — L6                 |
-| `/risk/*`                  | RiskOS governed risk workspace             | Active — L6                 |
-| `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L6                 |
-| `/institutional-memory/*`  | Institutional Memory knowledge graph       | Active — L6                 |
-| `/knowledge-foundation/*`  | Knowledge Foundation versioning            | Active — L6                 |
-| `/content-studio/*`        | ContentStudio operational content workspace| Active — L6                 |
+| `/assistant/*`             | Office AI Assistant                        | Active — L5 (P0 freeze)     |
+| `/local-content/*`         | LocalContentOS workspace (27 routes)       | Active — L5 (P0 freeze)     |
+| `/sales/*`                 | SalesOS commercial intelligence workspace  | Active — L5 (P0 freeze)     |
+| `/risk/*`                  | RiskOS governed risk workspace             | Active — L5 (P0 freeze)     |
+| `/contacts/*`              | LocalContactOS governed contact workspace  | Active — L5 (P0 freeze)     |
+| `/institutional-memory/*`  | Institutional Memory knowledge graph       | Active — L5 (P0 freeze)     |
+| `/knowledge-foundation/*`  | Knowledge Foundation versioning            | Active — L5 (P0 freeze)     |
+| `/content-studio/*`        | ContentStudio operational content workspace| Active — L5 (P0 freeze)     |
 | `/sunbul/*`                | Sunbul legacy redirect alias to WorkflowOS | Active — redirect alias     |
-| `/workflowos/*`            | WorkflowOS governed workspace              | Active — L6                 |
+| `/workflowos/*`            | WorkflowOS governed workspace              | Active — L5 (P0 freeze)     |
 | `/organizations/*`         | Generic organizations prototype            | Active — L5 prototype       |
 | `/settings/*`              | Platform diagnostics + prototype settings  | Active — L2/L4              |
 | `/monitoring`              | Platform monitoring                        | Active — L4                 |
@@ -192,7 +196,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - **Knowledge Foundation** — Version promotion pipeline, release packages with SHA-256, diff engine, rollback, bilingual PDF/JSON export. Full error boundaries. 87 tests PASS.
 - **ContentStudio** — Operational Content Workspace (5 routes). Content lifecycle (DRAFT→IN_REVIEW→APPROVED→PUBLISHED→ARCHIVED), versioning with restore, template system with variable interpolation, evidence linking, PDF export with bilingual Arabic/English, audit trail, ~125 tests. Full error boundaries.
 - **Office AI Assistant** — Task creation, document-aware responses, file content extraction, review workflow, action logs, permission checks, audit events. 6 task types. 248 tests PASS.
-- **WorkflowOS** — L6 Production-hardened workspace at `/workflowos/*`. Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) in enterprise health dashboard.
+- **WorkflowOS** — L5 Pilot-ready (conditional) workspace at `/workflowos/*`. Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) in enterprise health dashboard.
 - **Sunbul** — Legacy redirect alias to WorkflowOS.
 - **Platform Infrastructure** — Auth, RBAC, unified audit logs (PlatformAuditLog — single-write, productKey-scoped, all 8 legacy product-level audit models consolidated), storage provider (S3/local), rate limiter (memory/Redis), export engine, health monitoring, enterprise health, operator panel.
 - **Custom Product Inquiry** — Funnel with form submission API.
@@ -213,7 +217,7 @@ All surfaces with active routes, server actions, database models, seed data, tes
 - Fully autonomous AI decisions (AI is assistive only)
 - Automated production backup/restore (scripts exist; live DR unverified)
 
-**Now at L6 Production-hardened (moved out of "not implemented" list):**
+**Now at L5 Pilot-ready (conditional) per P0 freeze (moved out of "not implemented" list):**
 
 - AQLIYA Platform — L6 with full enterprise hardening
 - Intelligence Core — L6 with all Tier 2/3 gaps closed
@@ -229,28 +233,34 @@ All surfaces with active routes, server actions, database models, seed data, tes
 
 ---
 
-## 10. What Is Production-Hardened (L6)
+## 10. What Is Pilot-Ready (L5) — Per P0 Governance Freeze
 
-All 12 active products reached L6 Production-hardened status on 2026-07-03:
+> **⚠️ P0 GOVERNANCE FREEZE (ADR-109 — 2026-07-19):**
+> Unrestricted L6 claims are suspended. All active products are at **L5 Pilot-ready (conditional)** until external pen-test, Redis/ClamAV verification, and commercial claim alignment are closed.
+> **Exception:** DecisionOS remains L6 (275 tests, full lifecycle, no outstanding blockers).
 
-- **AQLIYA Platform** — Full enterprise foundation with monitoring dashboard (12 product metrics), operator panel, ABAC shadow+enforce, all 167 route segments with error/loading/not-found boundaries. 5,691 tests PASS.
-- **AuditOS** — 8 L6 engines complete (ISQM1, Materiality, Client Acceptance, Independence, Working Papers, Review Notes SLA, Sampling Hardening, Knowledge Engine). 43 infra/tests added.
-- **LocalContentOS** — All 9 LC gaps closed. 27 route segments with full boundaries. 321+ tests. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Arabic PDF font fidelity. ERP integration.
-- **DecisionOS** — All 6 D3 gaps closed. 22 route segments with boundaries. 275 tests (273 pass). Signal automation, sector intelligence, outcome analytics.
+- **AQLIYA Platform** — Full enterprise foundation with monitoring dashboard (12 product metrics), operator panel, ABAC shadow+enforce, all 167 route segments with error/loading/not-found boundaries. 5,691+ tests PASS.
+- **AuditOS** — 8 engines complete (ISQM1, Materiality, Client Acceptance, Independence, Working Papers, Review Notes SLA, Sampling Hardening, Knowledge Engine). GREEN closure 2026-08-20. 6,809 tests.
+- **LocalContentOS** — All 9 LC gaps closed. 27 route segments with full boundaries. 321+ tests. AI quality: 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. LCGPA regulatory intelligence verified 2026-08-23.
+- **DecisionOS** — **L6 Production-hardened.** All 6 D3 gaps closed. 22 route segments with boundaries. 275 tests (273 pass). Signal automation, sector intelligence, outcome analytics.
 - **SalesOS** — All 8 S7 gaps closed. 32 route segments with boundaries. 878+ tests across 86 files. Intelligence hub, forecasting, CRM sync.
 - **RiskOS** — Full boundaries on 4 risk routes. Procedure tracking, dashboard, audit trail, exports.
 - **LocalContactOS** — Full boundaries on 9 contact routes. 15 integration tests.
 - **Institutional Memory** — Full boundaries on 4 routes. Graph, events, collections.
 - **ContentStudio** — Full boundaries on 5 routes. ~125 tests. PDF export with Arabic font.
-- **Knowledge Foundation** — Full boundaries on all knowledge routes. Release governance, diff engine, provenance.
+- **Knowledge Foundation** — Full boundaries on all knowledge routes. Release governance, diff engine, provenance. 87 tests.
 - **Office AI Assistant** — Full boundaries on all assistant routes. 248 tests. 6 task types.
+- **WorkflowOS** — Full boundaries on all 8 route segments. Template workflows, SLA monitoring, gated PDF export, 31 action tests.
 
-Remaining enterprise gates: IaC (Terraform apply — code complete), pentest — contract-gated.
-
-**Also at L6 Production-hardened:**
+**Also at L5 Pilot-ready:**
 - **SSO (SAML/OIDC)** — Self-service key configuration via /settings/sso. ClientSecret AES-256-GCM encrypted. 65 tests.
 - **SCIM v2 Provisioning** — User/Group provisioning with API key auth and audit trail.
-- **Office AI Assistant** — Full boundaries on all assistant routes. 248 tests. 6 task types. Mock provider available for demo/testing.
+
+**Remaining enterprise gates (BLOCKING for L6):**
+- External penetration test (B-01)
+- Redis rate-limit + ClamAV verification in production
+- Commercial claim alignment
+- IaC live apply on AWS
 
 ---
 
@@ -258,7 +268,7 @@ Remaining enterprise gates: IaC (Terraform apply — code complete), pentest —
 
 - **Organizations surface** — L5 pilot-ready with real Prisma data (org cards, workspace dashboard, CRUD with audit trail, seed data). Admin-role middleware protection. Not L6 production-hardened.
 - **Generic settings /settings main page** — L2 shell (local-state-only preview). Sub-routes (/settings/workspaces, /settings/platform-organization, /settings/audit-logs) are L4 real admin surfaces backed by Prisma.
-- **WorkflowOS** — L6 Production-hardened. Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) tracked.
+- **WorkflowOS** — L5 Pilot-ready (conditional). Full error/loading/not-found boundaries on all 8 route segments. Template workflows, SLA monitoring with escalation, gated PDF export, 31 action tests, seed data. Monitoring metric (workflowRecords) tracked.
 
 ---
 
@@ -299,7 +309,7 @@ The following claims are not supported by current code, routes, schema, or valid
 - LocalContentOS is regulator-certified
 - LocalContentOS is marketing-only or unimplemented (contradicts workspace at `/local-content/*`)
 
-**NOTE:** AQLIYA **IS** now production-hardened (L6) across all 12 active products as of 2026-07-03. The L6 claim is now supported by code evidence. Remaining enterprise gates (pentest, IaC apply on live AWS) are contract-gated — the code-level L6 work is complete.
+**NOTE:** Per P0 Governance Freeze (ADR-109 — 2026-07-19), unrestricted L6 claims are suspended. All active products are at **L5 Pilot-ready (conditional)** except DecisionOS (L6). Code-level L6 work is complete; enterprise gates (pentest, Redis/ClamAV, IaC) remain BLOCKING.
 
 ---
 
@@ -331,7 +341,7 @@ This master reference (`AQLIYA_MASTER_REFERENCE.md`) captures the current v0.1 o
 
 ### Milestone
 
-All 12 active products at L6 Production-hardened. All 18 TypeScript errors, 135 ESLint warnings, and multiple test failures resolved. Full error/loading/not-found boundaries on all route segments: 167 error.tsx, 170 loading.tsx, 135 not-found.tsx created across all products.
+All 12 active products at L5 Pilot-ready (conditional) per P0 freeze (DecisionOS L6 exempt). All 18 TypeScript errors, 135 ESLint warnings, and multiple test failures resolved. Full error/loading/not-found boundaries on all route segments: 167 error.tsx, 170 loading.tsx, 135 not-found.tsx created across all products.
 
 ### Known deferred items
 

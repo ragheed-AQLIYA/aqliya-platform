@@ -5,7 +5,7 @@
 **File location:** `docs/DOCUMENTATION_AUTHORITY.md`  
 **Effective date:** 2026-05-22  
 **Owner:** Documentation Team  
-**Last Reviewed:** 2026-06-26
+**Last Reviewed:** 2026-09-06
 
 ---
 
@@ -94,7 +94,7 @@ Reports in `docs/reports/*` provide evidence of implementation progress. They do
 
 ### 5.5 Theoretical Docs Are Background Only
 
-`docs/theoretical-reference/*` provides intellectual foundation and domain theory. It does not govern implementation status, product taxonomy, route decisions, or architectural authority. If a theoretical document claims final authority over implementation decisions, that claim is superseded by this file.
+`docs/archive/theoretical-reference/*` provides intellectual foundation and domain theory. It does not govern implementation status, product taxonomy, route decisions, or architectural authority. If a theoretical document claims final authority over implementation decisions, that claim is superseded by this file.
 
 ### 5.6 Archived Docs Are Historical
 
@@ -146,8 +146,8 @@ Marketing copy must not claim capabilities that are not validated in code.
 When determining product implementation status:
 
 1. Inspect code (routes, actions, schema, tests, seed data).
-2. Inspect validation reports in `docs/reports/*`.
-3. Consult `docs/source-of-truth/AQLIYA_CURRENT_STATE.md` for the latest operational snapshot.
+2. Inspect validation reports in `docs/evidence/reports/*`.
+3. Consult `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for detailed matrix.
 4. Consult `docs/official/AQLIYA_MASTER_REFERENCE.md` for summary.
 5. Consult `docs/source-of-truth/PRODUCT_STATUS_MATRIX.md` for detailed matrix.
 6. Consult `docs/official/aqliya-product-taxonomy-v1.1.md` for taxonomy classification.

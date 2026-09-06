@@ -76,7 +76,7 @@
 | **Document Intelligence** | Partial                 | File extraction/scanning exists; not full OCR platform                      |
 | **Reporting Engine**      | Active                  | Audit and custom export paths exist                                         |
 | **Model Governance**      | Not implemented         | Strategic/future                                                            |
-| **Institutional Memory**  | Active (L6 Production-hardened) | Cross-product entity linking, collections, graph visualization, export. See PRODUCT_STATUS_MATRIX.md. |
+| **Institutional Memory**  | Active (L5 Pilot-ready conditional) | Cross-product entity linking, collections, graph visualization, export. See PRODUCT_STATUS_MATRIX.md. |
 | **Deployment Layer**      | Cloud active only       | No On-Prem or Air-Gapped production package                                 |
 
 ---
@@ -85,12 +85,12 @@
 
 | Area                             | Classification                      | Route(s)                                  | Status                                         |
 | -------------------------------- | ----------------------------------- | ----------------------------------------- | ---------------------------------------------- |
-| **AuditOS**                      | Product workspace                   | `/audit/*`                                | Real, L6 Production-hardened                    |
-| **DecisionOS**                   | Adjacent product workspace          | `/decisions/*`, `/intelligence/sectors/*` | Real, L6 Production-hardened                              |
+| **AuditOS**                      | Product workspace                   | `/audit/*`                                | Real, L5 Pilot-ready (conditional)                    |
+| **DecisionOS**                   | Adjacent product workspace          | `/decisions/*`, `/intelligence/sectors/*` | **Real, L6 Production-hardened**                              |
 | **Office AI Assistant**          | Governed shared application         | `/assistant/*`                            | Real, usable v0.1                              |
-| **WorkflowOS**                   | Governed custom/client workspace    | `/workflowos/*`                           | Real, L6 Production-hardened                         |
+| **WorkflowOS**                   | Governed custom/client workspace    | `/workflowos/*`                           | Real, L5 Pilot-ready (conditional)                         |
 | **Sunbul**                       | Legacy redirect alias to WorkflowOS | `/sunbul/*`                               | Redirect only (N/A); no standalone surface     |
-| **LocalContentOS**               | Product workspace                   | `/local-content/*`                        | Real, L6 Production-hardened         |
+| **LocalContentOS**               | Product workspace                   | `/local-content/*`                        | Real, L5 Pilot-ready (conditional)         |
 | **auditos**                      | Demo family                         | `/auditos/*`                              | Public mock/demo only                          |
 | **organizations/settings/sales** | Prototype/internal preview surfaces | `/organizations/*`, `/settings`, `/sales` | Not v0.1-complete operational modules          |
 
@@ -107,7 +107,7 @@
 | `audit/*`                 | AuditOS governed workspace                      | Product workspace             |
 | `auditos/*`               | AuditOS guided demo                             | Demo                          |
 | `local-content/*`         | LocalContentOS workspace                        | Product workspace             |
-| `workflowos/*`            | WorkflowOS governed workspace                   | Governed workspace (L6)       |
+| `workflowos/*`            | WorkflowOS governed workspace                   | Governed workspace (L5 conditional)       |
 | `sunbul/*`                | Sunbul legacy redirect to WorkflowOS            | Redirect alias                |
 | `api/*`                   | Route handlers and operational endpoints        | Internal/public API as scoped |
 
@@ -117,10 +117,10 @@
 
 1. AuditOS and DecisionOS are the main real system domains currently included in v0.1 scope.
 2. Office AI Assistant is real, but belongs under shared applications, not the product family.
-3. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L6). Sunbul is a legacy redirect alias only (`/sunbul/*` → `/workflowos/*`); not a separate product.
-4. LocalContentOS is implemented as L6 Production-hardened. SalesOS is not implemented as an operational system.
+3. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L5 Pilot-ready). Sunbul is a legacy redirect alias only (`/sunbul/*` → `/workflowos/*`); not a separate product.
+4. LocalContentOS is implemented as L5 Pilot-ready (conditional). SalesOS is not implemented as an operational system.
 5. On-Prem, Air-Gapped, Local AI runtime, Model Governance, and Studio are architectural direction only.
 6. **Schema v0.2** (2026-05-28): `createdById` added to 10 models (PlatformOrganization, ClientWorkspace, Project, AuditOrganization, AuditUser, AuditClient, AuditEngagement, AuditFinding, LocalContentSupplier, LocalContentSpendRecord). `DecisionEvidence` model added with file/document support linked to Decision. `platformOrganizationId` added to SunbulClient for tenant isolation. Migration `add_governance_fields_v0_2` applied. 14 AuditOS Prisma enums were attempted but reverted to `String` due to value mismatch with existing codebase — application-level types in `src/types/audit/index.ts` provide equivalent type safety.
 
 
-> **Updated 2026-07-12** — aligned with PRODUCT_STATUS_MATRIX L6 assessment across all active products.
+> **Updated 2026-09-06** — aligned with P0 governance freeze (ADR-109). L6 claims suspended to L5 conditional except DecisionOS.

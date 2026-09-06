@@ -2,7 +2,8 @@
 
 **Purpose:** Defines the documentation, architecture, governance, and truthfulness skills required for work on AQLIYA.  
 **Version:** 1.1  
-**Status:** Official
+**Status:** Official  
+**Last Reviewed:** 2026-09-06 — P0 Governance Freeze alignment
 
 ---
 
@@ -41,7 +42,7 @@ Every implemented area must be classified using the official release model:
 | Marketing                  | `/products/*`, public pages               | Describe, do not overclaim                          |
 | Governed product workspace | `/audit/*`, `/decisions/*`                | Real product surfaces                               |
 | Shared application         | `/assistant/*`                            | Governed shared application, not standalone product |
-| Governed workspace         | `/workflowos/*`                           | WorkflowOS L4; canonical custom/client workspace    |
+| Governed workspace         | `/workflowos/*`                           | WorkflowOS L5 Pilot-ready; canonical custom/client workspace    |
 | Legacy redirect alias      | `/sunbul/*`                               | Sunbul redirects to WorkflowOS; not separate product  |
 | Demo                       | `/auditos/*`                              | Demo only                                           |
 | Prototype preview          | `/sales`, `/organizations/*`, `/settings` | Must be labeled honestly                            |
@@ -61,15 +62,16 @@ Do not leave official docs behind source-of-truth when the repository reality is
 
 Allowed examples:
 
-- AuditOS is real and pilot-ready.
-- DecisionOS is real and active.
-- Office AI Assistant is a governed shared application.
-- WorkflowOS is the governed custom/client-specific workspace (L4).
+- AuditOS is real and pilot-ready (L5 conditional).
+- DecisionOS is real and active (L6).
+- Office AI Assistant is a governed shared application (L5 conditional).
+- WorkflowOS is the governed custom/client-specific workspace (L5 conditional).
 - Sunbul is a legacy redirect alias to WorkflowOS, not a separate product.
+- SalesOS is L5 Pilot-ready (conditional), internal only — not sold in pilot.
 
 Forbidden examples:
 
-- SalesOS is live.
-- LocalContentOS is production-hardened (L6).
+- LocalContentOS is production-hardened (L6) — it is L5 conditional per P0 freeze.
 - AQLIYA has a production On-Prem package.
-- AQLIYA has Local AI runtime, Studio, Model Governance, or Institutional Memory live.
+- AQLIYA has Local AI runtime, Studio, Model Governance live.
+- Any product except DecisionOS is claimed as L6 Production-hardened.

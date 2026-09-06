@@ -185,7 +185,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/decisions/[id]/tender`         | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5 conditional) |                 |
 | `/decisions/[id]/what-to-do`     | DecisionOS     | Governed workspace | Protected        | Pilot-ready (L5 conditional) |                 |
 
-### LocalContentOS — Production-hardened Governed Workspace (27 routes, L6)
+### LocalContentOS — Pilot-ready Governed Workspace (27 routes, L5 conditional)
 
 | Route                                                | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                                |
 | ---------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------------------------------------- |
@@ -260,7 +260,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/monitoring` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Enterprise health panel + outbox actions |
 | `/operator` | Platform | Operator workspace | Protected (ADMIN) | Usable v0.1 (L4) | Operator dashboard + enterprise health |
 
-### SalesOS — Production-hardened Commercial Intelligence Workspace (32 routes, L6)
+### SalesOS — Pilot-ready Commercial Intelligence Workspace (32 routes, L5 conditional)
 
 | Route                               | Product/System | Route Type             | Public/Protected | Implementation Status | Notes                                       |
 | ----------------------------------- | -------------- | ---------------------- | ---------------- | --------------------- | ------------------------------------------- |
@@ -320,7 +320,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/settings/retention`             | Platform       | Settings/admin | Protected        | Active (L4)           | Data retention policy configuration |
 | `/monitoring`                     | Platform       | Settings/admin | Protected        | Active (L4)           | Real aggregate counts             |
 
-### WorkflowOS — Production-hardened Governed Workspace (L6)
+### WorkflowOS — Pilot-ready Governed Workspace (L5 conditional)
 
 | Route                                               | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                  |
 | --------------------------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ---------------------- |
@@ -333,7 +333,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/workflowos/records`                               | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Org workflow records   |
 | `/workflowos/records/[id]`                          | WorkflowOS     | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Record from template   |
 
-### LocalContactOS — Production-hardened Governed Workspace (L6)
+### LocalContactOS — Pilot-ready Governed Workspace (L5 conditional)
 
 | Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes              |
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | ------------------ |
@@ -347,7 +347,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/contacts/[id]/relations/new`     | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Add relation       |
 | `/contacts/[id]/interactions/new`  | LocalContactOS | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Log interaction    |
 
-### Institutional Memory — Production-hardened Knowledge Graph (L6)
+### Institutional Memory — Pilot-ready Knowledge Graph (L5 conditional)
 
 | Route                         | Product/System      | Route Type         | Public/Protected | Implementation Status | Notes                                        |
 | ----------------------------- | ------------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
@@ -356,7 +356,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/institutional-memory/collections`  | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5 conditional) | Saved collections of memory event links      |
 | `/institutional-memory/graph`        | Institutional Memory| Governed workspace | Protected        | Pilot-ready (L5 conditional) | Interactive knowledge graph visualization (D3.js) |
 
-### RiskOS — Production-hardened Risk Workspace (L6)
+### RiskOS — Pilot-ready Risk Workspace (L5 conditional)
 
 | Route                              | Product/System | Route Type         | Public/Protected | Implementation Status | Notes                                        |
 | ---------------------------------- | -------------- | ------------------ | ---------------- | --------------------- | -------------------------------------------- |
@@ -364,7 +364,7 @@ These pages serve as detail references for specialized operating systems. They a
 | `/risk/[id]`                       | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Risk model detail                            |
 | `/risk/assessments/[id]`           | RiskOS         | Governed workspace | Protected        | Pilot-ready (L5 conditional) | Assessment detail: score bars, category scores, procedure step tracking, audit trail, JSON export |
 
-### ContentStudio — Production-hardened Content Workspace (L6)
+### ContentStudio — Pilot-ready Content Workspace (L5 conditional)
 
 | Route                                     | Product/System | Route Type            | Public/Protected | Implementation Status | Notes                                                            |
 | ----------------------------------------- | -------------- | --------------------- | ---------------- | --------------------- | ---------------------------------------------------------------- |
