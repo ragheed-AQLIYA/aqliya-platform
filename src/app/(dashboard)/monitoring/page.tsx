@@ -7,6 +7,9 @@ import { TbFirmMemoryKpisPanel } from "@/components/monitoring/tb-firm-memory-kp
 import { LiveHealthCardsWrapper } from "@/components/monitoring/live-health-cards-wrapper";
 import { PlatformOpsSection } from "@/components/monitoring/platform-ops-section";
 import { MonitoringAutoRefresh } from "@/components/monitoring/monitoring-auto-refresh";
+import { ProductHealthPanel } from "@/components/monitoring/product-health-panel";
+import { SecurityMetricsPanel } from "@/components/monitoring/security-metrics-panel";
+import { AuditLogHealthPanel } from "@/components/monitoring/audit-log-health-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -120,6 +123,36 @@ export default function MonitoringPage() {
         }
       >
         <LiveHealthCardsWrapper />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل صحة المنتجات…
+          </div>
+        }
+      >
+        <ProductHealthPanel />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل المؤشرات الأمنية…
+          </div>
+        }
+      >
+        <SecurityMetricsPanel />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="text-center text-muted-foreground py-8">
+            جار تحميل صحة سجل التدقيق…
+          </div>
+        }
+      >
+        <AuditLogHealthPanel />
       </Suspense>
 
       <Suspense

@@ -46,25 +46,36 @@ export function DecisionProgress({ stages, decisionType, missingInputs, dataQual
   const blockedStage = stages.find((s) => s.blocked && !s.current)
 
   return (
-    <Card className={`p-4 ${className || ""}`}>
+    <Card className={`p-4 ${className || ""}`} role="region" aria-label="تقدم مسار العمل">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold">مسار العمل للقرار</h3>
-        <Badge variant={completeCount === totalCount ? "default" : "secondary"}>
+        <Badge
+          variant={completeCount === totalCount ? "default" : "secondary"}
+          aria-label={`${completeCount} من ${totalCount} مراحل مكتملة`}
+        >
           {completeCount}/{totalCount} مكتمل
         </Badge>
       </div>
 
-      <div className="flex items-center gap-1 mb-3 overflow-x-auto">
+      <div
+        role="progressbar"
+        aria-valuenow={completeCount}
+        aria-valuemin={0}
+        aria-valuemax={totalCount}
+        aria-label={`تقدم العمل: ${completeCount} من ${totalCount} مراحل مكتملة`}
+        className="flex items-center gap-1 mb-3 overflow-x-auto"
+      >
         {stages.map((stage, index) => (
           <div key={stage.stage} className="flex items-center">
             <Badge
               variant={getStageVariant(stage)}
               className="text-xs whitespace-nowrap"
+              aria-label={`${STAGE_LABELS[stage.stage]}: ${stage.complete ? "مكتمل" : stage.blocked ? "محظور" : stage.current ? "المرحلة الحالية" : "لم يبدأ"}`}
             >
               {stage.complete ? "✓" : stage.blocked ? "!" : stage.current ? "→" : "○"} {STAGE_LABELS[stage.stage]}
             </Badge>
             {index < stages.length - 1 && (
-              <div className={`w-3 h-px mx-1 ${stage.complete ? "bg-primary" : "bg-muted"}`} />
+              <div className={`w-3 h-px mx-1 ${stage.complete ? "bg-primary" : "bg-muted"}`} aria-hidden="true" />
             )}
           </div>
         ))}

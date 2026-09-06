@@ -58,6 +58,7 @@ export function WorkflowCreateRecordForm({
     <form
       onSubmit={handleSubmit}
       className="rounded-lg border bg-card p-4 space-y-4"
+      aria-label="إنشاء قضية جديدة"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">قضية جديدة</h3>
@@ -81,6 +82,8 @@ export function WorkflowCreateRecordForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="أدخل عنوان القضية"
+          aria-required="true"
+          aria-label="عنوان القضية"
           className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
           required
         />
@@ -98,11 +101,12 @@ export function WorkflowCreateRecordForm({
           onChange={(e) => setDescription(e.target.value)}
           placeholder="وصف القضية (اختياري)"
           rows={3}
+          aria-label="وصف القضية"
           className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
         />
       </div>
       {error && (
-        <div className="rounded-md bg-status-error/10 p-3 text-xs text-status-error">
+        <div className="rounded-md bg-status-error/10 p-3 text-xs text-status-error" role="alert" aria-live="assertive">
           {error}
         </div>
       )}

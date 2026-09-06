@@ -42,16 +42,23 @@ export function ExportApprovalDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" aria-label="فتح نافذة طلب تصدير السجل">
           <Download className="ms-1 h-4 w-4" />
           تصدير
           <ExportStatusBadge status={status} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        className="sm:max-w-md"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="export-dialog-title"
+        aria-describedby="export-dialog-description"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
-          <DialogTitle>طلب تصدير السجل</DialogTitle>
-          <DialogDescription>
+          <DialogTitle id="export-dialog-title">طلب تصدير السجل</DialogTitle>
+          <DialogDescription id="export-dialog-description">
             إدارة طلب تصدير السجل بصيغة JSON مع الأدلة وسجل التدقيق
           </DialogDescription>
         </DialogHeader>
