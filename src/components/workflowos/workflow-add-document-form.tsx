@@ -45,7 +45,7 @@ export function WorkflowAddDocumentForm({
           const result = reader.result as string;
           resolve(result.split(",")[1]);
         };
-        reader.onerror = () => reject(new Error("Failed to read file"));
+        reader.onerror = () => reject(new Error("فشل قراءة الملف"));
         reader.readAsDataURL(file);
       });
 

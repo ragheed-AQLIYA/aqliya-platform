@@ -13,7 +13,7 @@ export default function GovernanceNotFound() {
           لم نتمكن من العثور على الحوكمة المطلوبة أو ليس لديك صلاحية الوصول إليها.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Governance not found or access is not permitted.
+          الحوكمة غير موجودة أو ليس لديك صلاحية الوصول.
         </p>
       </div>
       <Link

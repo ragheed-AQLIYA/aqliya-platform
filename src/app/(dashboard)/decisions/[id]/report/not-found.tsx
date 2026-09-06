@@ -13,7 +13,7 @@ export default function ReportNotFound() {
           لم نتمكن من العثور على التقرير المطلوبة أو ليس لديك صلاحية الوصول إليها.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Report not found or access is not permitted.
+          التقرير غير موجود أو ليس لديك صلاحية الوصول.
         </p>
       </div>
       <Link

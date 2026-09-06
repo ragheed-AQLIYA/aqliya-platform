@@ -227,7 +227,7 @@ export function useRecommendationPage(params: Promise<{ id: string }>) {
     if (result.success) {
       router.refresh();
     } else {
-      setError(result.error || "Failed to save recommendation");
+      setError(result.error || "فشل في حفظ التوصية");
       if ("missing" in result && result.missing) {
         setGate({ allowed: false, missing: result.missing as string[] });
       }
@@ -251,7 +251,7 @@ export function useRecommendationPage(params: Promise<{ id: string }>) {
       await loadRecommendation();
       router.refresh();
     } else {
-      setError(result.error || "Failed to publish recommendation");
+      setError(result.error || "فشل في نشر التوصية");
       if ("requiresOverride" in result && result.requiresOverride) {
         setShowPublishConfirm(true);
       }
@@ -268,7 +268,7 @@ export function useRecommendationPage(params: Promise<{ id: string }>) {
       await loadRecommendation();
       router.refresh();
     } else {
-      setError(result.error || "Failed to unpublish recommendation");
+      setError(result.error || "فشل في إلغاء نشر التوصية");
     }
     setSaving(false);
   }, [id, loadRecommendation, router]);

@@ -161,7 +161,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 <div><span className="text-muted-foreground">{t("clientLabel")}</span> {tender.clientName}</div>
                 <div><span className="text-muted-foreground">{t("contractValue")}</span> SAR {tender.estimatedContractValue?.toLocaleString()}</div>
                 <div><span className="text-muted-foreground">{t("estimatedCost")}</span> SAR {tender.estimatedCost?.toLocaleString()}</div>
-                <div><span className="text-muted-foreground">{t("duration")}</span> {tender.durationMonths} months</div>
+                <div><span className="text-muted-foreground">{t("duration")}</span> {tender.durationMonths} شهر</div>
                 <div><span className="text-muted-foreground">{t("margin")}</span> {tender.marginEstimate}%</div>
                 <div><span className="text-muted-foreground">{t("riskLevel")}</span> <Badge variant="outline">{tender.riskLevel}</Badge></div>
                 <div><span className="text-muted-foreground">{t("requiredCapacity")}</span> {tender.requiredCapacity}</div>
@@ -262,7 +262,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 <TableBody>
                   {scenarios.map((s: any) => (
                     <TableRow key={s.type}>
-                      <TableCell className="font-medium">{s.type?.replace('_', ' ') || 'غير معروف'}</TableCell>
+                      <TableCell className="font-medium">{s.type === 'EXPECTED_CASE' ? 'الحالة المتوقعة' : s.type === 'WORST_CASE' ? 'أسوأ حالة' : s.type === 'BEST_CASE' ? 'أفضل حالة' : s.type?.replace('_', ' ') || 'غير معروف'}</TableCell>
                       <TableCell>{s.simulation?.feasibilityScore ?? 'N/A'}</TableCell>
                       <TableCell>{s.simulation?.financialScore ?? 'N/A'}</TableCell>
                       <TableCell>{s.simulation?.capacityScore ?? 'N/A'}</TableCell>

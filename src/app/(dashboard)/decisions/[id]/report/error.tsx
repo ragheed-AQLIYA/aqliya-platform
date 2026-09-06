@@ -29,11 +29,11 @@ export default function ReportError({
           حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Report encountered an error. Please try again.
+          حدث خطأ أثناء معالجة التقرير. يرجى المحاولة مرة أخرى.
         </p>
         {error.digest && (
           <p className="text-xs text-muted-foreground/40">
-            Error ID: {error.digest}
+            معرف الخطأ: {error.digest}
           </p>
         )}
       </div>

@@ -56,7 +56,7 @@ export function DecisionDetailSectionRisks({
           {(decision.riskAnalyses as Array<{ id: string; risks: string; uncertaintyLevel: string; scenario?: { name: string } }>).map((analysis) => (
             <div key={analysis.id} className="rounded border p-3 text-sm">
               <h3 className="font-medium">
-                {analysis.scenario?.name || "Scenario"}
+                {analysis.scenario?.name || "السيناريو"}
               </h3>
               <p className="mt-2 whitespace-pre-wrap text-muted-foreground">
                 {analysis.risks}
