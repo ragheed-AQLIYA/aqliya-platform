@@ -1,10 +1,12 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | AQLIYA",
   description:
     "Institutional privacy policy for the AQLIYA platform  covering data ownership, data residency, AI processing, and enterprise customer rights.",
+  alternates: buildAlternates("/en/privacy"),
 };
 
 const sections = [

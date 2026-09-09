@@ -41,21 +41,12 @@ export const metadata: Metadata = {
     title: "AQLIYA | منصة ذكاء مؤسسي محكوم",
     description:
       "منصة ذكاء مؤسسي خاص ومحكوم تساعد الجهات على بناء وتشغيل أنظمة مؤسسية ذكية داخل بيئة مضبوطة مع حوكمة وأدلة وصلاحيات وسجل تدقيق.",
-    images: [
-      {
-        url: "/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: "AQLIYA - Private Governed Institutional Intelligence Platform",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AQLIYA | منصة ذكاء مؤسسي محكوم",
     description:
       "منصة ذكاء مؤسسي خاص ومحكوم تساعد الجهات على بناء وتشغيل أنظمة مؤسسية ذكية داخل بيئة مضبوطة مع حوكمة وأدلة وصلاحيات وسجل تدقيق.",
-    images: ["/og-default.png"],
   },
   robots: {
     index: true,

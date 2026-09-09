@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BeforeAfterBlock, WorkflowChain } from "@/components/enterprise";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import type { ProductPageContent } from "@/lib/marketing/product-pages-content";
 
 type GovernanceCard = {
@@ -173,13 +174,14 @@ export function ProductPageTemplate({
           {t.highlights}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          {content.highlights.map((h) => (
-            <div
+          {content.highlights.map((h, i) => (
+            <Reveal
               key={h}
+              delay={i * 70}
               className="rounded-xl border border-primary/15 bg-primary/[0.03] px-4 py-5 text-sm font-semibold text-foreground"
             >
               {h}
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -190,11 +192,11 @@ export function ProductPageTemplate({
           {t.governance}
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {(content.governanceItems ?? defaultGovernance(locale)).map((g) => (
-            <div key={g.title} className="rounded-xl border border-border/60 bg-background p-5">
+          {(content.governanceItems ?? defaultGovernance(locale)).map((g, i) => (
+            <Reveal key={g.title} delay={i * 70} className="rounded-xl border border-border/60 bg-background p-5">
               <h4 className="mb-2 text-sm font-bold text-foreground">{g.title}</h4>
               <p className="text-sm leading-6 text-muted-foreground">{g.detail}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -206,14 +208,15 @@ export function ProductPageTemplate({
             {t.outcomes}
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {content.after.slice(0, 4).map((item) => (
-              <div
+            {content.after.slice(0, 4).map((item, i) => (
+              <Reveal
                 key={item}
+                delay={i * 70}
                 className="flex items-start gap-3 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] px-4 py-4"
               >
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500/60" />
+                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500/60" aria-hidden />
                 <span className="text-sm leading-6 text-foreground">{item}</span>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

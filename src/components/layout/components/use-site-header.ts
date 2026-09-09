@@ -30,6 +30,29 @@ const navItemsEn = [
 
 export type NavItem = { label: string; href: string; isActive: boolean };
 
+const headerLabels = {
+  ar: {
+    bookSession: "احجز جلسة تشخيص",
+    mainNavigation: "التنقل الرئيسي",
+    mobileNavigation: "التنقل الرئيسي للجوال",
+    openMenu: "فتح القائمة",
+    closeMenu: "إغلاق القائمة",
+    switchToEnglish: "التبديل إلى الإنجليزية",
+    switchToArabic: "التبديل إلى العربية",
+  },
+  en: {
+    bookSession: "Book a Diagnostic Session",
+    mainNavigation: "Main navigation",
+    mobileNavigation: "Mobile main navigation",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    switchToEnglish: "Switch to English",
+    switchToArabic: "Switch to Arabic",
+  },
+} as const;
+
+export type HeaderLabels = Record<keyof (typeof headerLabels)["ar"], string>;
+
 function computeIsActive(pathname: string, href: string) {
   return (
     pathname === href ||
@@ -50,6 +73,7 @@ export function useSiteHeader(localeProp?: "ar" | "en") {
   }));
   const homeHref = locale === "en" ? "/en" : "/";
   const contactHref = getBookingUrl(locale);
+  const labels: HeaderLabels = locale === "en" ? headerLabels.en : headerLabels.ar;
 
   const switchLocale = useCallback(
     (target: "ar" | "en") => {
@@ -72,6 +96,7 @@ export function useSiteHeader(localeProp?: "ar" | "en") {
     navItems,
     homeHref,
     contactHref,
+    labels,
     open,
     switchLocale,
     toggleMenu,

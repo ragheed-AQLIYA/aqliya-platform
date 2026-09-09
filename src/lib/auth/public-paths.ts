@@ -28,6 +28,7 @@ export const PUBLIC_EXACT = new Set([
   "/soc2-roadmap",
   "/platform",
   "/pricing",
+  "/start",
   "/privacy",
   "/proof-library",
   "/products",
@@ -61,6 +62,8 @@ export const PUBLIC_PREFIXES = [
   "/products/",
   "/buyers/",
   "/insights/",
+  "/opengraph-image",
+  "/twitter-image",
 ];
 
 export function isPublicPath(pathname: string): boolean {

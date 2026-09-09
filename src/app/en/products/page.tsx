@@ -2,14 +2,17 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { ConversionBand } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import {
   roadmapProductCardsEn,
 } from "@/lib/marketing/product-pages-content-en";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Operating Systems | AQLIYA",
   description:
     "Governed operating systems on AQLIYA Intelligence Core  AuditOS, LocalContentOS, and DecisionOS.",
+  alternates: buildAlternates("/en/products"),
 };
 
 const tier1ProductCardsEn = [
@@ -48,7 +51,7 @@ function ProductCard({
     <Link
       href={card.href}
       className={cn(
-        "group flex flex-col rounded-2xl border p-6 transition-colors hover:border-primary/30",
+        "group flex h-full flex-col rounded-2xl border p-6 transition-colors hover:border-primary/30",
         "muted" in card && card.muted
           ? "border-border/50 bg-muted/20 opacity-80"
           : "border-border/70 bg-background",
@@ -93,19 +96,21 @@ export default function EnglishProductsPage() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-6 py-14">
+      <section className="mx-auto w-full max-w-7xl px-6 py-16 sm:py-20">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-600">
           Core operating systems
         </p>
         <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {tier1ProductCardsEn.map((card) => (
-            <ProductCard key={card.id} card={card} />
+          {tier1ProductCardsEn.map((card, i) => (
+            <Reveal key={card.id} delay={i * 70} className="h-full">
+              <ProductCard card={card} />
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="border-t bg-muted/10">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700/80">
             Platform roadmap & shared services
           </p>
@@ -113,8 +118,10 @@ export default function EnglishProductsPage() {
             Shared capabilities and early-stage systems  discussed within your activation scope.
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
-            {roadmapProductCardsEn.map((card) => (
-              <ProductCard key={card.id} card={card} />
+            {roadmapProductCardsEn.map((card, i) => (
+              <Reveal key={card.id} delay={i * 70} className="h-full">
+                <ProductCard card={card} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -139,6 +146,7 @@ export default function EnglishProductsPage() {
       </section>
 
       <ConversionBand
+        primaryHref="/en/contact"
         secondaryHref="/en/start"
         secondaryLabel="Where to start"
       />

@@ -120,7 +120,11 @@ export function SiteFooter({ locale = "ar" }: { locale?: "ar" | "en" } = {}) {
   const productLinks = isEn ? productLinksEn : productLinksAr;
 
   return (
-    <footer role="contentinfo" className="border-t bg-gradient-to-b from-muted/30 to-background" dir={isEn ? "ltr" : undefined}>
+    <footer role="contentinfo" className="relative border-t bg-gradient-to-b from-muted/30 to-background" dir={isEn ? "ltr" : undefined}>
+      <span
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
+        aria-hidden
+      />
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="space-y-5">

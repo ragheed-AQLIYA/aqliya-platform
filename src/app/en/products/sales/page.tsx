@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { publicOsStatusEn } from "@/lib/marketing/public-status"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "SalesOS  Commercial Intelligence | AQLIYA",
   description: "Pipeline management, deal tracking, account intelligence, and governed outreach for commercial teams.",
+  alternates: buildAlternates("/en/products/sales"),
 };
 
 export default function SalesOSEnPage() {

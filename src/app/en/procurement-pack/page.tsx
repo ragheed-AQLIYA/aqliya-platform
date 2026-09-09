@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { BOOKING_EMAIL } from "@/lib/marketing/booking";
 import { procurementPackItemsEn } from "@/lib/marketing/procurement-pack-items";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Procurement Evaluation Pack | AQLIYA",
   description:
     "Ready documents for procurement and security: executive brief, security summary, DPA, data residency, evaluation SOW, and proof center.",
+  alternates: buildAlternates("/en/procurement-pack"),
 };
 
 export default function EnglishProcurementPackPage() {

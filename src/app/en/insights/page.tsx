@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import Link from "next/link";
+import { Reveal } from "@/components/marketing/reveal";
 import { institutionalUseCasesEn } from "@/lib/marketing/institutional-use-cases-en";
 
 export const metadata: Metadata = {
   title: "Insights & Articles | AQLIYA",
   description:
     "Analysis and articles about governed institutional intelligence  from the perspective of governance, accountability, and real operational impact.",
+  alternates: buildAlternates("/en/insights"),
 };
 
 const articles = [
@@ -69,7 +72,8 @@ export default function InsightsPage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="space-y-6">
             {articles.map((article, i) => (
-              <Link key={article.slug} href={`/en/insights/${article.slug}`}>
+              <Reveal key={article.slug} delay={i * 70}>
+              <Link href={`/en/insights/${article.slug}`} className="block">
                 <div className="group glass-card-light rounded-2xl p-8 transition-all hover:border-white/15">
                   <div className="mb-4 flex flex-wrap items-center gap-3">
                     <span className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${article.categoryColor}`}>
@@ -93,6 +97,7 @@ export default function InsightsPage() {
                   </div>
                 </div>
               </Link>
+              </Reveal>
             ))}
           </div>
 
@@ -126,9 +131,10 @@ export default function InsightsPage() {
           </div>
 
           <div className="mx-auto mt-12 max-w-6xl space-y-6">
-            {institutionalUseCasesEn.map((uc) => (
-              <div
+            {institutionalUseCasesEn.map((uc, i) => (
+              <Reveal
                 key={uc.id}
+                delay={i * 70}
                 className={`rounded-[24px] border ${uc.categoryBorder} ${uc.categoryBg} p-6 sm:p-8`}
               >
                 <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
@@ -170,7 +176,7 @@ export default function InsightsPage() {
                     {uc.systemLabel}
                   </Link>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { StartHubPage } from "@/components/marketing/v2/start-hub-page";
 import { buyerJourneys, universalJourneySteps } from "@/lib/marketing/buyer-journeys";
 import { startCopyAr } from "@/lib/marketing/copy-plain";
@@ -15,28 +16,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/start",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-start.png",
-          width: 1200,
-          height: 630,
-          alt: "ابدأ مع عقلية - AQLIYA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-start.png"],
-    },
+    alternates: buildAlternates("/start"),
   };
 }
 

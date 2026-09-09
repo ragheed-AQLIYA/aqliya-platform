@@ -2,7 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
+import { Reveal } from "@/components/marketing/reveal";
 import { publicOsStatus } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
   const title = "المنصة | AQLIYA Intelligence Core";
@@ -11,28 +13,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/platform",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-platform.png",
-          width: 1200,
-          height: 630,
-          alt: "AQLIYA Intelligence Core - بنية المنصة",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-platform.png"],
-    },
+    alternates: buildAlternates("/platform"),
   };
 }
 
@@ -261,8 +242,9 @@ export default function PlatformPage() {
 
             <div className="space-y-4">
               {[...platformLayers].reverse().map((layer, _i) => (
-                <div
+                <Reveal
                   key={layer.num}
+                  delay={_i * 70}
                   className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all hover:border-primary/20 hover:shadow-sm"
                 >
                   <div className="flex items-start gap-5">
@@ -297,7 +279,7 @@ export default function PlatformPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -357,11 +339,11 @@ export default function PlatformPage() {
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {operatingSystems.map((sys) => (
+            {operatingSystems.map((sys, i) => (
+              <Reveal key={sys.system} delay={i * 70}>
               <Link
-                key={sys.system}
                 href={sys.href}
-                className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
+                className="group block rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <h3 className="text-base font-black text-foreground group-hover:text-primary">
@@ -376,6 +358,7 @@ export default function PlatformPage() {
                   نظام التشغيل: {sys.system}
                 </p>
               </Link>
+              </Reveal>
             ))}
           </div>
 
@@ -411,9 +394,10 @@ export default function PlatformPage() {
           />
 
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {deploymentModels.map((model) => (
-              <div
+            {deploymentModels.map((model, i) => (
+              <Reveal
                 key={model.id}
+                delay={i * 70}
                 className={`rounded-2xl border p-6 ${
                   model.status === "available"
                     ? "border-status-success/25 bg-gradient-to-br from-status-success/[0.05] to-background"
@@ -452,7 +436,7 @@ export default function PlatformPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             ))}
           </div>
 

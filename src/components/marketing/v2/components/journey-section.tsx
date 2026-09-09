@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Reveal } from "@/components/marketing/reveal";
 import type { BuyerJourney } from "@/lib/marketing/buyer-journeys";
 
 type JourneySectionProps = {
@@ -11,16 +12,16 @@ type JourneySectionProps = {
 
 export function JourneySection({ journeys, title, hint }: JourneySectionProps) {
   return (
-    <section className="border-t bg-muted/10 py-14 sm:py-16">
+    <section className="border-t bg-muted/10 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl font-black sm:text-3xl">{title}</h2>
           <p className="mt-3 text-sm text-muted-foreground">{hint}</p>
         </div>
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {journeys.map((journey) => (
+          {journeys.map((journey, i) => (
+            <Reveal key={journey.id} delay={i * 70}>
             <div
-              key={journey.id}
               id={journey.id}
               className="scroll-mt-28 rounded-2xl border border-border/60 bg-background p-6 sm:p-8"
             >
@@ -58,6 +59,7 @@ export function JourneySection({ journeys, title, hint }: JourneySectionProps) {
                 )}
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
       </div>

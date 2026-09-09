@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
 import { useSiteHeader } from "./components/use-site-header";
 import { TopBar } from "./components/top-bar";
 import { DesktopNav } from "./components/desktop-nav";
@@ -14,12 +13,12 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({ locale }: SiteHeaderProps) {
-  const t = useTranslations("common");
   const {
     locale: resolvedLocale,
     navItems,
     homeHref,
     contactHref,
+    labels,
     open,
     switchLocale,
     toggleMenu,
@@ -31,7 +30,11 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
       role="banner"
       className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75"
     >
-      <TopBar />
+      <span
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent"
+        aria-hidden
+      />
+      <TopBar locale={resolvedLocale} />
 
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
         <Link
@@ -53,6 +56,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           locale={resolvedLocale}
           navItems={navItems}
           contactHref={contactHref}
+          labels={labels}
           onSwitchLocale={switchLocale}
         />
 
@@ -60,8 +64,8 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           open={open}
           locale={resolvedLocale}
           onToggle={toggleMenu}
-          ariaLabelOpen={t("openMenu")}
-          ariaLabelClose={t("closeMenu")}
+          ariaLabelOpen={labels.openMenu}
+          ariaLabelClose={labels.closeMenu}
         />
       </div>
 
@@ -70,6 +74,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
         locale={resolvedLocale}
         navItems={navItems}
         contactHref={contactHref}
+        labels={labels}
         onSwitchLocale={switchLocale}
         onNavClick={closeMenu}
       />

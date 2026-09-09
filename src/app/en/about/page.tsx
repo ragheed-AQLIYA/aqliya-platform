@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { cn } from "@/lib/utils";
 import { BOOKING_EMAIL } from "@/lib/marketing/booking";
 import {
@@ -8,11 +9,13 @@ import {
 } from "@/lib/marketing/public-status";
 import { WorkflowChain } from "@/components/enterprise";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "About AQLIYA",
   description:
     "AQLIYA exists because institutions need intelligence they can trust and hold accountable  not just faster outputs. A governed institutional operating platform.",
+  alternates: buildAlternates("/en/about"),
 };
 
 const whyAqliyaExists = [
@@ -160,10 +163,10 @@ export default function EnglishAboutPage() {
             becomes a new burden instead of new value.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {whyAqliyaExists.map((item) => (
-              <div key={item} className="glass-card-light p-5">
+            {whyAqliyaExists.map((item, i) => (
+              <Reveal key={item} delay={i * 70} className="glass-card-light p-5">
                 <p className="text-sm leading-7 text-foreground">{item}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <p className="mt-8 text-base leading-8 text-muted-foreground">
@@ -187,8 +190,9 @@ export default function EnglishAboutPage() {
           </div>
           <div className="space-y-4">
             {operatingBeliefs.map((item, index) => (
-              <div
+              <Reveal
                 key={item}
+                delay={index * 70}
                 className="rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/30 p-6 shadow-sm"
               >
                 <div className="text-sm font-black text-primary">
@@ -197,7 +201,7 @@ export default function EnglishAboutPage() {
                 <p className="mt-2 text-base leading-8 text-foreground">
                   {item}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -217,10 +221,10 @@ export default function EnglishAboutPage() {
             </p>
           </div>
           <div className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {coreItems.map((item) => (
-              <div key={item} className="glass-card p-5 text-center">
+            {coreItems.map((item, i) => (
+              <Reveal key={item} delay={i * 70} className="glass-card p-5 text-center">
                 <p className="text-sm font-bold text-white">{item}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -238,14 +242,14 @@ export default function EnglishAboutPage() {
             institutional systems are built.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {canonicalSystems.map((item) => (
-              <div key={item.name} className="glass-card-light rounded-2xl p-5">
+            {canonicalSystems.map((item, i) => (
+              <Reveal key={item.name} delay={i * 70} className="glass-card-light rounded-2xl p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
                   {item.status}
                 </p>
                 <p className="mt-2 text-sm font-black text-foreground">{item.name}</p>
                 <p className="mt-1 text-xs leading-6 text-muted-foreground">{item.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -264,11 +268,11 @@ export default function EnglishAboutPage() {
             </p>
           </div>
           <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:grid-cols-2">
-            {whatAqliyaIs.map((item) => (
-              <div key={item} className="glass-card flex items-start gap-3 p-5">
+            {whatAqliyaIs.map((item, i) => (
+              <Reveal key={item} delay={i * 70} className="glass-card flex items-start gap-3 p-5">
                 <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-aqliya-cyan/70" />
                 <p className="text-sm leading-7 text-white/75">{item}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -298,8 +302,9 @@ export default function EnglishAboutPage() {
             </div>
             <div className="space-y-4">
               {phases.map((phase, i) => (
-                <div
+                <Reveal
                   key={phase.num}
+                  delay={i * 70}
                   className={cn(
                     "flex items-start gap-5 rounded-2xl border p-6",
                     i % 2 === 0
@@ -322,7 +327,7 @@ export default function EnglishAboutPage() {
                       <span>Participants: {phase.participants}</span>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
