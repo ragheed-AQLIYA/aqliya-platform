@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Expected orphan documents — non-.md artifacts that serve operational/config purposes but should not appear in the knowledge-map or navigation indexes.",
+  "description": "Expected orphan documents — non-navigation artifacts (config, structured data, release deliverables) that should not appear in the knowledge-map or navigation indexes.",
   "orphans": [
     {
       "path": "docs/ai/knowledge-map.schema.json",
@@ -75,6 +75,71 @@
     {
       "path": "docs/releases/documentation-remediation-closure.md",
       "reason": "Program closure document — released artifact, not navigation target.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/known-orphans.json",
+      "reason": "Allowlist file itself — consumed by the orphan detector script, not a documentation asset.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_DESIGN_SYSTEM.md",
+      "reason": "Website Phase 3 release deliverable — design system documentation, not a knowledge-map navigation target.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_FULL_VISUAL_SWEEP_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — visual sweep report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_HREFLANG_VALIDATION.md",
+      "reason": "Website Phase 3 release deliverable — hreflang validation report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PAGE_BLUEPRINTS.md",
+      "reason": "Website Phase 3 release deliverable — page blueprint specification for the release.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_BASELINE.md",
+      "reason": "Website Phase 3 release deliverable — baseline audit artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — phase final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_ROUTE_LOCALE_MATRIX.md",
+      "reason": "Website Phase 3 release deliverable — route/locale matrix artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_AUDIT.md",
+      "reason": "Website Phase 3 release deliverable — website audit report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — website final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_PHASE2_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — phase 2 final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_ROUTE_MIGRATION_MATRIX.md",
+      "reason": "Website Phase 3 release deliverable — route migration matrix artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_STRATEGY.md",
+      "reason": "Website Phase 3 release deliverable — website strategy document for the release.",
       "expected": true
     }
   ]
