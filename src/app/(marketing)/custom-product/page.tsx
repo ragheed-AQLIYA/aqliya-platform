@@ -20,7 +20,7 @@ const formSteps = [
 ];
 
 export const metadata: Metadata = {
-  title: "صمّم نظامك مع عقلية | AQLIYA",
+  title: "صمّم نظامك مع عقلية",
   description:
     "صمّم نظامًا برمجيًا خاصًا بطبيعة عمل مؤسستك. املأ الطلب وسيتواصل معك فريق عقلية.",
   alternates: buildAlternates("/custom-product"),

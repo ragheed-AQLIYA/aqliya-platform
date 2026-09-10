@@ -7,7 +7,7 @@ import {
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
-  const title = "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA";
+  const title = "Office AI Assistant — مساعد مؤسسي ذكي";
   const description =
     "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيق كامل.";
   return {

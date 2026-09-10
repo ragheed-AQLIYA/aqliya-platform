@@ -3,7 +3,7 @@ import Link from "next/link";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "شروط الخدمة | AQLIYA",
+  title: "شروط الخدمة",
   description:
     "شروط خدمة مؤسسية لمنصة عقلية  تشمل قيود الذكاء الاصطناعي الإلزامية، متطلبات الموافقة البشرية، ومسؤوليات الاستخدام المؤسسي.",
   alternates: buildAlternates("/terms"),

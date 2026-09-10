@@ -10,7 +10,7 @@ import {
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
-  const title = "أنظمة التشغيل | AQLIYA";
+  const title = "أنظمة التشغيل";
   const description =
     "أنظمة تشغيل مؤسسية  AuditOS، DecisionOS، LocalContentOS  على نواة حوكمة واحدة.";
   return {

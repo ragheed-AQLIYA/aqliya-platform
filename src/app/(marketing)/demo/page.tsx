@@ -5,7 +5,7 @@ import { DemoVideoSection } from "@/components/marketing/demo-video-section";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "ديمو AuditOS | AQLIYA",
+  title: "ديمو AuditOS",
   description:
     "رحلة الديمو الكاملة  ما ستشاهده، ما سيُثبَت، وكيف تمر بسير العمل من رفع الميزان إلى نشر حزمة الارتباط.",
   alternates: buildAlternates("/demo"),

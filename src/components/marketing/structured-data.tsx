@@ -37,24 +37,17 @@ export function OrganizationJsonLd({
 interface WebSiteJsonLdProps {
   name?: string;
   url?: string;
-  searchActionTarget?: string;
 }
 
 export function WebSiteJsonLd({
   name = "AQLIYA",
   url = "https://aqliya.com",
-  searchActionTarget = "https://aqliya.com/search?q={search_term_string}",
 }: WebSiteJsonLdProps) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name,
     url,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: searchActionTarget,
-      "query-input": "required name=search_term_string",
-    },
   };
 
   return (

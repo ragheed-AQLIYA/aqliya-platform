@@ -31,7 +31,7 @@ export type ProductPageContent = {
 
 export const auditProductContent: ProductPageContent = {
   metadata: {
-    title: "AuditOS  نظام تشغيل المراجعة والالتزام | AQLIYA",
+    title: "AuditOS — نظام تشغيل المراجعة والالتزام",
     description:
       "مسار مراجعة محكوم من قبول العميل إلى حزمة الارتباط  أدلة، مراجعة بشرية، وسجل تدقيق.",
   },
@@ -85,7 +85,7 @@ export const auditProductContent: ProductPageContent = {
 
 export const decisionProductContent: ProductPageContent = {
   metadata: {
-    title: "DecisionOS  نظام تشغيل القرارات المؤسسية | AQLIYA",
+    title: "DecisionOS — نظام تشغيل القرارات المؤسسية",
     description:
       "مسار قرار محكوم: بدائل، معايير، مخاطر، توصية AI، واعتماد بشري  لا قرار متفرق.",
   },
@@ -128,7 +128,7 @@ export const decisionProductContent: ProductPageContent = {
 
 export const localContentProductContent: ProductPageContent = {
   metadata: {
-    title: "LocalContentOS  المحتوى المحلي والامتثال | AQLIYA",
+    title: "LocalContentOS — المحتوى المحلي والامتثال",
     description:
       "موردون، إنفاق، تصنيف، فجوات امتثال، وتقارير تنظيمية  مسار تشغيلي واحد للسوق السعودي.",
   },

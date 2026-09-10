@@ -5,7 +5,7 @@ import { Reveal } from "@/components/marketing/reveal";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "دراسات الحالة | AQLIYA",
+  title: "دراسات الحالة",
   description:
     "سيناريوهات مؤسسية موثقة توضح كيف تحول عقلية سير العمل من عمليات يدوية مبعثرة إلى مسارات محكومة قابلة للتدقيق.",
   alternates: buildAlternates("/case-studies"),

@@ -4,7 +4,7 @@ import { buildAlternates } from "@/lib/marketing/seo";
 import { FAQSection } from "@/components/marketing/faq-section";
 
 export function generateMetadata(): Metadata {
-  const title = "الأسعار | AQLIYA";
+  const title = "الأسعار";
   const description =
     "خطط أسعار AQLIYA للمنصات المؤسسية المحكومة  من المجاني إلى المؤسسي. تواصل معنا لتحديد الخطة المناسبة لمؤسستك.";
   return {
@@ -83,14 +83,14 @@ const tiers = [
     priceEn: "Tailored",
     periodAr: "حسب الاتفاق",
     periodEn: "per agreement",
-    descriptionAr: "نشر كامل مع تخصيص عميق، بنية خاصة، وشراكة هندسية مستمرة.",
-    descriptionEn: "Full deployment with deep customization, private infrastructure, and ongoing engineering partnership.",
+    descriptionAr: "تشغيل سحابي مُدار مع تخصيص عميق، حوكمة مشددة، وشراكة هندسية مستمرة.",
+    descriptionEn: "Managed cloud operation with deep customization, tightened governance, and ongoing engineering partnership.",
     highlighted: false,
     featuresAr: [
       "جميع أنظمة التشغيل بدون حد",
-      "نشر خاص (Private Deployment)",
+      "مسار نشر خاص قيد التخطيط — ليس حزمة إنتاج جاهزة",
       "تخصيص سير العمل والبيانات والواجهات",
-      "دمج مع الأنظمة الخارجية (ERP, DMS, SSO)",
+      "دمج مع الأنظمة الخارجية (ERP, DMS, SSO) حسب الاتفاق",
       "فريق دعم مخصص ومدير حساب",
       "SLA مخصص مع ضمان وقت الاستجابة",
       "استشارات أمنية ومراجعة دورية",
@@ -98,9 +98,9 @@ const tiers = [
     ],
     featuresEn: [
       "All operating systems, unlimited",
-      "Private deployment",
+      "Private deployment path under planning — not a production package",
       "Custom workflows, data, and interfaces",
-      "External system integration (ERP, DMS, SSO)",
+      "External system integration (ERP, DMS, SSO) by agreement",
       "Dedicated support team and account manager",
       "Custom SLA with response time guarantees",
       "Security consulting and periodic reviews",
@@ -292,10 +292,10 @@ export default function PricingPage() {
                     enterprise: true,
                   },
                   {
-                    feature: "نشر خاص (Private)",
+                    feature: "مسار نشر خاص (مخطط — ليس منتجاً جاهزاً)",
                     starter: false,
                     professional: false,
-                    enterprise: true,
+                    enterprise: "مخطط",
                   },
                   {
                     feature: "تدريب الفريق",
@@ -385,10 +385,10 @@ export default function PricingPage() {
                 AQLIYA Private
               </p>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                داخل بنية تحتية المؤسسة مع تحكم كامل في البيانات.
+                اتجاه استراتيجي قيد التخطيط داخل بنية المؤسسة. ليس حزمة إنتاج جاهزة للشراء.
               </p>
               <span className="mt-3 inline-block rounded-full bg-amber-500/15 px-2.5 py-1 text-[9px] font-bold text-amber-600">
-                خاص بعملاء مختارين
+                قيد التخطيط
               </span>
             </div>
             <div className="rounded-2xl border border-border/40 bg-muted/10 p-6">

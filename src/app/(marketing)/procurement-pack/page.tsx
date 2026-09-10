@@ -6,7 +6,7 @@ import { procurementPackItems } from "@/lib/marketing/procurement-pack-items";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "حزمة التقييم للمشتريات | AQLIYA",
+  title: "حزمة التقييم للمشتريات",
   description:
     "وثائق جاهزة لفريق المشتريات والأمن: ملخص تنفيذي، أمن، DPA، إقامة بيانات، نموذج تجربة، ومواد الإثبات.",
   alternates: buildAlternates("/procurement-pack"),

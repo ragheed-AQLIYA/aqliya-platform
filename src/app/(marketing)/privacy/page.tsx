@@ -3,7 +3,7 @@ import Link from "next/link";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "سياسة الخصوصية | AQLIYA",
+  title: "سياسة الخصوصية",
   description:
     "سياسة خصوصية مؤسسية لمنصة عقلية  تغطي ملكية البيانات، إقامة البيانات، التعامل مع الذكاء الاصطناعي، والحقوق المؤسسية للعملاء.",
   alternates: buildAlternates("/privacy"),

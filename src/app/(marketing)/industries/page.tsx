@@ -4,7 +4,7 @@ import { buildAlternates } from "@/lib/marketing/seo";
 import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
-  title: "القطاعات | AQLIYA",
+  title: "القطاعات",
   description:
     "مبنية لمكاتب المراجعة، الجهات الحكومية، المؤسسات الكبرى، وشركات الخدمات المهنية. كل قطاع له مسار مخصص على منصة تشغيل مؤسسية واحدة.",
   alternates: buildAlternates("/industries"),

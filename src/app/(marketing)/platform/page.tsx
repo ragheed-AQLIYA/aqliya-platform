@@ -7,7 +7,7 @@ import { publicOsStatus } from "@/lib/marketing/public-status";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
-  const title = "المنصة | AQLIYA Intelligence Core";
+  const title = "المنصة — Intelligence Core";
   const description =
     "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.";
   return {
@@ -38,14 +38,14 @@ const deploymentModels = [
     title: "AQLIYA Private",
     titleAr: "خوادم خاصة",
     status: "planned",
-    statusLabel: "نشر خاص",
+    statusLabel: "قيد التخطيط",
     description:
-      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات  للمؤسسات ذات متطلبات السيادة والأمن العالية.",
+      "اتجاه استراتيجي لنشر داخل بنية المؤسسة مع تحكم محلي في البيانات. ليس حزمة إنتاج جاهزة، ويخضع لتقييم وتصميم مشترك.",
     points: [
-      "بيانات تبقى داخل بنية المؤسسة",
-      "تحكم كامل في قواعد البيانات والتخزين",
-      "يعتمد على اكتمال نموذج السحابة",
-      "متاح لعملاء منتقَين خلال مرحلة التطوير",
+      "الهدف: بقاء البيانات داخل بنية المؤسسة",
+      "الهدف: تحكم كامل في قواعد البيانات والتخزين",
+      "يعتمد على اكتمال نموذج السحابة أولًا",
+      "مخطط فقط — ليس عرض شراء جاهزًا للتسليم",
     ],
   },
   {

@@ -5,7 +5,7 @@ import { Reveal } from "@/components/marketing/reveal";
 import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "الحوكمة | AQLIYA",
+  title: "الحوكمة",
   description:
     "سلسلة أدلة كاملة، RBAC متعدد المستويات، Audit Trail غير قابل للتعديل، وحوكمة AI صارمة  مدمجة في البنية.",
   alternates: buildAlternates("/governance"),

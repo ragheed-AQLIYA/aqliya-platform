@@ -6,7 +6,7 @@ import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/ma
 import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
-  title: "حالات الاستخدام المؤسسية | AQLIYA",
+  title: "حالات الاستخدام المؤسسية",
   description:
     "أربعة مسارات تشغيلية رئيسية: التدقيق، القرارات، المحتوى المحلي، والجاهزية التنظيمية  المشكلة، الوضع التقليدي، ومسار عقلية.",
   alternates: buildAlternates("/use-cases"),

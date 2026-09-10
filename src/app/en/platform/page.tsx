@@ -36,14 +36,14 @@ const deploymentModels = [
     id: "private",
     title: "AQLIYA Private",
     status: "planned",
-    statusLabel: "Private deployment",
+    statusLabel: "Planned",
     description:
-      "Deploy inside your infrastructure with local data control  for institutions with sovereignty and security requirements.",
+      "Strategic direction for deployment inside your infrastructure with local data control. Not a production package; requires joint design and evaluation.",
     points: [
-      "Data stays inside your environment",
-      "Full control over databases and storage",
-      "Builds on the cloud model",
-      "Available to selected clients during rollout",
+      "Intent: data stays inside your environment",
+      "Intent: full control over databases and storage",
+      "Depends on completing the cloud model first",
+      "Planned only — not a purchasable production offer",
     ],
   },
   {

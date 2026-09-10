@@ -11,7 +11,7 @@ import { WorkflowChain } from "@/components/enterprise";
 import { Reveal } from "@/components/marketing/reveal";
 
 export function generateMetadata(): Metadata {
-  const title = "عن عقلية | AQLIYA";
+  const title = "عن عقلية";
   const description =
     "وُجدت عقلية لأن المؤسسة تحتاج ذكاءً يمكن الوثوق به ومساءلته  لا فقط ذكاءً أسرع. منصة تشغيل مؤسسية للقرارات والعمليات والأدلة.";
   return {

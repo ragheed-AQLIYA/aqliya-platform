@@ -5,7 +5,7 @@ import { Reveal } from "@/components/marketing/reveal";
 import { institutionalUseCases } from "@/lib/marketing/institutional-use-cases";
 
 export const metadata: Metadata = {
-  title: "رؤى ومقالات | AQLIYA",
+  title: "رؤى ومقالات",
   description:
     "تحليلات ومقالات حول الذكاء الاصطناعي المؤسسي المحكوم  من منظور الحوكمة والمسؤولية والأثر التشغيلي الحقيقي.",
   alternates: buildAlternates("/insights"),

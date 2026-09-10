@@ -61,6 +61,9 @@ export function FAQSection({
 
   const resolvedItems: FAQItem[] = externalItems ?? (() => {
     const count = Number(t("count"));
+    if (!Number.isFinite(count) || count <= 0) {
+      return [];
+    }
     return Array.from({ length: count }, (_, i) => ({
       question: t(`q${i + 1}`),
       answer: t(`a${i + 1}`),
@@ -95,6 +98,7 @@ export function FAQSection({
                 >
                   <button
                     type="button"
+                    id={`faq-question-${index}`}
                     onClick={() => toggle(index)}
                     className="flex w-full items-center justify-between gap-4 p-5 text-right"
                     aria-expanded={isOpen}

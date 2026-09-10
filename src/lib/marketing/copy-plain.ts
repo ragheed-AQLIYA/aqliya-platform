@@ -5,7 +5,7 @@
 
 export const homeCopyAr = {
   metadata: {
-    title: "AQLIYA | منصة ذكاء مؤسسي خاص ومحكوم",
+    title: "منصة ذكاء مؤسسي خاص ومحكوم",
     description:
       "عقلية هي منصة ذكاء مؤسسي خاص ومحكوم  تُشغّل فرقك داخل إجراءات بأدلة ومراجعة واعتماد وصلاحيات. جرّبوا الديمو أو احجزوا جلسة تشخيص.",
   },
@@ -87,7 +87,7 @@ export const homeCopyAr = {
 
 export const startCopyAr = {
   metadata: {
-    title: "من أين تبدأ؟ | AQLIYA",
+    title: "من أين تبدأ؟",
     description:
       "اختر دورك في المؤسسة  نرشدك للمحتوى المناسب ثم تتواصل معنا عندما تكون جاهزاً.",
   },

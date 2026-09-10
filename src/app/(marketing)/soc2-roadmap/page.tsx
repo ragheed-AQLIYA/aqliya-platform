@@ -8,7 +8,7 @@ import {
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 
 export const metadata: Metadata = {
-  title: "خارطة SOC2 | AQLIYA",
+  title: "خارطة SOC2",
   description:
     "خارطة طريق SOC2 Type I بمواعيد مستهدفة  بدون ادعاء شهادة. شفافية للمشتريات والأمن.",
   alternates: buildAlternates("/soc2-roadmap"),
