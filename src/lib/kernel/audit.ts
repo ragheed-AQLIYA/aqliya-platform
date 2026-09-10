@@ -1,5 +1,3 @@
-"use server";
-
 /**
  * Kernel-level bridge for AuditOS audit functions.
  *
