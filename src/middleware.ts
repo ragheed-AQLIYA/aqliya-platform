@@ -176,6 +176,17 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isPublicPath(pathname)) {
+    // For English marketing paths, forward the locale so next-intl renders
+    // <html lang="en" dir="ltr"> without requiring a NEXT_LOCALE cookie.
+    if (pathname === "/en" || pathname.startsWith("/en/")) {
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("X-NEXT-INTL-LOCALE", "en");
+      return withTiming(
+        setSecurityHeaders(
+          NextResponse.next({ request: { headers: requestHeaders } })
+        )
+      );
+    }
     return withTiming(setSecurityHeaders(NextResponse.next()));
   }
 
@@ -280,6 +291,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/en",
+    "/en/:path*",
     "/audit",
     "/audit/:path*",
     "/decisions",
