@@ -598,11 +598,6 @@
       "expected": true
     },
     {
-      "path": "docs/config-drafts/claude-code-router-config.json",
-      "reason": "Draft config for Claude Code Router toolchain (Phase 1); not a documentation asset.",
-      "expected": true
-    },
-    {
       "path": "docs/deployment/ACCESS_CONTROL_MATRIX.md",
       "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
@@ -1715,61 +1710,6 @@
     {
       "path": "docs/releases/documentation-remediation-closure.md",
       "reason": "Program closure document — released artifact, not navigation target.",
-      "expected": true
-    },
-    {
-      "path": "docs/reports/.session4-walkthrough-output.json",
-      "reason": "Automated session output artifact; hidden file, not meant for human navigation.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/localcontent/FS_ANALYSIS.json",
-      "reason": "LocalContentOS review artifact — structured analysis output, not readable documentation.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/localcontent/PILOT_METRICS.json",
-      "reason": "LocalContentOS pilot metrics artifact — structured data, not documentation.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/localcontent/TB_ANALYSIS.json",
-      "reason": "LocalContentOS trial balance review artifact — structured data.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/localcontent/TIME_STUDY.json",
-      "reason": "LocalContentOS time study artifact — structured data.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/localcontent/WORKBOOK_COVERAGE_MATRIX.json",
-      "reason": "LocalContentOS coverage matrix artifact — structured data.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/skill-os/det-auditor-1.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON, not human-readable documentation.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/skill-os/det-auditor-2.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/skill-os/det-evaluator-1.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/skill-os/det-evaluator-2.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
-      "expected": true
-    },
-    {
-      "path": "docs/review/skill-os/det-evaluator-3.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
       "expected": true
     },
     {
