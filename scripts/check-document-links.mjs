@@ -15,7 +15,7 @@
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'fs';
-import { resolve, dirname, extname } from 'path';
+import { resolve, dirname, extname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -58,7 +58,7 @@ function buildHeadingMap(files) {
   for (const file of files) {
     try {
       const content = readFileSync(file, 'utf-8');
-      const relPath = file.replace(REPO_ROOT + '\\', '').replace(/\\/g, '/');
+      const relPath = relative(REPO_ROOT, file).replace(/\\/g, '/');
       const headings = [];
       const headingRegex = /^(#{1,6})\s+(.+)$/gm;
       let match;
@@ -115,7 +115,7 @@ for (const file of rootFiles) {
 
 // Strip docs/ prefix for existence checks
 const allDocPaths = new Set(allMdFiles.map(f => {
-  const rel = f.replace(REPO_ROOT + '\\', '').replace(/\\/g, '/');
+  const rel = relative(REPO_ROOT, f).replace(/\\/g, '/');
   return rel;
 }));
 
@@ -137,7 +137,7 @@ let filesChecked = 0;
 for (const file of allMdFiles) {
   try {
     const content = readFileSync(file, 'utf-8');
-    const relFile = file.replace(REPO_ROOT + '\\', '').replace(/\\/g, '/');
+    const relFile = relative(REPO_ROOT, file).replace(/\\/g, '/');
     const fileDir = dirname(file).replace(/\\/g, '/');
 
     // Find markdown links: [text](url)
@@ -190,7 +190,7 @@ for (const file of allMdFiles) {
       }
 
       // Normalize to repo-relative path for checking
-      const relResolved = resolvedPath.replace(REPO_ROOT + '\\', '').replace(/\\/g, '/');
+      const relResolved = relative(REPO_ROOT, resolvedPath).replace(/\\/g, '/');
 
       // Check if file exists
       if (!existsSync(resolvedPath) && !allDocPaths.has(relResolved)) {

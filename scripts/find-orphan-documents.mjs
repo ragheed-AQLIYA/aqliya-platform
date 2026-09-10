@@ -46,7 +46,7 @@ function getAllDocFiles(dir, relativeTo = REPO_ROOT) {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = resolve(dir, entry.name);
-      const relPath = fullPath.replace(relativeTo + '\\', '').replace(/\\/g, '/');
+      const relPath = relative(relativeTo, fullPath).replace(/\\/g, '/');
 
       // Skip hidden dirs, node_modules, .git
       if (entry.name.startsWith('.') && entry.isDirectory()) continue;
