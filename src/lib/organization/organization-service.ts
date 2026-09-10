@@ -33,11 +33,16 @@ export interface OrgDetailData {
 }
 
 export async function listOrganizations(
-  platformOrgId?: string,
+  scope?: string | { organizationId?: string; platformOrganizationId?: string },
 ): Promise<OrgWithCounts[]> {
-  const where = platformOrgId
-    ? { platformOrganizationId: platformOrgId }
-    : {};
+  const where =
+    typeof scope === "string"
+      ? { platformOrganizationId: scope }
+      : scope?.organizationId
+        ? { id: scope.organizationId }
+        : scope?.platformOrganizationId
+          ? { platformOrganizationId: scope.platformOrganizationId }
+          : {};
 
   const orgs = await prisma.organization.findMany({
     where,
@@ -67,9 +72,10 @@ export async function listOrganizations(
 export async function getOrganizationDetail(
   orgId: string,
   platformOrgId?: string,
+  allowPlatformScope = false,
 ): Promise<OrgDetailData | null> {
   const where: Record<string, unknown> = { id: orgId };
-  if (platformOrgId) {
+  if (platformOrgId && allowPlatformScope) {
     where.platformOrganizationId = platformOrgId;
   }
 
@@ -109,7 +115,7 @@ export async function getOrganizationDetail(
   let sunbulRecordCount = 0;
   let sunbulStatus = "غير مفعل";
 
-  if (platformOrgId) {
+  if (platformOrgId && allowPlatformScope) {
     const sunbulClients = await prisma.sunbulClient.findMany({
       where: { platformOrganizationId: platformOrgId },
       select: { id: true },
@@ -129,25 +135,6 @@ export async function getOrganizationDetail(
     // Sunbul memberships track Workflow templates for the organization
     sunbulMembershipCount = await prisma.workflowTemplate.count({
       where: { platformOrganizationId: platformOrgId },
-    });
-    sunbulStatus =
-      sunbulRecordCount > 0
-        ? "نشط"
-        : sunbulClientCount > 0
-          ? "جاهز"
-          : "غير مفعل";
-  } else if (org.platformOrganizationId) {
-    const poId = org.platformOrganizationId;
-    sunbulClientCount = await prisma.sunbulClient.count({
-      where: { platformOrganizationId: poId },
-    });
-    // Sunbul redirect → WorkflowRecord query
-    sunbulRecordCount = await prisma.workflowRecord.count({
-      where: { template: { platformOrganizationId: poId } },
-    });
-    // Sunbul redirect → WorkflowTemplate count
-    sunbulMembershipCount = await prisma.workflowTemplate.count({
-      where: { platformOrganizationId: poId },
     });
     sunbulStatus =
       sunbulRecordCount > 0

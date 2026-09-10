@@ -185,13 +185,13 @@ export default function DecisionIntakePage({ params }: { params: Promise<{ id: s
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div>
                 <h3 className="text-sm font-medium">الأسباب</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm">
+                <ul className="mt-2 list-disc ps-5 text-sm">
                   {intake.reasons.map((reason) => <li key={reason}>{reason}</li>)}
                 </ul>
               </div>
               <div>
                 <h3 className="text-sm font-medium">الخطوات التالية المطلوبة</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm">
+                <ul className="mt-2 list-disc ps-5 text-sm">
                   {intake.requiredNextSteps.map((step) => <li key={step}>{step}</li>)}
                 </ul>
               </div>

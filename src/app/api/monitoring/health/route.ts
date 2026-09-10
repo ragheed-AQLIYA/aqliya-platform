@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getHealthCheck, getSystemMetrics, getQueueMetrics, getFailedJobs } from "@/lib/platform/monitoring/system-monitor"
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/auth"
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     const { searchParams } = new URL(request.url)
     const scope = searchParams.get("scope") ?? "all"
 

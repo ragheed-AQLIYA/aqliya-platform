@@ -32,7 +32,12 @@ jest.mock("next/cache", () => ({
 jest.mock("@/lib/tb-intelligence/knowledge-mining", () => ({
   listCandidates: jest.fn().mockResolvedValue({ candidates: [], total: 0 }),
   getCandidate: jest.fn().mockResolvedValue({
-    candidate: { id: "c-1", status: "CANDIDATE", candidatePhrase: "Test" },
+    candidate: {
+      id: "c-1",
+      status: "CANDIDATE",
+      candidatePhrase: "Test",
+      organizationId: "org-1",
+    },
     evidence: [],
     promotions: [],
   }),

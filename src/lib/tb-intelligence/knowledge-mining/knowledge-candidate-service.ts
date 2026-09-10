@@ -13,6 +13,8 @@ export type CandidateFilter = {
   status?: KnowledgeCandidateStatus;
   canonicalCode?: string;
   organizationId?: string;
+  /** Platform-admin only: list institutional (organizationId = null) rows. */
+  includeInstitutional?: boolean;
   search?: string;
   sortBy?: "supportCount" | "confidence" | "createdAt" | "updatedAt";
   sortDir?: "asc" | "desc";
@@ -75,7 +77,13 @@ export async function listCandidates(
 
   if (filter.status) where.status = filter.status;
   if (filter.canonicalCode) where.canonicalCode = filter.canonicalCode;
-  if (filter.organizationId) where.organizationId = filter.organizationId;
+  if (filter.organizationId) {
+    where.organizationId = filter.organizationId;
+  } else if (filter.includeInstitutional) {
+    where.organizationId = null;
+  } else {
+    return { candidates: [], total: 0 };
+  }
   if (filter.search) {
     where.candidatePhrase = { contains: filter.search, mode: "insensitive" };
   }
@@ -123,7 +131,10 @@ type PromotionRow = {
 /**
  * Get a single candidate with evidence and promotion history.
  */
-export async function getCandidate(id: string): Promise<{
+export async function getCandidate(
+  id: string,
+  organizationId?: string,
+): Promise<{
   candidate: KnowledgeCandidateDTO | null;
   evidence: Array<{
     id: string;
@@ -148,6 +159,10 @@ export async function getCandidate(id: string): Promise<{
   });
 
   if (!candidate) {
+    return { candidate: null, evidence: [], promotions: [] };
+  }
+
+  if (organizationId && candidate.organizationId !== organizationId) {
     return { candidate: null, evidence: [], promotions: [] };
   }
 
@@ -179,7 +194,19 @@ export async function getCandidate(id: string): Promise<{
  * Delete a candidate and its associated evidence/promotion history.
  * Blocked when the candidate is bound to a Knowledge Foundation version.
  */
-export async function deleteCandidate(id: string): Promise<boolean> {
+export async function deleteCandidate(
+  id: string,
+  organizationId?: string,
+): Promise<boolean> {
+  if (organizationId) {
+    const existing = await prisma.knowledgeCandidate.findUnique({
+      where: { id },
+      select: { organizationId: true },
+    });
+    if (!existing || existing.organizationId !== organizationId) {
+      return false;
+    }
+  }
   const binding = await prisma.knowledgeFoundationVersionCandidate.findFirst({
     where: { candidateId: id },
     include: {

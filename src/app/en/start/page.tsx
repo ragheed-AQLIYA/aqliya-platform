@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { StartHubPage } from "@/components/marketing/v2/start-hub-page";
 import {
   buyerJourneysEn,
@@ -15,6 +16,7 @@ import {
 export const metadata: Metadata = {
   title: startCopyEn.metadata.title,
   description: startCopyEn.metadata.description,
+  alternates: buildAlternates("/en/start"),
 };
 
 export default function EnglishStartPage() {

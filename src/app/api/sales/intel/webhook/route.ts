@@ -60,12 +60,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const orgEnvKey = `${providerId.toUpperCase()}_WEBHOOK_ORGANIZATION_ID`;
+    const organizationId = process.env[orgEnvKey]?.trim() ?? "";
+    if (!organizationId) {
+      logger.warn("[Webhook] No organization binding configured for provider");
+      return NextResponse.json(
+        { error: "Webhook organization not configured" },
+        { status: 503 },
+      );
+    }
+
     const result = await receiveWebhook(
       {
         providerId,
         webhookSecret,
         enabled: true,
-        organizationId: "system", // Tenant resolved from webhook payload
+        organizationId,
       },
       body,
       signature,

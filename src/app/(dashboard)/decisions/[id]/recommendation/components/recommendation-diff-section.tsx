@@ -157,7 +157,7 @@ export function RecommendationDiffSection({
                 onClick={onToggleDiff}
                 disabled={loadingDiff}
               >
-                <FileDiff className="h-4 w-4 mr-1" />
+                <FileDiff className="h-4 w-4 me-1" />
                 {showDiff ? "إخفاء الفروقات" : "عرض الفروقات جنبًا إلى جنب"}
               </Button>
               <Button

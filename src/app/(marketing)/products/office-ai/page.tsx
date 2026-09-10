@@ -4,6 +4,7 @@ import {
   SectionEyebrow,
   EnterpriseCTA,
 } from "@/components/enterprise";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
   const title = "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA";
@@ -12,28 +13,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/products/office-ai",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-office-ai.png",
-          width: 1200,
-          height: 630,
-          alt: "Office AI Assistant - مساعد مؤسسي ذكي | AQLIYA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-office-ai.png"],
-    },
+    alternates: buildAlternates("/products/office-ai"),
   };
 }
 

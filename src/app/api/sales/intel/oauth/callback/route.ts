@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createLogger } from "@/lib/observability/logger";
 import { getToken } from "next-auth/jwt";
+import { resolveSessionCookieName } from "@/lib/auth/session-cookie";
 import {
   exchangeCodeForTokens,
   OAUTH2_PROVIDERS,
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
     const sessionToken = await getToken({
       req: request,
       secret: process.env.AUTH_SECRET,
-      salt: "authjs.session-token",
+      salt: resolveSessionCookieName(request.cookies),
     });
     if (!sessionToken?.sub) {
       return NextResponse.redirect(

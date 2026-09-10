@@ -41,5 +41,6 @@ describe("health routes", () => {
     const res = await GET()
     const body = (await res.json()) as { checks: Record<string, { ok: boolean }> }
     expect(body.checks.database?.ok).toBe(true)
+    expect(body.checks.auth_secret).toBeUndefined()
   })
 })

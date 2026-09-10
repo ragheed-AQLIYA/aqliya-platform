@@ -113,13 +113,15 @@ export function SupplierForm({
         <CardTitle className="text-base">{resolvedTitle}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={handleSubmit} className="space-y-3">
+        <form action={handleSubmit} className="space-y-3" aria-label={resolvedTitle}>
           <div>
             <Label htmlFor="name">اسم المورد</Label>
             <Input
               id="name"
               name="name"
               required
+              aria-required="true"
+              aria-label="اسم المورد"
               className="h-9"
               defaultValue={initialValues?.name || ""}
             />
@@ -130,6 +132,7 @@ export function SupplierForm({
               <Input
                 id="crNumber"
                 name="crNumber"
+                aria-label="رقم السجل التجاري"
                 className="h-9"
                 defaultValue={initialValues?.crNumber || ""}
               />
@@ -140,6 +143,7 @@ export function SupplierForm({
                 id="localityClassification"
                 name="localityClassification"
                 defaultValue={initialValues?.localityClassification || ""}
+                aria-label="تصنيف المحلية"
                 className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
               >
                 <option value="">غير محدد</option>
@@ -157,6 +161,7 @@ export function SupplierForm({
                 id="ownershipType"
                 name="ownershipType"
                 defaultValue={initialValues?.ownershipType || ""}
+                aria-label="نوع الملكية"
                 className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
               >
                 <option value="">غير محدد</option>
@@ -173,6 +178,7 @@ export function SupplierForm({
                 type="number"
                 min="0"
                 max="100"
+                aria-label="نسبة المحتوى بالمائة"
                 className="h-9"
                 defaultValue={initialValues?.localContentPercentage ?? ""}
               />
@@ -186,11 +192,16 @@ export function SupplierForm({
               type="number"
               min="0"
               max="100"
+              aria-label="نسبة السعودة بالمائة"
               className="h-9"
               defaultValue={initialValues?.workforceLocalPct ?? ""}
             />
           </div>
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && (
+            <p className="text-xs text-red-600" role="alert" aria-live="assertive">
+              {error}
+            </p>
+          )}
           <div className="flex gap-2">
             <Button type="submit" size="sm" disabled={pending}>
               {pending ? "جارٍ الحفظ..." : resolvedSubmitLabel}

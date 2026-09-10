@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { buyerJourneysEn } from "@/lib/marketing/buyer-journeys-en";
 import { DemoVideoSection } from "@/components/marketing/demo-video-section";
 import { ConversionBand } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import {
   deploymentOptionsEn,
   evidenceSamplesEn,
@@ -14,10 +15,12 @@ import {
   proofPageCopyEn,
   proofScenariosEn,
 } from "@/lib/marketing/copy-proof-en";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: proofPageCopyEn.metadata.title,
   description: proofPageCopyEn.metadata.description,
+  alternates: buildAlternates("/en/proof"),
 };
 
 export default function EnglishProofCenterPage() {
@@ -71,7 +74,7 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <section id="demo" className="scroll-mt-28 border-t">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-black">{c.sections.demo.title}</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             {c.sections.demo.subtitle}
@@ -89,35 +92,36 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <section id="executive-brief" className="scroll-mt-28 border-t bg-muted/10">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-black">{c.sections.brief.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{c.sections.brief.subtitle}</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {executiveBriefLayersEn.map((layer) => (
-              <div key={layer.name} className="rounded-xl border border-border/60 bg-background p-5">
+            {executiveBriefLayersEn.map((layer, i) => (
+              <Reveal key={layer.name} delay={i * 70} className="rounded-xl border border-border/60 bg-background p-5">
                 <h3 className="font-bold">{layer.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{layer.description}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {governancePrinciplesEn.map((p) => (
-              <div key={p.title} className="rounded-xl border border-primary/15 bg-primary/[0.03] p-5">
+            {governancePrinciplesEn.map((p, i) => (
+              <Reveal key={p.title} delay={i * 70} className="rounded-xl border border-primary/15 bg-primary/[0.03] p-5">
                 <h3 className="text-sm font-bold text-primary">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-8 space-y-3">
-            {deploymentOptionsEn.map((d) => (
-              <div
+            {deploymentOptionsEn.map((d, i) => (
+              <Reveal
                 key={d.name}
+                delay={i * 70}
                 className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-border/50 px-4 py-3 text-sm"
               >
                 <span className="font-semibold">{d.name}</span>
                 <span className="text-muted-foreground">{d.status}</span>
                 <span className="w-full text-xs text-muted-foreground/80">{d.note}</span>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -132,31 +136,31 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <section id="evaluation-framework" className="scroll-mt-28 border-t">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-black">{c.sections.evaluation.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{c.sections.evaluation.subtitle}</p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            {proofDimensionsEn.map((d) => (
-              <div key={d.dimension} className="rounded-xl border border-border/60 p-4">
+            {proofDimensionsEn.map((d, i) => (
+              <Reveal key={d.dimension} delay={i * 70} className="rounded-xl border border-border/60 p-4">
                 <h3 className="text-sm font-bold">{d.dimension}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{d.question}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-8 space-y-3">
-            {proofScenariosEn.map((s) => (
-              <div key={s.title} className="rounded-xl border border-border/60 p-4">
+            {proofScenariosEn.map((s, i) => (
+              <Reveal key={s.title} delay={i * 70} className="rounded-xl border border-border/60 p-4">
                 <h3 className="font-semibold">{s.title}</h3>
                 <p className="mt-1 text-sm text-primary">{s.verifiable}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {pilotDecisionOutcomesEn.map((o) => (
-              <div key={o.outcome} className="rounded-xl border border-border/60 p-4 text-sm">
+            {pilotDecisionOutcomesEn.map((o, i) => (
+              <Reveal key={o.outcome} delay={i * 70} className="rounded-xl border border-border/60 p-4 text-sm">
                 <p className="font-bold">{o.outcome}</p>
                 <p className="mt-1 text-muted-foreground">{o.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <Link href="/en/start#engagement" className="mt-6 inline-block text-sm font-medium text-primary hover:underline">
@@ -167,12 +171,12 @@ export default function EnglishProofCenterPage() {
 
       {/* ─── Pilot Framework ─────────────────────────── */}
       <section id="pilot" className="scroll-mt-28 border-t">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-black">{c.sections.pilot.title}</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{c.sections.pilot.subtitle}</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {c.pilotPhases.map((p, i) => (
-              <div key={p.phase} className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">
+              <Reveal key={p.phase} delay={i * 70} className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-black text-primary">
                     {String(i + 1).padStart(2, "0")}
@@ -181,7 +185,7 @@ export default function EnglishProofCenterPage() {
                 </div>
                 <h3 className="text-base font-black text-foreground">{p.phase}</h3>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">{p.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -196,12 +200,12 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <section id="evidence-samples" className="scroll-mt-28 border-t bg-muted/10">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-black">{c.sections.evidence.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{c.sections.evidence.subtitle}</p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {evidenceSamplesEn.map((sample) => (
-              <div key={sample.id} className="rounded-xl border border-border/60 bg-background p-5">
+            {evidenceSamplesEn.map((sample, i) => (
+              <Reveal key={sample.id} delay={i * 70} className="rounded-xl border border-border/60 bg-background p-5">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
                   {sample.category}
                 </p>
@@ -210,14 +214,14 @@ export default function EnglishProofCenterPage() {
                 <span className="mt-3 inline-block text-[10px] text-amber-600">
                   {c.sections.evidence.sampleBadge}
                 </span>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       <section id="outcomes" className="scroll-mt-28 border-t">
-        <div className="mx-auto max-w-3xl px-6 py-14">
+        <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
           <h2 className="text-center text-2xl font-black">{c.sections.outcomes.title}</h2>
           <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-8 text-center">
             <p className="text-sm font-semibold text-amber-700">{c.sections.outcomes.statusLabel}</p>
@@ -235,7 +239,7 @@ export default function EnglishProofCenterPage() {
       </section>
 
       <section id="procurement" className="scroll-mt-28 border-t bg-muted/10">
-        <div className="mx-auto max-w-7xl px-6 py-14 text-center">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20 text-center">
           <h2 className="text-xl font-black">{c.sections.procurement.title}</h2>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             {c.externalLinks.map((r) => (

@@ -1,10 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "القطاعات | AQLIYA",
   description:
     "مبنية لمكاتب المراجعة، الجهات الحكومية، المؤسسات الكبرى، وشركات الخدمات المهنية. كل قطاع له مسار مخصص على منصة تشغيل مؤسسية واحدة.",
+  alternates: buildAlternates("/industries"),
 };
 
 const sectors = [
@@ -134,12 +137,12 @@ export default function IndustriesPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <div className="space-y-16">
-          {sectors.map((sector) => (
-            <article
-              key={sector.id}
-              id={sector.id}
-              className="scroll-mt-24 rounded-2xl border border-border/60 bg-background p-6 sm:p-10"
-            >
+          {sectors.map((sector, i) => (
+            <Reveal key={sector.id} delay={i * 70}>
+              <article
+                id={sector.id}
+                className="scroll-mt-24 rounded-2xl border border-border/60 bg-background p-6 sm:p-10"
+              >
               <h2 className="text-2xl font-black text-foreground sm:text-3xl">
                 {sector.title}
               </h2>
@@ -223,7 +226,8 @@ export default function IndustriesPage() {
                   احجز جلسة تشخيص
                 </Link>
               </div>
-            </article>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>

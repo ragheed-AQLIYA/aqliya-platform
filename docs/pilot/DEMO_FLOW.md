@@ -1,15 +1,15 @@
 # سيناريو العرض التجريبي / Demo Flow Script
 
-> Duration: 20 minutes | Audience: Institutional decision-makers
-> المدة: 20 دقيقة | الجمهور: صانعو القرارات المؤسسية
+> Duration: 25 minutes | Audience: Institutional decision-makers
+> المدة: 25 دقيقة | الجمهور: صانعو القرارات المؤسسية
 
 ---
 
 ## المقدمة / Overview
 
-هذا السيناريو يعرض منصة AQLIYA في 6 فصول. كل فصل يركز على جانب مختلف من المنصة.
+هذا السيناريو يعرض منصة AQLIYA في 7 فصول. كل فصل يركز على جانب مختلف من المنصة.
 
-This script presents AQLIYA in 6 acts. Each act focuses on a different platform aspect.
+This script presents AQLIYA in 7 acts. Each act focuses on a different platform aspect.
 
 ---
 
@@ -110,7 +110,62 @@ This script presents AQLIYA in 6 acts. Each act focuses on a different platform 
 
 ---
 
-## الفصل 4: حوكمة الذكاء الاصطناعي / Act 4: AI Governance
+## الفصل 4: LocalContentOS —引擎 / Act 4: LocalContentOS Deep Dive
+
+**المدة / Duration:** 5 دقائق / 5 minutes
+
+### العرض / Show
+
+1. **فتح دفتر العمل / Open Workbook**
+   - انتقل إلى `/local-content/workbook/[workbookId]`
+   - Navigate to the workbook detail page
+   - "دفتر العمل يحتوي جميع بيانات المحتوى المحلي للمشروع."
+   - "The workbook contains all local content data for the project."
+
+2. **عرض بيانات الإنفاق / Show Spend Data**
+   - أظهر جدول الإنفاق مع تكاليف G&S، AD، LC، CB
+   - Show the spend table with G&S, AD, LC, CB costs
+   - "كل تكلفة موثقة ومربوطة بمصدرها."
+   - "Every cost is documented and linked to its source."
+
+3. **احتساب نسبة المحتوى المحلي / Compute LCGPA**
+   - انقر على زر «احتساب»
+   - Click the «احتساب» (Compute) button
+   - "النظام يحسب النسبة تلقائياً بناءً على البيانات الفعلية."
+   - "The system computes the percentage automatically based on actual data."
+
+4. **عرض النتيجة / Show Result**
+   - أظهر بطاقة LCGPA: 68.73% مع شارة «مرتبط»
+   - Show the LCGPA card: 68.73% with «مرتبط» (Bound) badge
+   - "النسبة محسوبة من بيانات حقيقية، ليست تقديرات."
+   - "The percentage is computed from real data, not estimates."
+
+5. **عرض التفاصيل / Show Details**
+   - افتح قسم التفاصيل لعرض:
+     - المكونات الأربعة (G&S, AD, LC, CB)
+     -المصدر التنظيمي (LCGPA_MANDATORY_LIST_SOC)
+     - إصدار مجموعة البيانات
+     - بصمة الملف (SHA-256)
+   - Open the details section to show:
+     - The four components (G&S, AD, LC, CB)
+     - Regulatory source (LCGPA_MANDATORY_LIST_SOC)
+     - Dataset version
+     - Artifact hash (SHA-256)
+
+6. **الادعاءات / Audit Trail**
+   - أظهر أن كل احتساب مسجل في سجل التدقيق
+   - Show that every computation is logged in the audit trail
+   - "كل احتساب مسجل مع المصدر والبصمة. لا شيء مخفي."
+   - "Every computation is logged with source and hash. Nothing is hidden."
+
+### النقطة الرئيسية / Key Point
+
+> "LocalContentOS تحسب نسبة المحتوى المحلي من البيانات الفعلية. نتائج حقيقية، ليست تقديرات."
+> "LocalContentOS computes local content percentage from actual data. Real results, not estimates."
+
+---
+
+## الفصل 5: حوكمة الذكاء الاصطناعي / Act 5: AI Governance
 
 **المدة / Duration:** 3 دقائق / 3 minutes
 
@@ -146,7 +201,7 @@ This script presents AQLIYA in 6 acts. Each act focuses on a different platform 
 
 ---
 
-## الفصل 5: الاستعداد المؤسسي / Act 5: Enterprise Readiness
+## الفصل 6: الاستعداد المؤسسي / Act 6: Enterprise Readiness
 
 **المدة / Duration:** 2 دقيقة / 2 minutes
 
@@ -183,7 +238,7 @@ This script presents AQLIYA in 6 acts. Each act focuses on a different platform 
 
 ---
 
-## الفصل 6: الأسئلة والأجوبة / Act 6: Q&A
+## الفصل 7: الأسئلة والأجوبة / Act 7: Q&A
 
 **المدة / Duration:** 2 دقيقة / 2 minutes
 

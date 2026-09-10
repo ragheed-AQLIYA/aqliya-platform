@@ -1,7 +1,11 @@
 import { getEnterpriseHealthSnapshot } from "@/lib/platform/enterprise-health";
 import { EnterpriseHealthOperatorActions } from "@/components/monitoring/enterprise-health-operator-actions";
+import { getCurrentUser } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export async function EnterpriseHealthPanel() {
+  const user = await getCurrentUser();
+  if (!isPlatformAdmin(user)) return null;
   const snapshot = await getEnterpriseHealthSnapshot();
 
   return (

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isOutboxEnabled } from "@/lib/core/events/outbox-service";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -10,9 +11,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
 
     if (!isOutboxEnabled()) {
       return NextResponse.json({

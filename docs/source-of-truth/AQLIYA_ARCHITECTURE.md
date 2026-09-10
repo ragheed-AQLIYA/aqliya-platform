@@ -28,26 +28,26 @@ AQLIYA Platform Company
 ├── AQLIYA Studio (custom systems layer)
 │
 ├── Specialized Operating Systems (capabilities — built on Core)
-│   ├── AuditOS                 (audit workflow — L6 production-hardened)
-│   ├── DecisionOS              (decision governance — L6 production-hardened)
-│   ├── LocalContentOS          (local content & supply chain — L6 production-hardened)
-│   ├── SalesOS                 (business development — L6 production-hardened)
+│   ├── AuditOS                 (audit workflow — L5 pilot-ready conditional)
+│   ├── DecisionOS              (decision governance — **L6 production-hardened**)
+│   ├── LocalContentOS          (local content & supply chain — L5 pilot-ready conditional)
+│   ├── SalesOS                 (business development — L5 pilot-ready conditional)
 │   └── SimulationOS            (capability label — not standalone)
-│   ├── RiskOS                  (audit-adjacent risk workspace — L6 production-hardened)
-│   ├── LocalContactOS          (governed relationship intelligence — L6 production-hardened)
-│   ├── ContentStudio           (operational content workspace — L6 production-hardened)
-│   ├── Knowledge Foundation    (governed versioning — L6 production-hardened)
-│   └── Institutional Memory    (cross-product knowledge graph — L6 production-hardened)
+│   ├── RiskOS                  (audit-adjacent risk workspace — L5 pilot-ready conditional)
+│   ├── LocalContactOS          (governed relationship intelligence — L5 pilot-ready conditional)
+│   ├── ContentStudio           (operational content workspace — L5 pilot-ready conditional)
+│   ├── Knowledge Foundation    (governed versioning — L5 pilot-ready conditional)
+│   └── Institutional Memory    (cross-product knowledge graph — L5 pilot-ready conditional)
 │
 ├── Custom / Client-Specific Workspaces
-│   └── WorkflowOS              (/workflowos) — governed custom workflow (L6 production-hardened)
+│   └── WorkflowOS              (/workflowos) — governed custom workflow (L5 pilot-ready conditional)
 │
 ├── Workspaces (execution environments)
 │   ├── AuditOS Workspace       (/audit)
 │   ├── DecisionOS Workspace    (/decisions, /intelligence/sectors)
 │   ├── Office AI Workspace     (/assistant)
-│   ├── WorkflowOS Workspace    (/workflowos) — L6 production-hardened
-│   ├── Institutional Memory   (/institutional-memory) — L6 knowledge graph
+│   ├── WorkflowOS Workspace    (/workflowos) — L5 pilot-ready conditional
+│   ├── Institutional Memory   (/institutional-memory) — L5 knowledge graph
 │   ├── Sunbul Workspace        (/sunbul) — legacy redirect → /workflowos
 ├── Governance (cross-cutting)
 │   ├── RBAC                     (multi-level permissions)
@@ -132,14 +132,14 @@ Deployment models: Cloud (active), Private/On-Prem (strategic), Air-Gapped (stra
 | `/assistant`                             | Office AI Assistant workspace               | Shared Application     |
 | `/workflowos`                            | WorkflowOS governed workspace               | Custom Workspace       |
 | `/sunbul`                                | Legacy redirect → /workflowos               | Custom Workspace Alias |
-| `/local-content`                         | LocalContentOS governed workspace (27 routes, L6 production-hardened)           | Workspace              |
-| `/sales`                                 | SalesOS governed workspace (32 routes, L6 production-hardened)                 | Workspace              |
-| `/contacts`                              | LocalContactOS governed workspace (L6 production-hardened)           | Workspace              |
-| `/risk`                                  | RiskOS governed workspace (L6 production-hardened)                   | Workspace              |
+| `/local-content`                         | LocalContentOS governed workspace (27 routes, L5 pilot-ready conditional)           | Workspace              |
+| `/sales`                                 | SalesOS governed workspace (32 routes, L5 pilot-ready conditional)                 | Workspace              |
+| `/contacts`                              | LocalContactOS governed workspace (L5 pilot-ready conditional)           | Workspace              |
+| `/risk`                                  | RiskOS governed workspace (L5 pilot-ready conditional)                   | Workspace              |
 | `/organizations`                         | Protected organizations surface (L5 pilot-ready)                     | Workspace/Prototype    |
-| `/institutional-memory`              | Institutional Memory governed workspace (L6)     | Workspace              |
-| `/institutional-memory/collections`  | Institutional Memory collections (L6)            | Workspace              |
-| `/institutional-memory/graph`        | Institutional Memory knowledge graph view (L6)   | Workspace              |
+| `/institutional-memory`              | Institutional Memory governed workspace (L5)     | Workspace              |
+| `/institutional-memory/collections`  | Institutional Memory collections (L5)            | Workspace              |
+| `/institutional-memory/graph`        | Institutional Memory knowledge graph view (L5)   | Workspace              |
 | `/settings`                              | Protected generic settings preview          | Workspace/Prototype    |
 | `/login`                                 | Authentication                              | Internal               |
 | `/access-denied`                         | Access control                              | Internal               |
@@ -260,10 +260,10 @@ Response headers: `Cache-Control: private, no-store`, `X-Content-Type-Options: n
 
 - AQLIYA is positioned as an **institutional operating platform**, not a product company. The homepage presents the platform first; operating systems are surfaced inside `/platform#capabilities`.
 - `Office AI Assistant` is implemented in code today as a governed shared application.
-- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L6 Production-hardened). Template workflows, SLA monitoring, gated export, full error/loading/not-found boundaries, 31 action tests, seed data, monitoring dashboard metric.
+- `WorkflowOS` is the canonical governed workflow workspace at `/workflowos/*` (L5 Pilot-ready conditional). Template workflows, SLA monitoring, gated export, full error/loading/not-found boundaries, 31 action tests, seed data, monitoring dashboard metric.
 - `Sunbul` is a legacy redirect alias: `/sunbul/*` routes → `permanentRedirect(302)` to `/workflowos/*`.
 - `/organizations` is a protected surface — not yet v0.1 workspace complete.
-- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L6 Production-hardened** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 321+ tests PASS. **Action split (2026-07-13)**: `localcontent-actions.ts` (1,471 lines) decomposed into 8 focused modules under `src/lib/local-content/` (supplier, spend, classification, evidence, findings, workbook, review, project).
+- `LocalContentOS` is implemented as a governed workspace at `/local-content/*` with 27 routes, bilingual UI, evidence upload, binary PDF/XLSX exports, audit trail, AI recommendation engine with knowledge retrieval (V3.5), simulation explainability, recommendation feedback loop, pilot readiness dashboard, quality dashboard, review center, and ERP integration (SAP/Oracle/CSV). **L5 Pilot-ready (conditional)** — Full error/loading/not-found boundaries on all routes. All 9 L6 gaps closed. AI quality re-run achieved 100% readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. 321+ tests PASS. **Action split (2026-07-13)**: `localcontent-actions.ts` (1,471 lines) decomposed into 8 focused modules under `src/lib/local-content/` (supplier, spend, classification, evidence, findings, workbook, review, project).
 - `DecisionOS` is a production-hardened governed workspace at `/decisions/*` (L6). Full lifecycle (draft → in_review → approved/rejected), evidence upload, bilingual PDF export, signal automation, sector intelligence wiring, cross-decision pattern analysis, decision portfolio view, outcome correlation analytics. Full error/loading/not-found boundaries on all 22 route segments. 275 tests (273 pass), seed data.
 - `SalesOS` is a production-hardened governed commercial intelligence workspace at `/sales/*` (L6). 32 routes with full error/loading/not-found boundaries. Intelligence tab with 12 sub-engines, forecasting engine, CRM sync (HubSpot/Salesforce), conversion funnel analytics, pipeline depth analytics, bilingual UX. 878+ tests across 86 test files PASS. God Object split: `sales-actions.ts` (977 lines) split into 4 focused modules (`sales-actions-helpers`, `sales-interaction-actions`, `sales-agent-actions`, `sales-outreach-actions`). Product plugin registered (`SalesOSPlugin`) with event bus subscriptions for cross-product awareness.
 - `AuditOS` is the most mature operating system with 12-station audit lifecycle, ISQM1 quality management, 8 L6 engines, and interactive demo at `/auditos`. **God Object split (2026-07-13)**: `audit-actions.ts` (3,657 lines) decomposed into 12 focused modules under `src/lib/audit/db/` (e.g., engagement-db, finding-db, evidence-db). Each module owns a single domain concern.
@@ -311,3 +311,5 @@ SalesOS integrates with Institutional Memory via `src/lib/sales/institutional-me
  - **Platform caching (2026-07-13)**: `src/lib/platform/cache-strategy.ts` implements `getCachedOrFetch` (5-minute TTL, per-user/org scoped keys) for all 5 primary dashboard server actions. Mutations call `invalidateDashboardCaches()` to bust stale entries. Pattern: write-through invalidation with key-prefix matching.
  - **Pagination standard (2026-07-13)**: All server actions across the platform return paginated results in `{ items, totalCount, hasMore }` format. No unbounded array returns.
  - **Platform Kernel 2.0 (Sprint 7 complete)**: All 691 consumer files migrated from direct module imports to `@/lib/kernel` imports. Kernel provides 9 bridges (auth, feature-flags, cache, authorization, audit, knowledge, governance, workflowos, prisma), 20+ TypeScript contracts, plugin system (`ProductPlugin`/`ProductRegistry`), domain event bus (with dead-letter queue, retry, history), and CQRS projection framework. The kernel is the sole import surface for platform services.
+ - **LocalContactOS RBAC enforcement (2026-08-23)**: `enforce()` from `@/lib/kernel` added to all 9 CRUD actions in `contact-actions.ts` (listContacts, createContact, getContact, updateContact, deleteContact, createContactRelation, logContactInteraction, uploadContactEvidence, createContactReview). Previously only export and review actions had server-side RBAC enforcement. All LocalContactOS mutations now go through the kernel authorization layer.
+ - **RTL hardening — DecisionOS + WorkflowOS (2026-08-23)**: 64+ physical CSS classes converted to logical (RTL-safe) equivalents across 30+ files: `pl-*`→`ps-*`, `ml-*`→`ms-*`, `mr-*`→`me-*`, `text-right`→`text-start`, `right-0`→`end-0`, `border-l-*`→`border-s-*`. English-only content translated to Arabic: DecisionOS report page (executive summary, table headers, score labels, scenario mapping), dashboard mock data, 18 strings in `decision-progress.tsx`, error/loading/not-found pages across report/governance/recommendation. Dropdown positioning fixed in `workflow-client-selector.tsx`.

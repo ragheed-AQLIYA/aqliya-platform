@@ -28,7 +28,7 @@ export default async function ExecutiveOverviewPage({ params }: PageProps) {
             <CardDescription>
               {result.error}
               {result.missing && (
-                <ul className="mt-2 list-disc pl-5">
+                <ul className="mt-2 list-disc ps-5">
                   {result.missing.map((m) => (
                     <li key={m}>{m.replace(/_/g, " ")}</li>
                   ))}

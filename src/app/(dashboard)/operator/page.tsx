@@ -1,5 +1,6 @@
 import "server-only";
 import { getCurrentUser } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 import { redirect } from "next/navigation";
 
 import { getSystemHealthAction } from "@/actions/operator-actions";
@@ -16,7 +17,10 @@ export const dynamic = "force-dynamic";
 
 export default async function OperatorDashboardPage() {
   try {
-    await getCurrentUser();
+    const user = await getCurrentUser();
+    if (!isPlatformAdmin(user)) {
+      redirect("/access-denied");
+    }
   } catch {
     redirect("/login");
   }

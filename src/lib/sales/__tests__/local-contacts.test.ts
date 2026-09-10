@@ -2,6 +2,10 @@ jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }));
 
+jest.mock("@/lib/kernel", () => ({
+  enforce: jest.fn().mockResolvedValue(undefined),
+}));
+
 jest.mock("@/lib/prisma", () => ({
   prisma: {
     localContact: {

@@ -372,7 +372,7 @@ export default function OutcomePage({ params }: PageProps) {
               {variance >= 0 ? "+" : ""}
               {variance.toFixed(2)}
               {formData.expectedValue && (
-                <span className="ml-2">
+                <span className="ms-2">
                   (
                   {(
                     (variance / parseFloat(formData.expectedValue)) *
@@ -437,7 +437,7 @@ export default function OutcomePage({ params }: PageProps) {
           <div className="flex gap-2 pt-2">
             {canEdit && (
               <Button onClick={handleSave} disabled={saving}>
-                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {saving && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
                 حفظ النتيجة
               </Button>
             )}

@@ -4,8 +4,8 @@
 **Version:** 1.1  
 **Status:** Official — agent context for v0.1 operational baseline  
 **Owner:** Governance Team  
-**Last Reviewed:** 2026-06-26  
-**Note:** LocalContentOS status corrected from "not implemented" to "pilot-ready with conditions (L5)". For current status, see `AQLIYA_MASTER_REFERENCE.md`.
+**Last Reviewed:** 2026-09-06 — P0 Governance Freeze alignment  
+**Note:** Updated to reflect current L5/L6 status per PRODUCT_STATUS_MATRIX.md.
 
 ---
 
@@ -29,12 +29,12 @@
 2. AuditOS is the first proof product, not the whole platform.
 3. DecisionOS is a real active adjacent system.
 4. Office AI Assistant is a real governed shared application, not a standalone product.
-5. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L4 usable v0.1).
+5. WorkflowOS is the canonical governed workspace at `/workflowos/*` (L5 Pilot-ready).
 6. Sunbul is a legacy redirect alias to WorkflowOS only (`/sunbul/*` → `/workflowos/*`); not a separate product or workspace.
 
-- LocalContentOS is implemented as L5 pilot-ready with conditions / usable v0.1 after mutation feedback loop verification (2026-05-23). SalesOS is not implemented as an operational product.
+- LocalContentOS is L5 Pilot-ready (conditional) per P0 governance freeze. SalesOS is L5 Pilot-ready (conditional) with 878+ tests.
 
-8. Private/On-Prem, Air-Gapped, Local AI, Studio, and Model Governance are not implemented. Institutional Memory is implemented as L5 pilot-ready.
+8. Private/On-Prem, Air-Gapped, Local AI, Studio, and Model Governance are not implemented. Institutional Memory is L5 Pilot-ready (conditional). SSO/SAML is L5 Pilot-ready (conditional) with 65 tests. SCIM v2 is L5 Pilot-ready (conditional).
 
 ---
 
@@ -59,14 +59,21 @@ Use these exact labels when classifying repository reality:
 
 | Area                | Status                                         |
 | ------------------- | ---------------------------------------------- |
-| AuditOS             | Included as pilot-ready product                |
-| DecisionOS          | Included as active adjacent system             |
-| Office AI Assistant | Included as governed shared application        |
-| WorkflowOS          | Included as governed workspace (L4)            |
+| AuditOS             | Included as pilot-ready product — L5 (P0 freeze) |
+| DecisionOS          | Included as active adjacent system — **L6**    |
+| Office AI Assistant | Included as governed shared application — L5 (P0 freeze) |
+| WorkflowOS          | Included as governed workspace — L5 (P0 freeze) |
 | Sunbul              | Redirect alias only (not separate surface)     |
 | auditos             | Included as demo only                          |
-| SalesOS             | Prototype / internal preview                   |
-| LocalContentOS      | Pilot-ready with conditions / usable v0.1 (L5) |
+| SalesOS             | Included as pilot-ready product — L5 (P0 freeze) |
+| LocalContentOS      | Included as pilot-ready product — L5 (P0 freeze) |
+| RiskOS              | Included as pilot-ready product — L5 (P0 freeze) |
+| LocalContactOS      | Included as pilot-ready product — L5 (P0 freeze) |
+| ContentStudio       | Included as pilot-ready product — L5 (P0 freeze) |
+| Knowledge Foundation| Included in v0.1 — L5 (P0 freeze)              |
+| Institutional Memory| Included as pilot-ready product — L5 (P0 freeze) |
+| SSO (SAML/OIDC)     | Included in v0.1 — L5 (P0 freeze)              |
+| SCIM v2             | Included in v0.1 — L5 (P0 freeze)              |
 
 ---
 

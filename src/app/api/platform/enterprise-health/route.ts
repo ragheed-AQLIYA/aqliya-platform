@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getEnterpriseHealthSnapshot } from "@/lib/platform/enterprise-health";
 import { getHealthCheck, getSystemMetrics } from "@/lib/platform/monitoring/system-monitor";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
-/** ADMIN — Tier 3 enterprise readiness snapshot (ops prep). */
+/** Platform admin — Tier 3 enterprise readiness snapshot (ops prep). */
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     const snapshot = await getEnterpriseHealthSnapshot();
     const [health, sysMetrics] = await Promise.all([
       getHealthCheck(["database", "redis", "storage", "ai", "queue", "server"]),

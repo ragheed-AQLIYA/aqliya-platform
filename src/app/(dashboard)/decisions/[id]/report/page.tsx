@@ -116,11 +116,11 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           <h2 className="text-xl font-bold">{t("title")}</h2>
           <div className="flex gap-2">
             <Button onClick={handleExportPDF} variant="outline" disabled={exporting}>
-              <FileDown className="w-4 h-4 mr-2" />
+              <FileDown className="w-4 h-4 me-2" />
               {exporting ? t("loading") : t("exportPDF")}
             </Button>
             <Button onClick={handlePrint} variant="outline">
-              <Printer className="w-4 h-4 mr-2" />
+              <Printer className="w-4 h-4 me-2" />
               {t("printReport")}
             </Button>
           </div>
@@ -144,8 +144,8 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
               <p className="text-sm">
                 {recommendation ? (
                   <>
-                    Based on rule-based simulation across three scenarios, this tender shows an <strong>Expected Case overall score of {scenarios.find((s: any) => s.type === 'EXPECTED_CASE')?.simulation?.overallDecisionScore || 'N/A'}/100</strong>.
-                    The decision is recommended as <Badge>{recommendation.type}</Badge> {recommendation.conditions ? 'pending conditions fulfillment.' : '.'}
+                    بناءً على المحاكاة القائمة على القواعد عبر ثلاث سيناريوهات، يُظهر هذا العرض 점 <strong>الحالة المتوقعة الإجمالية {scenarios.find((s: any) => s.type === 'EXPECTED_CASE')?.simulation?.overallDecisionScore || 'N/A'}/100</strong>.
+                    يُوصى بالقرار كـ <Badge>{recommendation.type}</Badge> {recommendation.conditions ? 'بانتظار تحقق الشروط.' : '.'}
                   </>
                 ) : (
                   t("noRecommendation")
@@ -161,7 +161,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 <div><span className="text-muted-foreground">{t("clientLabel")}</span> {tender.clientName}</div>
                 <div><span className="text-muted-foreground">{t("contractValue")}</span> SAR {tender.estimatedContractValue?.toLocaleString()}</div>
                 <div><span className="text-muted-foreground">{t("estimatedCost")}</span> SAR {tender.estimatedCost?.toLocaleString()}</div>
-                <div><span className="text-muted-foreground">{t("duration")}</span> {tender.durationMonths} months</div>
+                <div><span className="text-muted-foreground">{t("duration")}</span> {tender.durationMonths} شهر</div>
                 <div><span className="text-muted-foreground">{t("margin")}</span> {tender.marginEstimate}%</div>
                 <div><span className="text-muted-foreground">{t("riskLevel")}</span> <Badge variant="outline">{tender.riskLevel}</Badge></div>
                 <div><span className="text-muted-foreground">{t("requiredCapacity")}</span> {tender.requiredCapacity}</div>
@@ -174,7 +174,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           <section>
             <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("objectives")}</h3>
             {decision.objectives?.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1">
+              <ul className="list-disc ps-5 text-sm space-y-1">
                 {decision.objectives.map((obj: any) => (
                   <li key={obj.id}>{obj.description}</li>
                 ))}
@@ -187,7 +187,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           <section>
             <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("constraints")}</h3>
             {decision.constraints?.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1">
+              <ul className="list-disc ps-5 text-sm space-y-1">
                 {decision.constraints.map((con: any) => (
                   <li key={con.id}>{con.description}</li>
                 ))}
@@ -200,7 +200,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           <section>
             <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("assumptions")}</h3>
             {decision.assumptions?.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1">
+              <ul className="list-disc ps-5 text-sm space-y-1">
                 {decision.assumptions.map((ass: any) => (
                   <li key={ass.id}>{ass.description}</li>
                 ))}
@@ -213,7 +213,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
           <section>
             <h3 className="text-lg font-bold mb-4 border-b pb-2">{t("alternatives")}</h3>
             {decision.alternatives?.length > 0 ? (
-              <ul className="list-disc pl-5 text-sm space-y-1">
+              <ul className="list-disc ps-5 text-sm space-y-1">
                 {decision.alternatives.map((alt: any) => (
                   <li key={alt.id}>{alt.description}</li>
                 ))}
@@ -231,8 +231,8 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                   <div><span className="text-muted-foreground">{t("riskLevel")}</span> <Badge variant="outline">{tender?.riskLevel || t("notAvailable")}</Badge></div>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Identified Risks:</span>
-                  <ul className="list-disc pl-5 text-sm mt-1">
+                  <span className="text-muted-foreground">المخاطر المحددة:</span>
+                  <ul className="list-disc ps-5 text-sm mt-1">
                     {decision.risks.map((risk: any) => (
                       <li key={risk.id}>{risk.description} - <span className="font-medium">{risk.level}</span></li>
                     ))}
@@ -250,19 +250,19 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Scenario</TableHead>
-                    <TableHead>Feasibility</TableHead>
-                    <TableHead>Financial</TableHead>
-                    <TableHead>Capacity</TableHead>
-                    <TableHead>Risk</TableHead>
-                    <TableHead>Strategic</TableHead>
-                    <TableHead>Overall</TableHead>
+                    <TableHead>السيناريو</TableHead>
+                    <TableHead>الجدوى</TableHead>
+                    <TableHead>المالي</TableHead>
+                    <TableHead>القدرة</TableHead>
+                    <TableHead>المخاطر</TableHead>
+                    <TableHead>الاستراتيجي</TableHead>
+                    <TableHead>الإجمالي</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {scenarios.map((s: any) => (
                     <TableRow key={s.type}>
-                      <TableCell className="font-medium">{s.type?.replace('_', ' ') || 'Unknown'}</TableCell>
+                      <TableCell className="font-medium">{s.type === 'EXPECTED_CASE' ? 'الحالة المتوقعة' : s.type === 'WORST_CASE' ? 'أسوأ حالة' : s.type === 'BEST_CASE' ? 'أفضل حالة' : s.type?.replace('_', ' ') || 'غير معروف'}</TableCell>
                       <TableCell>{s.simulation?.feasibilityScore ?? 'N/A'}</TableCell>
                       <TableCell>{s.simulation?.financialScore ?? 'N/A'}</TableCell>
                       <TableCell>{s.simulation?.capacityScore ?? 'N/A'}</TableCell>
@@ -286,12 +286,12 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                   const expectedScenario = scenarios.find((s: any) => s.type === 'EXPECTED_CASE')
                   const sim = expectedScenario?.simulation
                   return [
-                    { label: "Feasibility", score: sim?.feasibilityScore ?? 0 },
-                    { label: "Financial", score: sim?.financialScore ?? 0 },
-                    { label: "Capacity", score: sim?.capacityScore ?? 0 },
-                    { label: "Risk", score: sim?.riskScore ?? 0 },
-                    { label: "Strategic Fit", score: sim?.strategicFitScore ?? 0 },
-                    { label: "Overall", score: sim?.overallDecisionScore ?? 0, highlight: true },
+                    { label: "الجدوى", score: sim?.feasibilityScore ?? 0 },
+                    { label: "المالي", score: sim?.financialScore ?? 0 },
+                    { label: "القدرة", score: sim?.capacityScore ?? 0 },
+                    { label: "المخاطر", score: sim?.riskScore ?? 0 },
+                    { label: "الملاءمة الاستراتيجية", score: sim?.strategicFitScore ?? 0 },
+                    { label: "الإجمالي", score: sim?.overallDecisionScore ?? 0, highlight: true },
                   ].map((item) => (
                     <Card key={item.label} className={`p-4 ${item.highlight ? "border-primary" : ""}`}>
                       <div className="text-sm text-muted-foreground">{item.label}</div>
@@ -301,7 +301,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 })()}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No simulation results available.</p>
+              <p className="text-sm text-muted-foreground">لا توجد نتائج محاكاة متاحة.</p>
             )}
           </section>
 
@@ -316,7 +316,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
                 {recommendation.confidenceScore && (
                   <div>
                     <span className="text-sm text-muted-foreground">{t("confidenceScore")}</span>
-                    <span className="ml-2 font-medium">{recommendation.confidenceScore}%</span>
+                    <span className="ms-2 font-medium">{recommendation.confidenceScore}%</span>
                   </div>
                 )}
                 {recommendation.reasoning && (
@@ -346,7 +346,7 @@ export default function ReportPage({ params }: { params: Promise<{ id: string }>
             {auditLogs.length > 0 ? (
                 <div className="space-y-2">
                   {auditLogs.map((log: any) => (
-                    <div key={log.id} className="flex items-center gap-4 text-sm border-l-2 pl-4 pb-2">
+                    <div key={log.id} className="flex items-center gap-4 text-sm border-s-2 ps-4 pb-2">
                       <span className="text-muted-foreground w-36">{new Date(log.createdAt).toLocaleString()}</span>
                       <Badge variant="outline">{log.action}</Badge>
                       <span className="font-medium w-40">{log.user?.name || t("unassigned")}</span>

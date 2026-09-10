@@ -14,21 +14,21 @@ export function ExportStatusBadge({ status }: ExportStatusBadgeProps) {
     case "requested":
       return (
         <Badge className="bg-yellow-100 text-yellow-800">
-          <Clock className="ml-1 h-3 w-3" />
+          <Clock className="ms-1 h-3 w-3" />
           قيد المراجعة
         </Badge>
       );
     case "approved":
       return (
         <Badge className="bg-green-100 text-green-800">
-          <CheckCircle2 className="ml-1 h-3 w-3" />
+          <CheckCircle2 className="ms-1 h-3 w-3" />
           معتمد
         </Badge>
       );
     case "rejected":
       return (
         <Badge className="bg-red-100 text-red-800">
-          <XCircle className="ml-1 h-3 w-3" />
+          <XCircle className="ms-1 h-3 w-3" />
           مرفوض
         </Badge>
       );

@@ -18,7 +18,7 @@ export function RecommendationSummary({
         <div className="space-y-2">
           <div>
             <span className="text-muted-foreground">الإجراء:</span>
-            <span className="ml-2 font-medium">
+            <span className="ms-2 font-medium">
               {recommendationSummary.action}
             </span>
           </div>

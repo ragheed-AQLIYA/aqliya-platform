@@ -62,6 +62,12 @@ export async function GET(request: Request) {
     const offset = parseInt(url.searchParams.get("offset") ?? "0", 10);
     const limit = parseInt(url.searchParams.get("limit") ?? "50", 10);
 
+    const user = session.user as Record<string, unknown>;
+    const organizationId = user.organizationId as string | undefined;
+    if (!organizationId) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     const result = await listCandidates({
       status,
       canonicalCode,
@@ -70,6 +76,7 @@ export async function GET(request: Request) {
       sortDir,
       offset,
       limit,
+      organizationId,
     });
 
     return NextResponse.json(result);

@@ -46,11 +46,16 @@ export async function POST(request: Request) {
     }
     const parsed = aggregateSchema.safeParse(raw);
     const data = parsed.success ? parsed.data : {};
+    const user = session.user as Record<string, unknown>;
+    const organizationId = user.organizationId as string | undefined;
+    if (!organizationId) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
     const patterns = await aggregatePatterns({
       minSupportCount: data.minSupportCount ?? 2,
       minOrganizationCount: data.minOrganizationCount ?? 1,
       minConfidence: data.minConfidence ?? 0.6,
-      organizationId: data.organizationId ?? undefined,
+      organizationId,
     });
     return NextResponse.json({ patterns, count: patterns.length });
   } catch (error) {

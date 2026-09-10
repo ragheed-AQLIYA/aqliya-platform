@@ -89,13 +89,15 @@ export function ProjectCreateForm({ onSuccess }: { onSuccess?: () => void }) {
             </Button>
           </div>
         ) : (
-          <form action={handleSubmit} className="space-y-3">
+          <form action={handleSubmit} className="space-y-3" aria-label="إنشاء مشروع تقييم محتوى محلي">
             <div>
               <Label htmlFor="name">اسم المشروع</Label>
               <Input
                 id="name"
                 name="name"
                 required
+                aria-required="true"
+                aria-label="اسم المشروع"
                 className="h-9"
                 placeholder="مثال: تقييم المحتوى المحلي FY2026 — شركة التقنية"
               />
@@ -106,6 +108,8 @@ export function ProjectCreateForm({ onSuccess }: { onSuccess?: () => void }) {
                 id="reportingPeriod"
                 name="reportingPeriod"
                 required
+                aria-required="true"
+                aria-label="الفترة"
                 className="h-9"
                 placeholder="مثال: FY2025"
               />
@@ -116,13 +120,14 @@ export function ProjectCreateForm({ onSuccess }: { onSuccess?: () => void }) {
                 id="scopeDescription"
                 name="scopeDescription"
                 rows={2}
+                aria-label="الوصف والنطاق"
                 className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 placeholder="وصف موجز لنطاق التقييم..."
               />
             </div>
 
             {error && (
-              <div className="rounded-md bg-red-50 dark:bg-red-950 p-3 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
+              <div className="rounded-md bg-red-50 dark:bg-red-950 p-3 text-xs text-red-700 dark:text-red-300 flex items-center gap-2" role="alert" aria-live="assertive">
                 <XCircle className="h-4 w-4 shrink-0" />
                 {error}
               </div>

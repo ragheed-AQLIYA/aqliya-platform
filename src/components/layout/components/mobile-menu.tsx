@@ -2,15 +2,15 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import type { NavItem } from "./use-site-header";
+import type { NavItem, HeaderLabels } from "./use-site-header";
 
 type MobileMenuProps = {
   open: boolean;
   locale: "ar" | "en";
   navItems: NavItem[];
   contactHref: string;
+  labels: HeaderLabels;
   onSwitchLocale: (target: "ar" | "en") => void;
   onNavClick: () => void;
 };
@@ -25,10 +25,10 @@ export function MobileMenu({
   locale,
   navItems,
   contactHref,
+  labels,
   onSwitchLocale,
   onNavClick,
 }: MobileMenuProps) {
-  const t = useTranslations("common");
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -66,7 +66,7 @@ export function MobileMenu({
       ref={menuRef}
       role="dialog"
       aria-modal="true"
-      aria-label={t("mobileNavigation")}
+      aria-label={labels.mobileNavigation}
       className="border-t border-border/40 bg-background/98 backdrop-blur-xl md:hidden"
     >
       <nav
@@ -102,7 +102,7 @@ export function MobileMenu({
                   : "text-muted-foreground hover:text-foreground",
               )}
               aria-label={
-                value === "en" ? t("switchToEnglish") : t("switchToArabic")
+                value === "en" ? labels.switchToEnglish : labels.switchToArabic
               }
               aria-pressed={value === locale}
               lang={value}
@@ -117,7 +117,7 @@ export function MobileMenu({
           onClick={onNavClick}
           className="btn-primary mt-2 h-11 text-sm"
         >
-          {t("bookSession")}
+          {labels.bookSession}
         </Link>
       </nav>
     </div>

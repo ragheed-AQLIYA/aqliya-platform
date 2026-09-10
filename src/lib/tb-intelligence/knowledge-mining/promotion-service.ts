@@ -247,10 +247,14 @@ export async function batchPromoteCandidates(params: {
   promotedBy: string;
   artifactType: "candidate-synonyms" | "candidate-rule-pack";
   notes?: string;
+  organizationId?: string;
 }): Promise<{ promoted: number; artifactPath: string }> {
   // Bounded by status:"APPROVED" — only approved candidates eligible for promotion
   const approved = await prisma.knowledgeCandidate.findMany({
-    where: { status: "APPROVED" },
+    where: {
+      status: "APPROVED",
+      ...(params.organizationId ? { organizationId: params.organizationId } : {}),
+    },
     select: { id: true },
     take: 100,
   });

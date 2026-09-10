@@ -29,8 +29,13 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     requireRole(session.user as Record<string, unknown>, "VIEWER");
+    const user = session.user as Record<string, unknown>;
+    const organizationId = user.organizationId as string | undefined;
+    if (!organizationId) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
 
-    const kpis = await getKnowledgeMiningKPIs();
+    const kpis = await getKnowledgeMiningKPIs(organizationId);
     return NextResponse.json(kpis);
   } catch (error) {
     const { code } = sanitizeError(error);

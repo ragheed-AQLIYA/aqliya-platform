@@ -2,6 +2,9 @@
 
 > **Language note (2026-06-09):** Public-facing materials now refer to "Specialized Operating Systems" instead of "Products." The platform is positioned as an "institutional operating platform" first, with capabilities surfaced inside it. See `docs/official/AQLIYA_MASTER_REFERENCE.md §5b` for details.
 
+> **⚠️ P0 GOVERNANCE FREEZE (ADR-109 — 2026-07-19):**
+> All maturity levels below reflect L5 Pilot-ready (conditional) status. DecisionOS remains L6. Capabilities described remain real; certification language does not.
+
 ## Terms
 
 | Term                             | Definition                                                                       | Examples                                | Allowed Usage                                           | Forbidden Usage                                     |
@@ -36,7 +39,7 @@
 - Real AuditOS-adjacent risk workspace at `/risk/*`
 - Dashboard with KPI cards, risk distribution, assessments table, model list
 - Assessment detail: score bars, procedure steps, audit trail, JSON export
-- L6 Production-hardened — not marketed as standalone product
+- L5 Pilot-ready (conditional) — not marketed as standalone product
 - Uses `AuditRiskModel`/`AuditRiskAssessment` Prisma models (AuditOS schema)
 
 ### Office AI Assistant
@@ -47,14 +50,14 @@
 
 ### WorkflowOS and Sunbul
 
-- `WorkflowOS` = canonical governed workspace at `/workflowos/*` (L6 Production-hardened)
+- `WorkflowOS` = canonical governed workspace at `/workflowos/*` (L5 Pilot-ready)
 - `Sunbul` = legacy redirect alias only; `/sunbul/*` routes are `permanentRedirect(302)` to matching `/workflowos/*` routes
 - Prisma models retain `Sunbul*` prefixes for schema compatibility; product identity is WorkflowOS
 - Neither should be hidden, and WorkflowOS should not be promoted into a general AQLIYA product claim without further product decisions
 
 ### SalesOS, organizations, settings
 
-- `SalesOS` current runtime surface is L6 Production-hardened commercial intelligence workspace at `/sales/*` (32 routes, 878+ tests across 86 test files, full boundaries, 12 intelligence sub-engines, CRM sync, forecasting).
+- `SalesOS` current runtime surface is L5 Pilot-ready (conditional) commercial intelligence workspace at `/sales/*` (32 routes, 878+ tests across 86 test files, full boundaries, 12 intelligence sub-engines, CRM sync, forecasting).
 - `/organizations/*` surface is L5 pilot-ready with real Prisma data.
 - `/settings` generic surface is internal preview/prototype only (L2 shell for main page, L4 for sub-routes).
 - These must not be shown as implemented v0.1 operational modules (except SalesOS which is production-hardened).
@@ -86,7 +89,7 @@
 - **Knowledge Foundation:** Knowledge Foundation handles governed promotion pipelines with SHA-256 release packages and structured diff engines. ContentStudio handles simpler content versioning for operational documents.
 - **Office AI Assistant:** Assistant generates draft content as suggestions. ContentStudio can be the target workspace where those drafts are stored, reviewed, and published.
 
-**Current maturity:** L6 Production-hardened (2026-07-03)
+**Current maturity:** L5 Pilot-ready (conditional) per P0 governance freeze (ADR-109)
 - Full error/loading/not-found boundaries on all 5 routes
 - Real Prisma persistence (5 models: ContentWorkspace, ContentItem, ContentVersion, ContentTemplate, ContentEvidence)
 - 5 route groups (dashboard, workspace detail, content create, content detail, templates)
@@ -123,26 +126,26 @@
 
 ### LocalContentOS and SimulationOS
 
-- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L6 Production-hardened). All 9 LC gaps closed: supplier scoring engine, tender matching, multi-reviewer approval routing, classification rule admin, Arabic PDF font fidelity, spend analytics, trend analytics, ERP integration (SAP/Oracle/CSV), Content Studio scope definition. 27 routes with full error/loading/not-found boundaries. 321+ tests PASS. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Marketing page at `/products/local-content` is not the workspace.
+- `LocalContentOS` = strategic second product with real workspace at `/local-content/*` (L5 Pilot-ready conditional). All 9 LC gaps closed: supplier scoring engine, tender matching, multi-reviewer approval routing, classification rule admin, Arabic PDF font fidelity, spend analytics, trend analytics, ERP integration (SAP/Oracle/CSV), Content Studio scope definition. 27 routes with full error/loading/not-found boundaries. 321+ tests PASS. AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient. Marketing page at `/products/local-content` is not the workspace.
 - `SimulationOS` = current marketing/category label, not standalone runtime
 
 ## Release-Scope Mapping
 
 | Area                | Release Inclusion Status                | Maturity       | Customer Demo Status          |
 | ------------------- | --------------------------------------- | -------------- | ----------------------------- |
-| AQLIYA Platform     | Included in v0.1                        | **L6 Production-hardened** | Safe to show with explanation |
-| AuditOS             | Included as pilot-ready product         | L6 Production-hardened | Safe to show                  |
-| DecisionOS          | Included as active adjacent system      | L6 Production-hardened | Safe to show with explanation |
-| RiskOS              | AuditOS-adjacent risk workspace         | L6 Production-hardened | Safe to show with explanation |
-| Office AI Assistant | Included as governed shared application | L6 Production-hardened | Safe to show with explanation |
-| WorkflowOS          | Included as governed workspace          | L6 Production-hardened | Safe to show with explanation |
+| AQLIYA Platform     | Included in v0.1                        | **L5 Pilot-ready (conditional)** | Safe to show with explanation |
+| AuditOS             | Included as pilot-ready product         | L5 Pilot-ready (conditional) | Safe to show                  |
+| DecisionOS          | Included as active adjacent system      | **L6 Production-hardened** | Safe to show with explanation |
+| RiskOS              | AuditOS-adjacent risk workspace         | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| Office AI Assistant | Included as governed shared application | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| WorkflowOS          | Included as governed workspace          | L5 Pilot-ready (conditional) | Safe to show with explanation |
 | Sunbul              | Legacy redirect alias over WorkflowOS   | Redirect alias | Internal only                 |
 | auditos             | Included as demo only                   | L1 Marketing   | Demo only                     |
-| ContentStudio       | Included as operational content workspace | L6 Production-hardened | Safe to show with explanation |
-| Institutional Memory| Governance capability                   | L6 Production-hardened | Safe to show with explanation |
-| Knowledge Foundation| Governance capability                   | L6 Production-hardened | Safe to show with explanation |
-| SalesOS             | Commercial intelligence workspace       | L6 Production-hardened | Safe to show with explanation |
-| LocalContactOS      | Governed relationship workspace         | L6 Production-hardened | Safe to show with explanation |
-| SSO (SAML/OIDC)     | Enterprise auth capability              | L6 Production-hardened | Safe to show with explanation |
-| SCIM v2 Provisioning| Identity management (SCIM API)          | L6 Production-hardened | Safe to show with explanation |
-| LocalContentOS      | Included as pilot-ready with conditions | L6 Production-hardened | Safe to show with explanation |
+| ContentStudio       | Included as operational content workspace | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| Institutional Memory| Governance capability                   | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| Knowledge Foundation| Governance capability                   | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| SalesOS             | Commercial intelligence workspace       | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| LocalContactOS      | Governed relationship workspace         | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| SSO (SAML/OIDC)     | Enterprise auth capability              | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| SCIM v2 Provisioning| Identity management (SCIM API)          | L5 Pilot-ready (conditional) | Safe to show with explanation |
+| LocalContentOS      | Included as pilot-ready with conditions | L5 Pilot-ready (conditional) | Safe to show with explanation |

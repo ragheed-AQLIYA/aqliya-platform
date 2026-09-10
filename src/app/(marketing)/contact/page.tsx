@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { ContactForm } from "./contact-form";
 import {
   contactPageCopyAr,
@@ -21,28 +22,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/contact",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-contact.png",
-          width: 1200,
-          height: 630,
-          alt: "تواصل مع AQLIYA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-contact.png"],
-    },
+    alternates: buildAlternates("/contact"),
   };
 }
 

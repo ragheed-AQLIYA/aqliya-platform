@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { FAQSection } from "@/components/marketing/faq-section";
 
 export function generateMetadata(): Metadata {
@@ -9,28 +10,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/pricing",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-pricing.png",
-          width: 1200,
-          height: 630,
-          alt: "أسعار AQLIYA - خطط المنصة المؤسسية",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-pricing.png"],
-    },
+    alternates: buildAlternates("/pricing"),
   };
 }
 

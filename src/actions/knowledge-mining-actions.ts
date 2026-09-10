@@ -13,6 +13,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 import { listCandidates, getCandidate, deleteCandidate } from "@/lib/tb-intelligence/knowledge-mining";
 import {
   runFullMiningPipeline,
@@ -43,6 +44,20 @@ async function assertAdmin(user: { role: string }): Promise<void> {
   }
 }
 
+async function assertCandidateInTenant(
+  user: Awaited<ReturnType<typeof getCurrentUser>>,
+  candidateId: string,
+): Promise<void> {
+  const { candidate } = await getCandidate(
+    candidateId,
+    isPlatformAdmin(user) ? undefined : user.organizationId,
+  );
+  if (!candidate) throw new Error("Access denied");
+  if (!candidate.organizationId && !isPlatformAdmin(user)) {
+    throw new Error("Access denied");
+  }
+}
+
 /* ── Read Actions (VIEWER minimum) ──────────── */
 
 /**
@@ -50,9 +65,13 @@ async function assertAdmin(user: { role: string }): Promise<void> {
  * Viewer-allowed — read-only.
  */
 export async function getCandidates(filter: CandidateFilter = {}) {
-  await getCurrentUser(); // session check only — viewer can read
+  const user = await getCurrentUser();
   try {
-    return await listCandidates(filter);
+    return await listCandidates({
+      ...filter,
+      organizationId: user.organizationId,
+      includeInstitutional: false,
+    });
   } catch (error) {
     return { candidates: [], total: 0, error: String(error) };
   }
@@ -63,9 +82,9 @@ export async function getCandidates(filter: CandidateFilter = {}) {
  * Viewer-allowed — read-only.
  */
 export async function getCandidateDetail(id: string) {
-  await getCurrentUser(); // session check only — viewer can read
+  const user = await getCurrentUser();
   try {
-    return await getCandidate(id);
+    return await getCandidate(id, user.organizationId);
   } catch (error) {
     return { candidate: null, evidence: [], promotions: [], error: String(error) };
   }
@@ -76,9 +95,9 @@ export async function getCandidateDetail(id: string) {
  * Viewer-allowed — read-only.
  */
 export async function getKPIs(): Promise<KnowledgeMiningKPIs | { error: string }> {
-  await getCurrentUser(); // session check only — viewer can read
+  const user = await getCurrentUser();
   try {
-    return await getKnowledgeMiningKPIs();
+    return await getKnowledgeMiningKPIs(user.organizationId);
   } catch (error) {
     return { error: String(error) };
   }
@@ -121,6 +140,7 @@ export async function submitCandidateForReview(candidateId: string) {
   try {
     const user = await getCurrentUser();
     await assertOperator(user);
+    await assertCandidateInTenant(user, candidateId);
     const result = await submitForReview(candidateId, user.id);
     revalidatePath("/api/knowledge-mining/candidates");
     return result;
@@ -138,6 +158,7 @@ export async function approveCandidate(candidateId: string, notes?: string) {
   try {
     const user = await getCurrentUser();
     await assertOperator(user);
+    await assertCandidateInTenant(user, candidateId);
     const result = await applyReviewDecision({
       candidateId,
       reviewerId: user.id,
@@ -160,6 +181,7 @@ export async function rejectCandidate(candidateId: string, notes?: string) {
   try {
     const user = await getCurrentUser();
     await assertOperator(user);
+    await assertCandidateInTenant(user, candidateId);
     const result = await applyReviewDecision({
       candidateId,
       reviewerId: user.id,
@@ -186,6 +208,7 @@ export async function promoteCandidate(
   try {
     const user = await getCurrentUser();
     await assertOperator(user);
+    await assertCandidateInTenant(user, candidateId);
     const result = await promoteCandidates({
       candidateId,
       promotedBy: user.id,
@@ -215,6 +238,7 @@ export async function batchPromote(
       promotedBy: user.id,
       artifactType,
       notes,
+      organizationId: user.organizationId,
     });
     revalidatePath("/api/knowledge-mining/candidates");
     return result;
@@ -233,7 +257,10 @@ export async function removeCandidate(id: string) {
   try {
     const user = await getCurrentUser();
     await assertAdmin(user);
-    const result = await deleteCandidate(id);
+    const result = await deleteCandidate(
+      id,
+      isPlatformAdmin(user) ? undefined : user.organizationId,
+    );
     revalidatePath("/api/knowledge-mining/candidates");
     return { success: result };
   } catch (error) {

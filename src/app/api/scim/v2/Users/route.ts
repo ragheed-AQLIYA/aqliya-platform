@@ -10,6 +10,7 @@ import {
   type ScimUser,
 } from "@/lib/auth/scim-types";
 import { listUsers, createUser } from "@/lib/auth/scim-service";
+import { ScimRoleDeniedError } from "@/lib/auth/scim-role";
 import { authenticateScimRequest, getScimHeaders } from "../auth";
 import { sanitizeError } from "@/lib/platform/api-error";
 
@@ -73,6 +74,12 @@ export async function POST(request: Request) {
       },
     );
   } catch (error) {
+    if (error instanceof ScimRoleDeniedError) {
+      return NextResponse.json(
+        buildScimError(403, "SCIM cannot assign ADMIN unless explicitly allowed"),
+        { status: 403, headers: getScimHeaders() },
+      );
+    }
     const { message } = sanitizeError(error);
     return NextResponse.json(
       buildScimError(500, message),

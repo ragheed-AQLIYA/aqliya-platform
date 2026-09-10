@@ -29,11 +29,11 @@ export default function GovernanceError({
           حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Governance encountered an error. Please try again.
+          حدث خطأ أثناء معالجة الحوكمة. يرجى المحاولة مرة أخرى.
         </p>
         {error.digest && (
           <p className="text-xs text-muted-foreground/40">
-            Error ID: {error.digest}
+            معرف الخطأ: {error.digest}
           </p>
         )}
       </div>

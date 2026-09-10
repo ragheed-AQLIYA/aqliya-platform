@@ -45,7 +45,7 @@ export function WorkflowAddDocumentForm({
           const result = reader.result as string;
           resolve(result.split(",")[1]);
         };
-        reader.onerror = () => reject(new Error("Failed to read file"));
+        reader.onerror = () => reject(new Error("فشل قراءة الملف"));
         reader.readAsDataURL(file);
       });
 
@@ -109,7 +109,7 @@ export function WorkflowAddDocumentForm({
           ref={inputRef}
           type="file"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="w-full text-xs file:mr-2 file:rounded-md file:border-0 file:bg-primary/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-primary hover:file:bg-primary/20"
+          className="w-full text-xs file:me-2 file:rounded-md file:border-0 file:bg-primary/10 file:px-2 file:py-1 file:text-xs file:font-medium file:text-primary hover:file:bg-primary/20"
           required
           accept=".pdf,.xlsx,.xls,.docx,.jpg,.jpeg,.png,.csv"
         />

@@ -121,7 +121,8 @@ describe("SSO Admin Actions", () => {
       expect(result.providerType).toBe("github");
       expect(result.enabled).toBe(true);
       expect(result.organizationId).toBe("test-org-id");
-      expect(result.clientSecret).toBe("gh-secret"); // decrypted
+      expect(result).not.toHaveProperty("clientSecret");
+      expect(result.hasClientSecret).toBe(true);
     });
 
     it("creates a SAML provider with entry point", async () => {
@@ -211,7 +212,8 @@ describe("SSO Admin Actions", () => {
         clientSecret: "new-secret",
       });
       expect(result.clientId).toBe("new-id");
-      expect(result.clientSecret).toBe("new-secret");
+      expect(result).not.toHaveProperty("clientSecret");
+      expect(result.hasClientSecret).toBe(true);
     });
 
     it("updates SAML configuration", async () => {

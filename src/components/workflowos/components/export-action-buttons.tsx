@@ -52,9 +52,9 @@ export function ExportActionButtons({
           className="w-full sm:w-auto"
         >
           {loading === "request" ? (
-            <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+            <Loader2 className="ms-1 h-4 w-4 animate-spin" />
           ) : (
-            <FileText className="ml-1 h-4 w-4" />
+            <FileText className="ms-1 h-4 w-4" />
           )}
           طلب تصدير
         </Button>
@@ -69,9 +69,9 @@ export function ExportActionButtons({
             className="flex-1"
           >
             {loading === "approve" ? (
-              <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+              <Loader2 className="ms-1 h-4 w-4 animate-spin" />
             ) : (
-              <CheckCircle2 className="ml-1 h-4 w-4" />
+              <CheckCircle2 className="ms-1 h-4 w-4" />
             )}
             اعتماد
           </Button>
@@ -81,7 +81,7 @@ export function ExportActionButtons({
             variant="destructive"
             className="flex-1"
           >
-            <XCircle className="ml-1 h-4 w-4" />
+            <XCircle className="ms-1 h-4 w-4" />
             رفض
           </Button>
         </div>
@@ -98,9 +98,9 @@ export function ExportActionButtons({
             variant="destructive"
           >
             {loading === "reject" ? (
-              <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+              <Loader2 className="ms-1 h-4 w-4 animate-spin" />
             ) : (
-              <XCircle className="ml-1 h-4 w-4" />
+              <XCircle className="ms-1 h-4 w-4" />
             )}
             تأكيد الرفض
           </Button>
@@ -117,7 +117,7 @@ export function ExportActionButtons({
           variant="outline"
         >
           {loading === "request" ? (
-            <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+            <Loader2 className="ms-1 h-4 w-4 animate-spin" />
           ) : null}
           إعادة طلب
         </Button>
@@ -129,9 +129,9 @@ export function ExportActionButtons({
           disabled={loading !== null}
         >
           {loading === "download" ? (
-            <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+            <Loader2 className="ms-1 h-4 w-4 animate-spin" />
           ) : (
-            <Download className="ml-1 h-4 w-4" />
+            <Download className="ms-1 h-4 w-4" />
           )}
           تنزيل التصدير
         </Button>

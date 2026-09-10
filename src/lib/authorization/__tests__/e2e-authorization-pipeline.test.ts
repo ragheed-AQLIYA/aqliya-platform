@@ -138,13 +138,14 @@ describe("E2E: Authorization Pipeline (RBAC → Tenant → ABAC)", () => {
       expect(result.reason).toContain("Tenant access denied");
     });
 
-    it("allows admin to bypass tenant isolation", async () => {
+    it("denies tenant admin from bypassing tenant isolation", async () => {
       const result = await authorize({
         user: adminUser,
         resource: { type: "engagement", id: "e-1", tenantId: "org-beta" },
         action: "read",
       });
-      expect(result.allowed).toBe(true);
+      expect(result.allowed).toBe(false);
+      expect(result.reason).toContain("Tenant access denied");
     });
 
     it("denies viewer from another org even for read-only action", async () => {
@@ -234,7 +235,7 @@ describe("E2E: Authorization Pipeline (RBAC → Tenant → ABAC)", () => {
       expect(mockEvaluateAccess).not.toHaveBeenCalled();
     });
 
-    it("passes through when ABAC engine throws (fail-open)", async () => {
+    it("passes through when ABAC engine throws (fail-open) while enforce is off", async () => {
       mockEvaluateAccess.mockRejectedValue(new Error("DB connection lost"));
 
       const result = await authorize({
@@ -243,8 +244,23 @@ describe("E2E: Authorization Pipeline (RBAC → Tenant → ABAC)", () => {
         action: "read",
         context: { attributes: { sensitivity: "low" } },
       });
-      // abac-bridge catches errors and defaults to allowed
       expect(result.allowed).toBe(true);
+    });
+
+    it("fails closed when ABAC engine throws and FF_ABAC_ENFORCE=true", async () => {
+      const previous = process.env.FF_ABAC_ENFORCE;
+      process.env.FF_ABAC_ENFORCE = "true";
+      mockEvaluateAccess.mockRejectedValue(new Error("DB connection lost"));
+
+      const result = await authorize({
+        user: adminUser,
+        resource: { type: "engagement", id: "e-1" },
+        action: "read",
+        context: { attributes: { sensitivity: "low" } },
+      });
+      expect(result.allowed).toBe(false);
+      expect(result.reason).toContain("ABAC engine unavailable");
+      process.env.FF_ABAC_ENFORCE = previous;
     });
 
     it("forwards principal and action to ABAC engine", async () => {
@@ -282,12 +298,12 @@ describe("E2E: Authorization Pipeline (RBAC → Tenant → ABAC)", () => {
         user: adminUser, // ADMIN role (would pass RBAC)
         resource: { type: "engagement", id: "e-1", tenantId: "org-beta" },
         action: "read",
-        // Admin bypasses tenant, so this should actually pass!
-        // Test the non-admin case:
       });
 
-      // Admin bypasses tenant isolation by design
-      expect(result.allowed).toBe(true);
+      // Tenant ADMIN is scoped; only an explicit platform-admin identity may
+      // cross organizations.
+      expect(result.allowed).toBe(false);
+      expect(result.reason).toContain("Tenant access denied");
 
       // Test with non-admin to prove tenant check happens first
       const operatorResult = await authorize({
@@ -391,6 +407,16 @@ describe("E2E: Authorization Pipeline (RBAC → Tenant → ABAC)", () => {
         action: "admin",
       });
       expect(result.allowed).toBe(true);
+    });
+
+    it("denies tenant admin from administering another organization", async () => {
+      const result = await authorize({
+        user: adminUser,
+        resource: { type: "organization", id: "org-beta" },
+        action: "admin",
+      });
+      expect(result.allowed).toBe(false);
+      expect(result.reason).toContain("Tenant access denied");
     });
 
     it("handles document resource type", async () => {

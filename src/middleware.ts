@@ -4,9 +4,10 @@ import { getToken } from "next-auth/jwt";
 import { setSecurityHeaders, setCorsHeaders } from "@/middleware-security";
 import { rateLimitMiddleware } from "@/middleware-rate-limit";
 import { resolveMfaGateState } from "@/lib/auth/mfa-gate";
+import { isPublicPath } from "@/lib/auth/public-paths";
+import { resolveSessionCookieName } from "@/lib/auth/session-cookie";
 
 const secret = process.env.AUTH_SECRET;
-
 
 function isApiPath(pathname: string): boolean {
   return (
@@ -16,70 +17,13 @@ function isApiPath(pathname: string): boolean {
   );
 }
 
-const publicExact = new Set([
-  "/",
-  "/about",
-  "/contact",
-  "/custom-product",
-  "/demo",
-  "/deployment",
-  "/engagement-models",
-  "/executive-brief",
-  "/executive-briefing",
-  "/governance",
-  "/how-we-work",
-  "/industries",
-  "/insights",
-  "/login",
-  "/procurement-pack",
-  "/proof",
-  "/en",
-  "/signup",
-  "/access-denied",
-  "/pilot-outcomes",
-  "/pilot-proof",
-  "/soc2-roadmap",
-  "/platform",
-  "/pricing",
-  "/privacy",
-  "/proof-library",
-  "/products",
-  "/security",
-  "/terms",
-  "/use-cases",
-  "/case-studies",
-  "/auditos",
-  "/api/custom-product-submit",
-  "/api/pilot-review",
-  "/api/sales/intel/webhook",
-  "/api/sales/intel/oauth",
-  "/api/platform/health",
-]);
-
-const publicPrefixes = [
-  "/_next",
-  "/invite/",
-  "/api/auth",
-  "/api/auth/mfa/verify",
-  "/api/scim",
-  "/api/health",
-  "/auditos/",
-  "/en/",
-  "/print/",
-  "/products/",
-  "/buyers/",
-  "/insights/",
-];
-
 const mfaExemptPrefixes = [
   "/login",
   "/settings/mfa",
   "/api/auth",
 ];
 
-// ── RBAC: Route-to-minimum-role mapping ──
-// This is the Edge-compatible first gate. Detailed permission checks
-// happen server-side in server-action-guard / CoreAccessControl.
+// Edge-compatible first gate. Detailed permission checks happen server-side.
 const routeMinRoles: Record<string, string> = {
   "/audit": "viewer",
   "/decisions": "viewer",
@@ -146,21 +90,6 @@ function getRequiredRole(pathname: string): string | null {
   return null;
 }
 
-function isPublicPath(pathname: string): boolean {
-  if (publicExact.has(pathname)) return true;
-  if (publicPrefixes.some((p) => pathname.startsWith(p))) return true;
-  if (
-    [
-      "/favicon.ico",
-      "/robots.txt",
-      "/sitemap.xml",
-      "/manifest.webmanifest",
-    ].includes(pathname)
-  )
-    return true;
-  return false;
-}
-
 export async function middleware(request: NextRequest) {
   const start = Date.now();
 
@@ -182,7 +111,8 @@ export async function middleware(request: NextRequest) {
 
   let token: unknown = null;
   try {
-    token = await getToken({ req: request, secret, salt: "authjs.session-token" });
+    const salt = resolveSessionCookieName(request.cookies);
+    token = await getToken({ req: request, secret, salt });
     if (!token) {
       if (isApiPath(pathname) || pathname.startsWith("/api/")) {
         return withTiming(
@@ -253,7 +183,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // ── RBAC: Role-based route access check ──
   if (tok) {
     const role = tok.role as string | undefined;
     const requiredRole = getRequiredRole(pathname);
@@ -279,81 +208,12 @@ export async function middleware(request: NextRequest) {
   return withTiming(setSecurityHeaders(NextResponse.next()));
 }
 
+/**
+ * Default-deny matcher: every path except static assets runs through middleware.
+ * Public routes are skipped inside isPublicPath(), not by omitting them here.
+ */
 export const config = {
   matcher: [
-    "/audit",
-    "/audit/:path*",
-    "/decisions",
-    "/decisions/:path*",
-    "/local-content",
-    "/local-content/:path*",
-    "/assistant",
-    "/assistant/:path*",
-    "/sales",
-    "/sales/:path*",
-    "/sunbul",
-    "/sunbul/:path*",
-    "/contacts",
-    "/contacts/:path*",
-    "/institutional-memory",
-    "/institutional-memory/:path*",
-    "/content-studio",
-    "/content-studio/:path*",
-    "/risk",
-    "/risk/:path*",
-    "/office-ai",
-    "/office-ai/:path*",
-    "/sampling",
-    "/sampling/:path*",
-    "/settings/audit-bridge",
-    "/settings/audit-bridge/:path*",
-    "/settings/organization",
-    "/settings/organization/:path*",
-    "/workflowos",
-    "/workflowos/:path*",
-    "/organizations",
-    "/organizations/:path*",
-    "/intelligence",
-    "/intelligence/:path*",
-    "/monitoring",
-    "/monitoring/:path*",
-    "/published/recommendation",
-    "/published/recommendation/:path*",
-    "/settings",
-    "/settings/:path*",
-    "/api/audit/:path*",
-    "/api/decisions/:path*",
-    "/api/agent-memory",
-    "/api/office-ai/:path*",
-    "/api/local-content/:path*",
-    "/api/sunbul/:path*",
-    "/api/workflowos/:path*",
-    "/api/metrics",
-    "/api/monitoring/:path*",
-    "/api/ai/:path*",
-    "/api/scim/:path*",
-    "/api/integration/:path*",
-    "/api/custom-product-submit",
-    "/api/pilot-review",
-    "/api/platform/:path*",
-    "/api/skills/:path*",
-  "/api/sales/:path*",
-  "/api/sales/intel/:path*",
-  "/api/crm/:path*",
-  "/api/notifications/:path*",
-  "/api/knowledge-mining",
-  "/api/knowledge-mining/:path*",
-    "/knowledge-foundation",
-    "/knowledge-foundation/:path*",
-    "/governance-hub",
-    "/governance-hub/:path*",
-    "/operator",
-    "/operator/:path*",
-    "/overview",
-    "/overview/:path*",
-    "/notifications",
-    "/notifications/:path*",
-    "/knowledge-review",
-    "/knowledge-review/:path*",
+    "/((?!_next/static|_next/image|_next/webpack-hmr|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)",
   ],
 };

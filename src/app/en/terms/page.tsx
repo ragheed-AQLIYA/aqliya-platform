@@ -1,10 +1,12 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Terms of Service | AQLIYA",
   description:
     "Institutional terms of service for the AQLIYA platform  covering mandatory AI limitations, human approval requirements, and institutional use responsibilities.",
+  alternates: buildAlternates("/en/terms"),
 };
 
 const termsSections = [

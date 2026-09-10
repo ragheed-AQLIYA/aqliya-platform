@@ -30,6 +30,10 @@ jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),
 }))
 
+jest.mock("@/lib/kernel", () => ({
+  enforce: jest.fn().mockResolvedValue(undefined),
+}))
+
 // Mock notification actions since admin-actions imports createNotification
 jest.mock("@/actions/notification-actions", () => ({
   createNotification: jest.fn().mockResolvedValue({ id: "notif-1" }),
@@ -77,6 +81,12 @@ describe("Admin Actions", () => {
       mockGetCurrentUser.mockResolvedValue(makeAdmin({ role: "OPERATOR" }))
       await expect(listUsers("org-1")).rejects.toThrow("Admin access required")
     })
+
+    it("denies tenant admin listing another tenant's users", async () => {
+      mockGetCurrentUser.mockResolvedValue(makeAdmin())
+      await expect(listUsers("org-b")).rejects.toThrow("organization access required")
+      expect(mockPrisma.user.findMany).not.toHaveBeenCalled()
+    })
   })
 
   describe("updateUserRole", () => {
@@ -110,6 +120,14 @@ describe("Admin Actions", () => {
       mockGetCurrentUser.mockResolvedValue(makeAdmin())
       mockPrisma.user.findUnique.mockResolvedValue({ id: "u1", organizationId: "org-2" })
       await expect(updateUserRole("u1", "OPERATOR", "org-1")).rejects.toThrow("Access denied")
+    })
+
+    it("denies tenant admin changing roles using another tenant id", async () => {
+      mockGetCurrentUser.mockResolvedValue(makeAdmin())
+      await expect(updateUserRole("u1", "OPERATOR", "org-b")).rejects.toThrow(
+        "organization access required",
+      )
+      expect(mockPrisma.user.update).not.toHaveBeenCalled()
     })
   })
 
@@ -166,11 +184,11 @@ describe("Admin Actions", () => {
       mockPrisma.platformAuditLog.count.mockResolvedValue(0)
       mockPrisma.auditEvidence.count.mockResolvedValue(0)
 
-      await getPlatformStats("org-x")
+      await getPlatformStats("org-1")
 
-      expect(mockPrisma.user.count).toHaveBeenCalledWith({ where: { organizationId: "org-x" } })
-      expect(mockPrisma.auditEngagement.count).toHaveBeenCalledWith({ where: { organizationId: "org-x" } })
-      expect(mockPrisma.decision.count).toHaveBeenCalledWith({ where: { organizationId: "org-x" } })
+      expect(mockPrisma.user.count).toHaveBeenCalledWith({ where: { organizationId: "org-1" } })
+      expect(mockPrisma.auditEngagement.count).toHaveBeenCalledWith({ where: { organizationId: "org-1" } })
+      expect(mockPrisma.decision.count).toHaveBeenCalledWith({ where: { organizationId: "org-1" } })
     })
   })
 })

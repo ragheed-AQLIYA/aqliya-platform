@@ -246,6 +246,8 @@ export async function registerWebhookAction(
   try {
     const user = await getCurrentUser();
     await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "update");
+    const { assertSafeOutboundUrl } = await import("@/lib/security/ssrf");
+    await assertSafeOutboundUrl(config.url);
     const { getWebhookConfigs, saveWebhookConfigs } = await import("@/lib/workflowos/webhook-service");
     const configs = await getWebhookConfigs(organizationId);
     const newConfig = {
@@ -268,7 +270,8 @@ export async function registerWebhookAction(
       platformOrganizationId: user.platformOrganizationId ?? undefined,
       metadata: { url: config.url, events: config.events },
     });
-    return { success: true, data: newConfig };
+    const { secret: _secret, ...publicConfig } = newConfig;
+    return { success: true, data: { ...publicConfig, hasSecret: Boolean(_secret) } };
   } catch (error) {
     logger.error("Error registering webhook:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل تسجيل webhook" };
@@ -298,9 +301,17 @@ export async function testWebhookAction(organizationId: string, webhookId: strin
 
 export async function listWebhooksAction(organizationId: string) {
   try {
+    const user = await getCurrentUser();
+    await enforce(user, { type: "organization", id: organizationId, tenantId: organizationId }, "read");
     const { getWebhookConfigs } = await import("@/lib/workflowos/webhook-service");
     const configs = await getWebhookConfigs(organizationId);
-    return { success: true, data: configs };
+    return {
+      success: true,
+      data: configs.map(({ secret, ...rest }) => ({
+        ...rest,
+        hasSecret: Boolean(secret),
+      })),
+    };
   } catch (error) {
     logger.error("Error listing webhooks:", error instanceof Error ? error : undefined);
     return { success: false, error: "فشل جلب webhooks" };

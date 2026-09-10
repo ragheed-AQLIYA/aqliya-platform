@@ -3,18 +3,18 @@ import type { DashboardMetrics } from "./constants";
 export function GovernanceCards({ metrics }: { metrics: DashboardMetrics }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      <div className="rounded-lg border p-4">
+      <div className="rounded-lg border p-4" role="region" aria-label={`قرارات مدعومة بأدلة: ${metrics.governanceMetrics.evidenceBackedCount}`}>
         <div className="text-sm text-muted-foreground">
           قرارات مدعومة بأدلة
         </div>
         <div className="text-2xl font-bold mt-1 text-aqliya-blue">
           {metrics.governanceMetrics.evidenceBackedCount}
         </div>
-        <div className="mt-1 text-xs text-muted-foreground">
+        <div className="mt-1 text-xs text-muted-foreground" aria-label={`بدون أدلة: ${metrics.governanceMetrics.missingEvidenceCount}`}>
           بدون أدلة: {metrics.governanceMetrics.missingEvidenceCount}
         </div>
       </div>
-      <div className="rounded-lg border p-4">
+      <div className="rounded-lg border p-4" role="region" aria-label={`مراجعة بشرية مطلوبة: ${metrics.governanceMetrics.humanReviewRequiredCount}`}>
         <div className="text-sm text-muted-foreground">
           مراجعة بشرية مطلوبة
         </div>
@@ -26,7 +26,7 @@ export function GovernanceCards({ metrics }: { metrics: DashboardMetrics }) {
           {metrics.governanceMetrics.readyForReviewCount}
         </div>
       </div>
-      <div className="rounded-lg border p-4">
+      <div className="rounded-lg border p-4" role="region" aria-label={`قيد المراجعة دون أدلة: ${metrics.governanceMetrics.inReviewWithoutEvidence}`}>
         <div className="text-sm text-muted-foreground">
           قيد المراجعة دون أدلة
         </div>
@@ -37,7 +37,7 @@ export function GovernanceCards({ metrics }: { metrics: DashboardMetrics }) {
           اختناق حوكمة مباشر قبل الاعتماد
         </div>
       </div>
-      <div className="rounded-lg border p-4">
+      <div className="rounded-lg border p-4" role="region" aria-label={`عالي الأولوية بانتظار الاعتماد: ${metrics.governanceMetrics.highPriorityPendingApprovalCount}`}>
         <div className="text-sm text-muted-foreground">
           عالي الأولوية بانتظار الاعتماد
         </div>

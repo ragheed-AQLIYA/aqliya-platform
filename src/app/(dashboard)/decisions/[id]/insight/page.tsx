@@ -21,7 +21,7 @@ export default async function StrategicInsightPage({ params }: PageProps) {
             <CardDescription>
               {result.error}
               {result.missing && (
-                <ul className="mt-2 list-disc pl-5">
+                <ul className="mt-2 list-disc ps-5">
                   {result.missing.map((m) => (
                     <li key={m}>{m.replace(/_/g, " ")}</li>
                   ))}
@@ -68,7 +68,7 @@ export default async function StrategicInsightPage({ params }: PageProps) {
 
           <div>
             <h3 className="font-medium mb-2">العوامل الرئيسية</h3>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground">
+            <ul className="list-disc ps-5 text-sm text-muted-foreground">
               {insight.keyFactors.map((factor, i) => (
                 <li key={i}>{factor}</li>
               ))}

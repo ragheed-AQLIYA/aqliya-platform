@@ -201,9 +201,14 @@ export async function inviteTeamMemberAction(
     throw new Error("الرجاء إدخال بريد إلكتروني صحيح")
   }
 
-  const validRoles = ["ADMIN", "OPERATOR", "VIEWER"]
-  if (!validRoles.includes(role)) {
+  const validRoles = ["ADMIN", "OPERATOR", "VIEWER"] as const
+  if (!validRoles.includes(role as (typeof validRoles)[number])) {
     throw new Error("صلاحية غير صالحة")
+  }
+
+  const roleRank: Record<string, number> = { VIEWER: 0, OPERATOR: 1, ADMIN: 2 }
+  if ((roleRank[role] ?? 99) > (roleRank[user.role] ?? -1)) {
+    throw new Error("لا يمكنك منح صلاحية أعلى من صلاحيتك")
   }
 
   const organizationId = user.organizationId

@@ -23,7 +23,7 @@ export function BottlenecksPanel({ metrics }: { metrics: DashboardMetrics }) {
             <div>
               <span className="font-medium">{b.title}</span>
               <span
-                className={`ml-2 text-xs ${getPriorityColor(b.priority)}`}
+                className={`ms-2 text-xs ${getPriorityColor(b.priority)}`}
               >
                 {b.priority}
               </span>

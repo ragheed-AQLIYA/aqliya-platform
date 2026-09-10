@@ -34,7 +34,10 @@ function verifySignature(
     .createHmac("sha256", clientSecret)
     .update(body)
     .digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(signature));
+  const a = Buffer.from(hash);
+  const b = Buffer.from(signature);
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 // ─── POST /api/crm/webhook ───
@@ -75,12 +78,25 @@ export async function POST(request: Request) {
     );
   }
 
+  const organizationId = process.env.HUBSPOT_WEBHOOK_ORGANIZATION_ID;
+  if (!organizationId) {
+    return NextResponse.json(
+      { error: "Webhook organization is not configured" },
+      { status: 503 },
+    );
+  }
+
   const portalId = events[0]?.portalId;
+  const expectedPortal = process.env.HUBSPOT_WEBHOOK_PORTAL_ID;
+  if (expectedPortal && String(portalId) !== expectedPortal) {
+    return NextResponse.json({ error: "Unknown portal" }, { status: 404 });
+  }
 
   const connection = await prisma.crmConnection.findFirst({
     where: {
       provider: "hubspot",
       syncEnabled: true,
+      organizationId,
     },
     orderBy: { createdAt: "desc" },
   });

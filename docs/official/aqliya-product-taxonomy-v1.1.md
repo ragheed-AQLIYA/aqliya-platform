@@ -5,9 +5,12 @@
 **Version:** 1.1  
 **Status:** Official — aligned to v0.1 operational baseline  
 **Owner:** Governance Team  
-**Last Reviewed:** 2026-07-03 — Full L6 status alignment  
+**Last Reviewed:** 2026-09-06 — P0 Governance Freeze alignment  
 **Aligned with:** `AQLIYA_MASTER_REFERENCE.md`, `aqliya-vision-v1.1.md`, `aqliya-roadmap-v1.1.md`  
-**Note:** Implementation-status claims in this file have been corrected to match validated code reality. See `docs/DOCUMENTATION_AUTHORITY.md` for conflict resolution rules.
+**Note:** Per ADR-109 (2026-07-19), L6 claims suspended to L5 Pilot-ready (conditional) for all products except DecisionOS.
+
+> **⚠️ P0 GOVERNANCE FREEZE (ADR-109 — 2026-07-19):**
+> All maturity levels below reflect L5 Pilot-ready (conditional) status. DecisionOS remains L6.
 
 ---
 
@@ -24,24 +27,24 @@ AQLIYA Platform Company
 │   ├── Audit Logs
 │   ├── Document Intelligence
 │   ├── Reporting Engine
-│   ├── Knowledge Foundation (governance capability — L6 Production-hardened)
+│   ├── Knowledge Foundation (governance capability — L5 pilot-ready conditional)
 │   └── Deployment Layer
 ├── Shared Applications (built on Core)
-│   └── Office AI Assistant (L6 Production-hardened)
+│   └── Office AI Assistant (L5 pilot-ready conditional)
 ├── Specialized Operating Systems (capabilities — built on Core)
-│   ├── AuditOS                 (audit workflow — L6)
+│   ├── AuditOS                 (audit workflow — L5 pilot-ready conditional)
 │   │   └── Sampling            (internal workspace — L3 Prototype)
-│   ├── DecisionOS              (decision governance — L6)
-│   ├── LocalContentOS          (local content & supply chain — L6)
-│   ├── LocalContactOS          (relationship workspace — L6)
-│   ├── RiskOS                  (risk workspace — L6, not standalone)
-│   ├── SalesOS                 (commercial intelligence — L6)
+│   ├── DecisionOS              (decision governance — **L6**)
+│   ├── LocalContentOS          (local content & supply chain — L5 pilot-ready conditional)
+│   ├── LocalContactOS          (relationship workspace — L5 pilot-ready conditional)
+│   ├── RiskOS                  (risk workspace — L5 pilot-ready conditional, not standalone)
+│   ├── SalesOS                 (commercial intelligence — L5 pilot-ready conditional)
 │   └── SimulationOS            (capability label only)
 ├── Custom / Client-Specific Workspaces
-│   ├── WorkflowOS (canonical governed workspace — L6 Production-hardened)
+│   ├── WorkflowOS (canonical governed workspace — L5 pilot-ready conditional)
 │   └── Sunbul (legacy redirect alias to WorkflowOS)
 ├── Operational Content Workspace
-│   └── ContentStudio (content workspace — L6 Production-hardened)
+│   └── ContentStudio (content workspace — L5 pilot-ready conditional)
 ├── Internal Prototype Surfaces (code reality)
 │   └── Organizations, /settings main page (L2–L5)
 ├── Future Systems (not yet implemented)
@@ -95,24 +98,24 @@ AQLIYA Platform Company
 
 | Area                    | Taxonomy Layer                     | Release Inclusion Status                | Maturity                       | Customer Demo Status          |
 | ----------------------- | ---------------------------------- | --------------------------------------- | ------------------------------ | ----------------------------- |
-| **AQLIYA Platform**     | Platform layer                     | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
-| **Intelligence Core**   | Platform layer                     | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
-| **AuditOS**             | Product / System                   | Included as pilot-ready product         | L6 Production-hardened         | Safe to show                  |
-| **DecisionOS**          | Product / System                   | Included as active adjacent system      | L6 Production-hardened         | Safe to show with explanation |
-| **LocalContentOS**      | Product / System                   | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
-| **SalesOS**             | Product / System                   | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
-| **RiskOS**              | AuditOS-adjacent risk workspace    | Included as pilot-ready product         | L6 Production-hardened         | Safe with context             |
-| **LocalContactOS**      | Product / System                   | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
-| **Institutional Memory**| Governance/data capability         | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
-| **Knowledge Foundation**| Governance capability              | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
-| **ContentStudio**       | Operational Content Workspace      | Included as pilot-ready product         | L6 Production-hardened         | Safe to show with explanation |
-| **Office AI Assistant** | Shared Application                 | Included as governed shared application | L6 Production-hardened         | Safe to show with explanation |
-| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L6 Production-hardened                 | Safe to show with explanation |
+| **AQLIYA Platform**     | Platform layer                     | Included in v0.1                        | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **Intelligence Core**   | Platform layer                     | Included in v0.1                        | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **AuditOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show                  |
+| **DecisionOS**          | Product / System                   | Included as active adjacent system      | **L6 Production-hardened**     | Safe to show with explanation |
+| **LocalContentOS**      | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **SalesOS**             | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **RiskOS**              | AuditOS-adjacent risk workspace    | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe with context             |
+| **LocalContactOS**      | Product / System                   | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **Institutional Memory**| Governance/data capability         | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **Knowledge Foundation**| Governance capability              | Included in v0.1                        | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **ContentStudio**       | Operational Content Workspace      | Included as pilot-ready product         | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **Office AI Assistant** | Shared Application                 | Included as governed shared application | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **WorkflowOS**          | Custom / Client-Specific Workspace | Included as governed workspace          | L5 Pilot-ready (conditional)   | Safe to show with explanation |
 | **Sunbul**              | Custom / Client-Specific Workspace | Legacy alias / redirect to WorkflowOS   | N/A                            | Internal only                 |
 | **auditos demo**        | Demo                               | Included as demo only                   | L1 Marketing                   | Demo only                     |
 | **SimulationOS**        | Marketing capability label         | Do not claim as live                    | L1 Marketing                   | Do not show as implemented    |
-| **SSO (SAML/OIDC)**     | Enterprise auth capability         | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
-| **SCIM v2 Provisioning**| Identity management                | Included in v0.1                        | L6 Production-hardened         | Safe to show with explanation |
+| **SSO (SAML/OIDC)**     | Enterprise auth capability         | Included in v0.1                        | L5 Pilot-ready (conditional)   | Safe to show with explanation |
+| **SCIM v2 Provisioning**| Identity management                | Included in v0.1                        | L5 Pilot-ready (conditional)   | Safe to show with explanation |
 | **ComplianceOS**        | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **LegalOS**             | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
 | **GovOS**               | Product / System                   | Not implemented                         | L0 Concept                     | Do not show as implemented    |
@@ -133,7 +136,7 @@ Shared applications are governed tools built on AQLIYA Intelligence Core. They a
 
 ### LocalContentOS
 
-- Current status: **L6 Production-hardened** (2026-07-03). All 9 LC gaps closed.
+- Current status: **L5 Pilot-ready (conditional)** per P0 governance freeze (ADR-109). All 9 LC gaps closed.
 - Current route family: `/local-content/*` (27 routes with full error/loading/not-found boundaries)
 - Current data backing: `LocalContentProject`, `LocalContentSupplier`, `LocalContentSpendRecord`, `LocalContentClassification`, `LocalContentFinding`, `LocalContentEvidence`, `LocalContentApproval`, seed data, scoring engine, ERP integration
 - AI quality: 100% pilot readiness (7/7 GREEN), 95% acceptance, 88% confidence gradient

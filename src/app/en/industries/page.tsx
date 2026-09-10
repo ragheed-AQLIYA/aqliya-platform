@@ -1,11 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "Industries | AQLIYA",
   description:
     "Built for audit firms, government entities, enterprises, and professional services. Each sector activates governed operating paths on one institutional platform.",
+  alternates: buildAlternates("/en/industries"),
 };
 
 const sectors = [
@@ -136,12 +139,12 @@ export default function EnglishIndustriesPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
         <div className="space-y-16">
-          {sectors.map((sector) => (
-            <article
-              key={sector.id}
-              id={sector.id}
-              className="scroll-mt-24 rounded-2xl border border-border/60 bg-background p-6 sm:p-10"
-            >
+          {sectors.map((sector, i) => (
+            <Reveal key={sector.id} delay={i * 70}>
+              <article
+                id={sector.id}
+                className="scroll-mt-24 rounded-2xl border border-border/60 bg-background p-6 sm:p-10"
+              >
               <h2 className="text-2xl font-black text-foreground sm:text-3xl">
                 {sector.title}
               </h2>
@@ -226,7 +229,8 @@ export default function EnglishIndustriesPage() {
                 )}
                 <ScheduleDiagnosticCta locale="en" className="h-10 px-6 text-sm" />
               </div>
-            </article>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>

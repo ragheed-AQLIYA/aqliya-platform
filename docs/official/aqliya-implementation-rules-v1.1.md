@@ -5,8 +5,8 @@
 **Version:** 1.1
 **Status:** Official — mandatory coding and documentation rules
 **Owner:** Governance Team
-**Last Reviewed:** 2026-06-26
-**Note:** Implementation-status claims updated to match v0.1 code reality. See `AQLIYA_MASTER_REFERENCE.md` for current product status.
+**Last Reviewed:** 2026-09-06 — P0 Governance Freeze alignment
+**Note:** Implementation-status claims updated to reflect L5 Pilot-ready (conditional) status per ADR-109. DecisionOS remains L6.
 
 ---
 
@@ -105,7 +105,6 @@
 - Air-Gapped mode
 - AQLIYA Studio
 - Model Governance registry
-- SSO/LDAP/AD integration
 - SIEM integration
 - Kubernetes deployment
 - GPU-based local inference
@@ -122,6 +121,8 @@
 - PDF/XLSX export
 - Guided demo (/auditos)
 - Bilingual data processing
+- SSO/SAML/OIDC (NextAuth v5 providers, AES-256-GCM encrypted secrets, 65 tests)
+- SCIM v2 provisioning (User/Group CRUD, audit trail, API key auth)
 
 ---
 

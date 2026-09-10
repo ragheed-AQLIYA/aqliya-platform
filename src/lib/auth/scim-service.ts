@@ -13,6 +13,10 @@ import {
   type ScimUser,
   type ScimGroup,
 } from "./scim-types";
+import {
+  resolveScimProvisionedRole,
+  roleFromScimRolesValue,
+} from "./scim-role";
 
 // ─── Helpers ───
 
@@ -178,13 +182,16 @@ export async function createUser(
   });
 
   if (existing) {
-    // Update instead
+    const requestedRole = extractString(userData, "roles[0].value");
     const updated = await prisma.user.update({
       where: { id: existing.id },
       data: {
         name: displayName,
         image: extractString(userData, "profileUrl") || undefined,
         emailVerified: userData.active !== false ? new Date() : undefined,
+        ...(requestedRole
+          ? { role: resolveScimProvisionedRole(requestedRole) }
+          : {}),
       },
     });
 
@@ -218,7 +225,7 @@ export async function createUser(
       email,
       name: displayName,
       organizationId,
-      role: extractString(userData, "roles[0].value") as "ADMIN" | "OPERATOR" | "VIEWER" | undefined ?? "OPERATOR",
+      role: resolveScimProvisionedRole(extractString(userData, "roles[0].value")),
       emailVerified: active ? new Date() : undefined,
       image: extractString(userData, "profileUrl") || undefined,
     } as unknown as Prisma.UserCreateInput,
@@ -283,8 +290,8 @@ export async function updateUser(
   }
 
   const role = extractString(userData, "roles[0].value");
-  if (role && ["ADMIN", "OPERATOR", "VIEWER"].includes(role)) {
-    updateData.role = role as "ADMIN" | "OPERATOR" | "VIEWER";
+  if (role) {
+    updateData.role = resolveScimProvisionedRole(role);
   }
 
   const updated = await prisma.user.update({
@@ -339,12 +346,17 @@ export async function patchUser(
         updateData.email = String(op.value);
       } else if (op.path === "name.formatted") {
         updateData.name = String(op.value);
+      } else if (op.path === "roles" || op.path === "roles[0].value") {
+        updateData.role = resolveScimProvisionedRole(roleFromScimRolesValue(op.value));
       } else if (!op.path && typeof op.value === "object" && op.value !== null) {
         const val = op.value as Record<string, unknown>;
         if (val.userName) updateData.email = String(val.userName);
         if (val.displayName) updateData.name = String(val.displayName);
         if (typeof val.active === "boolean") {
           updateData.emailVerified = val.active ? new Date() : null;
+        }
+        if (val.roles !== undefined) {
+          updateData.role = resolveScimProvisionedRole(roleFromScimRolesValue(val.roles));
         }
       }
     } else if (op.op === "remove") {

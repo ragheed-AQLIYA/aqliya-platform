@@ -3,7 +3,8 @@
 import "server-only";
 
 import { revalidatePath } from "next/cache";
-import { getCurrentUser, isAdmin } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 import { AuditEngine } from "@/lib/core/audit";
 import {
   processOutboxBatch,
@@ -11,21 +12,19 @@ import {
 } from "@/lib/core/events/outbox-service";
 import { getEnterpriseHealthSnapshot } from "@/lib/platform/enterprise-health";
 
-async function requireAdmin() {
+async function requirePlatformAdmin() {
   const user = await getCurrentUser();
-  if (!isAdmin(user)) {
-    throw new Error("Access denied: admin role required");
-  }
+  assertPlatformAdmin(user);
   return user;
 }
 
 export async function getEnterpriseHealthAction() {
-  await requireAdmin();
+  await requirePlatformAdmin();
   return getEnterpriseHealthSnapshot();
 }
 
 export async function processPlatformOutboxAction() {
-  const user = await requireAdmin();
+  const user = await requirePlatformAdmin();
   const result = await processOutboxBatch(50);
 
   await AuditEngine.write({
@@ -45,7 +44,7 @@ export async function processPlatformOutboxAction() {
 }
 
 export async function retryFailedOutboxAction() {
-  const user = await requireAdmin();
+  const user = await requirePlatformAdmin();
   const result = await retryFailedOutboxEvents({ limit: 50 });
 
   await AuditEngine.write({

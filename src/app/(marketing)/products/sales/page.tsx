@@ -8,6 +8,7 @@ import {
   EnterpriseCTA,
 } from "@/components/enterprise";
 import { publicOsStatus } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
   const title = "SalesOS  نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA";
@@ -16,28 +17,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/products/sales",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-salesos.png",
-          width: 1200,
-          height: 630,
-          alt: "SalesOS - نظام الذاكرة التجارية | AQLIYA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-salesos.png"],
-    },
+    alternates: buildAlternates("/products/sales"),
   };
 }
 

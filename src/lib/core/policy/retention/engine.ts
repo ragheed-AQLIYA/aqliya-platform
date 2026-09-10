@@ -126,12 +126,33 @@ function getModelLabel(modelName: string): string {
   return labels[modelName] ?? modelName;
 }
 
+const ORG_SCOPED_MODELS = new Set([
+  "PlatformAuditLog",
+  "ScimProvisioningEvent",
+  "CrmSyncLog",
+  "ErpSyncLog",
+  "PlatformNotification",
+  "IngestionDocument",
+  "IngestionBatch",
+  "IntelligenceQuery",
+  "Decision",
+  "AuditEngagement",
+  "User",
+  "LocalContact",
+]);
+
 async function getExpiredRecords(
   model: PrismaModel,
   cutoff: Date,
+  organizationId?: string,
+  modelName?: string,
 ): Promise<{ id: string; createdAt: Date }[]> {
+  const where: Record<string, unknown> = { createdAt: { lte: cutoff } };
+  if (organizationId && modelName && ORG_SCOPED_MODELS.has(modelName)) {
+    where.organizationId = organizationId;
+  }
   const results = await model.findMany({
-    where: { createdAt: { lte: cutoff } },
+    where,
     orderBy: { createdAt: "asc" },
     take: 1000,
   } as never);
@@ -143,10 +164,34 @@ function canPerformHardDeleteOnModel(modelName: string): boolean {
   return !NEVER_DELETE.has(modelName);
 }
 
-export async function applyRetention(policy: RetentionPolicy): Promise<RetentionRunResult> {
+export async function applyRetention(
+  policy: RetentionPolicy,
+  organizationId?: string,
+): Promise<RetentionRunResult> {
   const startTime = Date.now();
 
   if (!policy.enabled) {
+    return {
+      modelName: policy.modelName,
+      action: policy.action,
+      status: "skipped",
+      recordsAffected: 0,
+      durationMs: Date.now() - startTime,
+    };
+  }
+
+  if (!organizationId) {
+    return {
+      modelName: policy.modelName,
+      action: policy.action,
+      status: "skipped",
+      recordsAffected: 0,
+      durationMs: Date.now() - startTime,
+      error: "organizationId is required for retention",
+    };
+  }
+
+  if (!ORG_SCOPED_MODELS.has(policy.modelName)) {
     return {
       modelName: policy.modelName,
       action: policy.action,
@@ -180,7 +225,12 @@ export async function applyRetention(policy: RetentionPolicy): Promise<Retention
 
   try {
     const cutoff = getCutoffDate(policy.retentionDays);
-    const expiredRecords = await getExpiredRecords(model, cutoff);
+    const expiredRecords = await getExpiredRecords(
+      model,
+      cutoff,
+      organizationId,
+      policy.modelName,
+    );
 
     if (expiredRecords.length === 0) {
       return {
@@ -320,13 +370,16 @@ export async function runScheduledRetention(organizationId?: string): Promise<{
   totalAffected: number;
   durationMs: number;
 }> {
+  if (!organizationId) {
+    throw new Error("organizationId is required for retention");
+  }
   const startTime = Date.now();
   const policies = getAllPolicies(organizationId);
   const jobs: RetentionJob[] = [];
   let totalAffected = 0;
 
   for (const policy of policies) {
-    const result = await applyRetention(policy);
+    const result = await applyRetention(policy, organizationId);
     totalAffected += result.recordsAffected;
 
     jobs.push({
@@ -359,10 +412,16 @@ export async function dryRun(policy?: RetentionPolicy, organizationId?: string):
 
     const model = resolveModel(p.modelName);
     if (!model) continue;
+    if (organizationId && !ORG_SCOPED_MODELS.has(p.modelName)) continue;
 
     try {
       const cutoff = getCutoffDate(p.retentionDays);
-      const expiredRecords = await getExpiredRecords(model, cutoff);
+      const expiredRecords = await getExpiredRecords(
+        model,
+        cutoff,
+        organizationId,
+        p.modelName,
+      );
 
       const recordsNotOnHold: { id: string; createdAt: Date }[] = [];
       for (const record of expiredRecords) {

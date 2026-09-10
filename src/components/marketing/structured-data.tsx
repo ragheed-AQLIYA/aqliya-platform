@@ -8,7 +8,7 @@ interface OrganizationJsonLdProps {
 export function OrganizationJsonLd({
   name = "AQLIYA",
   url = "https://aqliya.com",
-  logo = "https://aqliya.com/logo.png",
+  logo = "https://aqliya.com/brand/aqliya-logo-approved.png",
   description = "AQLIYA Private Governed Institutional Intelligence Platform",
 }: OrganizationJsonLdProps) {
   const jsonLd = {

@@ -21,7 +21,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
             <CardDescription>
               {result.error}
               {result.missing && (
-                <ul className="mt-2 list-disc pl-5">
+                <ul className="mt-2 list-disc ps-5">
                   {result.missing.map((m) => (
                     <li key={m}>{m.replace(/_/g, " ")}</li>
                   ))}
@@ -69,7 +69,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
           {whatToDo.nextSteps.length > 0 && (
             <div>
               <h3 className="font-medium mb-2">الخطوات التالية</h3>
-              <ul className="list-disc pl-5 text-sm text-muted-foreground">
+              <ul className="list-disc ps-5 text-sm text-muted-foreground">
                 {whatToDo.nextSteps.map((step, i) => (
                   <li key={i}>{step}</li>
                 ))}
@@ -80,7 +80,7 @@ export default async function WhatToDoNowPage({ params }: PageProps) {
           {whatToDo.blockers.length > 0 && (
             <div>
               <h3 className="font-medium mb-2 text-destructive">المعوقات</h3>
-              <ul className="list-disc pl-5 text-sm text-destructive">
+              <ul className="list-disc ps-5 text-sm text-destructive">
                 {whatToDo.blockers.map((blocker, i) => (
                   <li key={i}>{blocker}</li>
                 ))}

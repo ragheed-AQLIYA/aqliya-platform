@@ -3,13 +3,18 @@ import "server-only";
 import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { getPlatformNotificationsAction } from "@/actions/platform-overview-actions";
+import { resolveSessionCookieName } from "@/lib/auth/session-cookie";
 
 export const dynamic = "force-dynamic";
 
 const encoder = new TextEncoder();
 
 export async function GET(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+    salt: resolveSessionCookieName(req.cookies),
+  });
 
   if (!token?.sub) {
     return new Response("Unauthorized", { status: 401 });

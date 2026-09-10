@@ -32,7 +32,7 @@ export function DecisionDetailSectionIntake({ intake }: IntakeSectionProps) {
       {intake.reasons.length > 0 && (
         <div className="mt-4">
           <h3 className="text-sm font-medium">الأسباب</h3>
-          <ul className="mt-2 list-disc pl-5 text-sm">
+          <ul className="mt-2 list-disc ps-5 text-sm">
             {intake.reasons.map((reason: string) => (
               <li key={reason}>{reason}</li>
             ))}
@@ -42,7 +42,7 @@ export function DecisionDetailSectionIntake({ intake }: IntakeSectionProps) {
       {intake.requiredNextSteps.length > 0 && (
         <div className="mt-4">
           <h3 className="text-sm font-medium">الخطوات التالية المطلوبة</h3>
-          <ul className="mt-2 list-disc pl-5 text-sm">
+          <ul className="mt-2 list-disc ps-5 text-sm">
             {intake.requiredNextSteps.map((step: string) => (
               <li key={step}>{step}</li>
             ))}

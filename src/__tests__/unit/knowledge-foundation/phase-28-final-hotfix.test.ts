@@ -130,12 +130,13 @@ describe("Phase 28 Final Hotfix — R-03 release authorization", () => {
 });
 
 describe("Phase 28 Final Hotfix — R-04 middleware coverage", () => {
-  it("knowledge-foundation routes appear in middleware matcher and routeMinRoles", () => {
+  it("knowledge-foundation routes appear in universal middleware policy", () => {
     const middlewarePath = join(process.cwd(), "src", "middleware.ts");
     const source = readFileSync(middlewarePath, "utf-8");
 
     expect(source).toContain('"/knowledge-foundation": "viewer"');
     expect(source).toContain('"/knowledge-foundation"');
-    expect(source).toContain('"/knowledge-foundation/:path*"');
+    expect(source).toContain('"/knowledge-foundation": "viewer"');
+    expect(source).toContain("/((?!");
   });
 });

@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { getSamlAuthorizeUrl } from "@/lib/auth/saml/saml-sp";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { createLogger } from "@/lib/observability/logger";
+import { decryptStoredSsoSecret } from "@/lib/auth/sso-service";
 
 const logger = createLogger({ product: "platform", action: "saml-initiate" });
 
@@ -62,7 +63,8 @@ export async function GET(
     userInfoUrl: provider.userInfoUrl,
     jwksUri: provider.jwksUri,
     clientId: provider.clientId,
-    clientSecret: provider.clientSecret,
+    hasClientSecret: Boolean(provider.clientSecret),
+    clientSecret: decryptStoredSsoSecret(provider.clientSecret),
     samlEntryPoint: provider.samlEntryPoint,
     samlIssuer: provider.samlIssuer,
     samlCert: provider.samlCert,

@@ -29,11 +29,11 @@ export default function RecommendationError({
           حدث خطأ أثناء تحميل الصفحة. يرجى المحاولة مرة أخرى.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Recommendation encountered an error. Please try again.
+          حدث خطأ أثناء معالجة التوصية. يرجى المحاولة مرة أخرى.
         </p>
         {error.digest && (
           <p className="text-xs text-muted-foreground/40">
-            Error ID: {error.digest}
+            معرف الخطأ: {error.digest}
           </p>
         )}
       </div>

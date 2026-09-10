@@ -3,15 +3,14 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getPlatformHealthAction } from "@/actions/platform-overview-actions";
-import { getCurrentUser, isAdmin } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 // ─── Admin guard ───────────────────────────────────────────────────────────
 
 async function requireAdmin() {
   const user = await getCurrentUser();
-  if (!isAdmin(user)) {
-    throw new Error("Access denied: admin role required");
-  }
+  assertPlatformAdmin(user);
   return user;
 }
 

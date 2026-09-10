@@ -21,8 +21,47 @@ import { checkBudgetQuota } from "@/lib/core/ai/budget-manager"
 import { injectGovernedRagIntoRequest } from "@/lib/core/ai/orchestrator-rag-inject"
 import { sanitizeTaskInput } from "@/lib/security/prompt-sanitization"
 import { createLogger } from "@/lib/observability/logger"
+import { authorizeAIAction, type AITaskType } from "@/lib/core/ai/ai-authorization"
 
 const logger = createLogger({ product: "ai_orchestrator" })
+
+const AI_TASK_TYPES: AITaskType[] = [
+  "analysis",
+  "generation",
+  "review",
+  "extraction",
+  "classification",
+  "embedding",
+]
+
+function mapAiTaskType(taskType: string): AITaskType {
+  return AI_TASK_TYPES.includes(taskType as AITaskType)
+    ? (taskType as AITaskType)
+    : "analysis"
+}
+
+function assertAuthorizedAiRequest(request: {
+  taskType: string
+  organizationId?: string
+  userId?: string
+  userRole?: string
+}): void {
+  if (request.userId && !request.organizationId) {
+    throw new Error("AI actions require authenticated tenant context")
+  }
+  if (!request.userId) {
+    return
+  }
+  const result = authorizeAIAction({
+    taskType: mapAiTaskType(request.taskType),
+    organizationId: request.organizationId ?? "",
+    actorId: request.userId,
+    actorRoles: request.userRole ? [request.userRole.toLowerCase()] : [],
+  })
+  if (!result.allowed) {
+    throw new Error(result.reason ?? "AI action not authorized")
+  }
+}
 
 export type OrchestratorConfig = {
   defaultProvider?: AIProviderId
@@ -219,6 +258,7 @@ export class AIOrchestrator {
     governanceContext: GovernanceContext
     warnings: string[]
   }> {
+    assertAuthorizedAiRequest(request)
     const startMs = Date.now()
     const governanceContext = getGovernanceContext(request.taskType)
 
@@ -335,6 +375,7 @@ export class AIOrchestrator {
     stream: ReadableStream<Uint8Array>
     providerId: AIProviderId
   }> {
+    assertAuthorizedAiRequest(request)
     const governanceContext = getGovernanceContext(request.taskType)
 
     const aiRequest: AIRequest = {

@@ -1,9 +1,10 @@
 ﻿# AQLIYA Production Deployment Runbook
 
-> **Version:** 1.7  
-> **Last updated:** 2026-08-23  
+> **Version:** 1.8  
+> **Last updated:** 2026-08-31  
 > **Scope:** Production deployment of AQLIYA platform (Next.js 16, PostgreSQL 16, Prisma 7, Node.js 22)  
 > **Changelog:**
+> - v1.8 (2026-08-31): Platform-admin allow-list, proxy/session, SCIM per-org keys, CRM webhook org binding. Live ops gates (Redis rate-limit, ClamAV, restore) remain external.
 > - v1.7 (2026-08-23): Apex/`www` TLS incident documented — ACM certificate covers `app.aqliya.com` only; apex DNS points at the same ALB causing `ERR_CERT_COMMON_NAME_INVALID`. Canonical production URL confirmed as `app.aqliya.com`; promote workflow smoke tests repointed.
 > - v1.6 (2026-07-25): Audit model merge complete — PlatformAuditLog is sole audit model (no legacy AuditEvent/AuditLog). Added health endpoint matrix (4 endpoints). Added PlatformAuditLog migration verification steps. Updated rollback to include audit model integrity checks. Updated all model references.
 > - v1.5 (2026-06-21): Pilot Launch Closure — ClamAV ECS sidecar in Terraform, `RATE_LIMITER=redis` + `SCANNER_PROVIDER=clamav` env vars, closure scripts (`platform:pilot-closure`, scanner smoke, rate-limit load), restore-drill RTO/RPO reporting, Pilot Launch Certificate.
@@ -59,7 +60,10 @@ cp .env.example .env
 
 | Variable | Description | Required for |
 |----------|-------------|--------------|
-| `SCIM_API_KEY` | Bearer token for SCIM v2 API | SCIM provisioning |
+| `SCIM_API_KEY` | Fallback single-org SCIM key (prefer `SCIM_ORG_KEYS`) | One-org SCIM only |
+| `SCIM_DEFAULT_ORG_ID` | Org bound to the fallback SCIM key | One-org SCIM only |
+| `SCIM_ORG_KEYS` | Per-org keys: JSON `{"org":"key"}` or `org=key,org2=key2` | Multi-tenant SCIM |
+| `SCIM_ALLOW_ADMIN_ROLE` | Allow SCIM to assign `ADMIN` (`true` only) | Off by default |
 | `SSO_DEFAULT_ORG_ID` | Default org ID for SCIM-bound users | SCIM + SSO |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | Google OAuth credentials | Google sign-in |
 | `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` | GitHub OAuth credentials | GitHub sign-in |
@@ -74,6 +78,21 @@ cp .env.example .env
 | `NEXT_PUBLIC_APP_URL` | Used as SAML SP issuer and callback base URL |
 
 SAML provider configuration (entry point, certificate, issuer) is stored encrypted in the `SsoProvider` database table. No env vars are needed for individual SAML providers.
+
+### Platform admin & session (2026-08-31)
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `PLATFORM_ADMIN_USER_IDS` | Comma-separated user IDs. Empty = nobody is platform admin | Production operator access |
+| `PLATFORM_ADMIN_EMAILS` | Comma-separated emails (lowercase match) | Alternative allow-list |
+| `AUTH_TRUST_HOST` | Must be `true` in production behind ALB/CloudFront | Production |
+| `TRUST_PROXY` | Trust `X-Forwarded-For` / `X-Real-IP` only when `true` | Production behind a trusted proxy |
+| `SESSION_MAX_AGE_SECONDS` | JWT/session lifetime (default 43200 = 12h) | Optional |
+| `SESSION_AUTHZ_REFRESH_SECONDS` | Re-load role/org from DB (default 3600) | Optional |
+| `HUBSPOT_WEBHOOK_ORGANIZATION_ID` | Tenant bound to HubSpot CRM webhook | If HubSpot webhook is enabled |
+| `HUBSPOT_WEBHOOK_PORTAL_ID` | Optional HubSpot portal pin | Optional |
+
+Tenant `ADMIN` is not a platform superuser. Outbox drain, enterprise health, and `/operator` require the allow-list above.
 
 ### Security & Scanning
 

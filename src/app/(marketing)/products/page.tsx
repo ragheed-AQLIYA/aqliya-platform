@@ -2,10 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import {
   roadmapProductCards,
   tier1ProductCards,
 } from "@/lib/marketing/product-pages-content";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export function generateMetadata(): Metadata {
   const title = "أنظمة التشغيل | AQLIYA";
@@ -14,28 +16,7 @@ export function generateMetadata(): Metadata {
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      url: "https://aqliya.com/products",
-      siteName: "AQLIYA",
-      locale: "ar_SA",
-      type: "website",
-      images: [
-        {
-          url: "/og-products.png",
-          width: 1200,
-          height: 630,
-          alt: "أنظمة التشغيل المؤسسية - AQLIYA",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/og-products.png"],
-    },
+    alternates: buildAlternates("/products"),
   };
 }
 
@@ -48,7 +29,7 @@ function ProductCard({
     <Link
       href={card.href}
       className={cn(
-        "group flex flex-col rounded-2xl border p-6 transition-colors hover:border-primary/30",
+        "group flex h-full flex-col rounded-2xl border p-6 transition-colors hover:border-primary/30",
         card.muted
           ? "border-border/50 bg-muted/20 opacity-80"
           : "border-border/70 bg-background",
@@ -92,19 +73,21 @@ export default function ProductsPage() {
         }
       />
 
-      <section className="mx-auto w-full max-w-7xl px-6 py-14">
+      <section className="mx-auto w-full max-w-7xl px-6 py-16 sm:py-20">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-600">
           أنظمة التشغيل الأساسية
         </p>
         <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {tier1ProductCards.map((card) => (
-            <ProductCard key={card.id} card={card} />
+          {tier1ProductCards.map((card, i) => (
+            <Reveal key={card.id} delay={i * 70} className="h-full">
+              <ProductCard card={card} />
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="border-t bg-muted/10">
-        <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700/80">
             خطوط خارطة المنصة
           </p>
@@ -112,8 +95,10 @@ export default function ProductsPage() {
             قدرات مشتركة أو نماذج أولية  تُناقش ضمن نطاق التفعيل المؤسسي.
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
-            {roadmapProductCards.map((card) => (
-              <ProductCard key={card.id} card={card} />
+            {roadmapProductCards.map((card, i) => (
+              <Reveal key={card.id} delay={i * 70} className="h-full">
+                <ProductCard card={card} />
+              </Reveal>
             ))}
           </div>
         </div>

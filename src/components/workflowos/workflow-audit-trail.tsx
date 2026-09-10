@@ -106,7 +106,7 @@ export function WorkflowAuditTrail({
                 typeof event.metadata === "object" &&
                 "previousStatus" in event.metadata &&
                 "newStatus" in event.metadata && (
-                  <span className="mr-2">
+                  <span className="me-2">
                     | من{" "}
                     {String(
                       (event.metadata as Record<string, unknown>)

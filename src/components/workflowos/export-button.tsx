@@ -123,9 +123,9 @@ export function ExportButton({
             disabled={actionLoading !== null}
           >
             {actionLoading === "download" ? (
-              <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+              <Loader2 className="ms-1 h-4 w-4 animate-spin" />
             ) : (
-              <Download className="ml-1 h-4 w-4" />
+              <Download className="ms-1 h-4 w-4" />
             )}
             {statusLabel()}
           </Button>
@@ -137,15 +137,15 @@ export function ExportButton({
             disabled={actionLoading !== null}
           >
             {actionLoading === "request" ? (
-              <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+              <Loader2 className="ms-1 h-4 w-4 animate-spin" />
             ) : (
-              <Download className="ml-1 h-4 w-4" />
+              <Download className="ms-1 h-4 w-4" />
             )}
             {statusLabel()}
           </Button>
         ) : (
           <Button size="sm" variant="outline" disabled>
-            <Clock className="ml-1 h-4 w-4" />
+            <Clock className="ms-1 h-4 w-4" />
             {statusLabel()}
           </Button>
         )}

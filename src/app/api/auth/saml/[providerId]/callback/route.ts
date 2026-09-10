@@ -8,15 +8,17 @@ import { encode } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 import { validateSamlResponse } from "@/lib/auth/saml/saml-sp";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
+import { decryptStoredSsoSecret } from "@/lib/auth/sso-service";
+import {
+  sessionCookieName,
+  sessionCookieSalt,
+  sessionMaxAgeSeconds,
+} from "@/lib/auth/session-cookie";
 
 export const runtime = "nodejs";
 
-const SESSION_COOKIE =
-  process.env.NODE_ENV === "production"
-    ? "__Secure-authjs.session-token"
-    : "authjs.session-token";
-
-const COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+const SESSION_COOKIE = sessionCookieName();
+const COOKIE_MAX_AGE = sessionMaxAgeSeconds();
 
 export async function POST(
   req: NextRequest,
@@ -77,7 +79,8 @@ export async function POST(
     userInfoUrl: provider.userInfoUrl,
     jwksUri: provider.jwksUri,
     clientId: provider.clientId,
-    clientSecret: provider.clientSecret,
+    hasClientSecret: Boolean(provider.clientSecret),
+    clientSecret: decryptStoredSsoSecret(provider.clientSecret),
     samlEntryPoint: provider.samlEntryPoint,
     samlIssuer: provider.samlIssuer,
     samlCert: provider.samlCert,
@@ -165,7 +168,7 @@ export async function POST(
       ssoProvider: `saml:${providerId}`,
     },
     secret,
-    salt: SESSION_COOKIE,
+    salt: sessionCookieSalt(),
     maxAge: COOKIE_MAX_AGE,
   });
 

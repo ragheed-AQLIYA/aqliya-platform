@@ -2,6 +2,7 @@ import { z } from "zod"
 import { NextRequest, NextResponse } from "next/server"
 import { evaluateWithGate, getGateThreshold, registerGateThreshold } from "@/lib/core/ai/eval-gate"
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth"
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin"
 
 export const dynamic = "force-dynamic"
 
@@ -52,9 +53,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     const { searchParams } = new URL(request.url)
     const suiteId = searchParams.get("suiteId")
     if (suiteId) {
@@ -64,6 +63,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error"
     if (msg === "Unauthenticated") return NextResponse.json({ success: false, error: { code: "UNAUTHENTICATED" } }, { status: 401 })
+    if (msg.startsWith("Access denied")) return NextResponse.json({ success: false, error: { code: "FORBIDDEN" } }, { status: 403 })
     return NextResponse.json({ success: false, error: { code: "EVAL_GATE_ERROR" } }, { status: 500 })
   }
 }
@@ -71,9 +71,7 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
 
     let body: unknown;
     try {

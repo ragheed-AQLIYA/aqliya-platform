@@ -2,20 +2,30 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 import type { PlatformNotification } from "./types";
 
 export async function getPlatformNotificationsAction(): Promise<{
   notifications: PlatformNotification[];
   counts: { critical: number; warning: number; info: number };
 }> {
-  await getCurrentUser();
+  const user = await getCurrentUser();
+  const organizationId = user.organizationId;
   const now = new Date();
   const staleThreshold = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+  // Tenant users may only see audit-derived notifications from their own
+  // organization. Platform scope is an explicit allow-list capability, not a
+  // consequence of sharing platformOrganizationId with sibling tenants.
+  const tenantAuditFilter =
+    isPlatformAdmin(user) && user.platformOrganizationId
+      ? { platformOrganizationId: user.platformOrganizationId }
+      : { organizationId };
+
   const decisionsInReview = await prisma.decision
     .findMany({
-      where: { status: "IN_REVIEW" },
+      where: { status: "IN_REVIEW", organizationId },
       select: { id: true, title: true, updatedAt: true },
       take: 20,
       orderBy: { updatedAt: "desc" },
@@ -25,6 +35,7 @@ export async function getPlatformNotificationsAction(): Promise<{
   const decisionsOverdue = await prisma.decision
     .findMany({
       where: {
+        organizationId,
         targetDate: { lt: now },
         status: { notIn: ["APPROVED", "REJECTED", "ARCHIVED"] },
       },
@@ -36,7 +47,7 @@ export async function getPlatformNotificationsAction(): Promise<{
 
   const workflowFailed = await prisma.workflowRecord
     .findMany({
-      where: { status: { in: ["rejected", "cancelled"] } },
+      where: { organizationId, status: { in: ["rejected", "cancelled"] } },
       select: { id: true, title: true, status: true, updatedAt: true },
       take: 20,
       orderBy: { updatedAt: "desc" },
@@ -45,7 +56,7 @@ export async function getPlatformNotificationsAction(): Promise<{
 
   const workflowInReview = await prisma.workflowRecord
     .findMany({
-      where: { status: "in_progress" },
+      where: { organizationId, status: "in_progress" },
       select: { id: true, title: true, updatedAt: true },
       take: 20,
       orderBy: { updatedAt: "desc" },
@@ -54,7 +65,7 @@ export async function getPlatformNotificationsAction(): Promise<{
 
   const lcPendingReviews = await prisma.localContentReview
     .findMany({
-      where: { status: "pending" },
+      where: { status: "pending", project: { organizationId } },
       select: { id: true, projectId: true, comments: true, createdAt: true },
       take: 20,
       orderBy: { createdAt: "desc" },
@@ -64,6 +75,7 @@ export async function getPlatformNotificationsAction(): Promise<{
   const staleDeals = await prisma.salesDeal
     .findMany({
       where: {
+        organizationId,
         status: { notIn: ["closed_won", "closed_lost"] },
         updatedAt: { lt: staleThreshold },
       },
@@ -78,6 +90,7 @@ export async function getPlatformNotificationsAction(): Promise<{
       where: {
         createdAt: { gte: todayStart },
         severity: { in: ["error", "critical"] },
+        ...tenantAuditFilter,
       },
       select: { id: true, action: true, targetLabel: true, actorName: true, createdAt: true, severity: true },
       take: 20,

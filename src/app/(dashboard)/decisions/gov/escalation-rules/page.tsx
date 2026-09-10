@@ -175,7 +175,7 @@ export default function EscalationRulesPage() {
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreateDialog}>
-              <Plus className="h-4 w-4 ml-1" />
+              <Plus className="h-4 w-4 ms-1" />
               قاعدة جديدة
             </Button>
           </DialogTrigger>
@@ -270,7 +270,7 @@ export default function EscalationRulesPage() {
                   <TableHead>المهلة (ساعات)</TableHead>
                   <TableHead>الحالة</TableHead>
                   <TableHead>تاريخ الإنشاء</TableHead>
-                  <TableHead className="text-left">الإجراءات</TableHead>
+                  <TableHead className="text-end">الإجراءات</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -130,6 +130,9 @@ export async function getUserTaskList(userId: string, filters?: {
   const user = await getCurrentUser();
   const platformOrgId = user.platformOrganizationId;
   if (!platformOrgId) return { workspaces: [], projects: [], tasks: [], taskCounts: [], recentActivity: [] };
+  if (userId !== user.id) {
+    throw new Error("Access denied");
+  }
 
   const [workspaces, projects] = await Promise.all([
     prisma.clientWorkspace.findMany({
@@ -138,7 +141,7 @@ export async function getUserTaskList(userId: string, filters?: {
       orderBy: { name: "asc" },
     }),
     prisma.project.findMany({
-      where: { status: "active" },
+      where: { status: "active", workspace: { platformOrganizationId: platformOrgId } },
       select: { id: true, name: true, workspaceId: true },
       orderBy: { name: "asc" },
       take: 50,
@@ -223,7 +226,7 @@ export async function getTaskDetail(taskId: string): Promise<TaskDetail | null> 
   });
 
   if (!task) return null;
-  if (orgId && task.platformOrganizationId !== orgId) return null;
+  if (!orgId || task.platformOrganizationId !== orgId) return null;
 
   return task as unknown as TaskDetail;
 }
@@ -231,12 +234,13 @@ export async function getTaskDetail(taskId: string): Promise<TaskDetail | null> 
 export async function getTaskAuditTrail(taskId: string): Promise<AuditEventEntry[]> {
   const user = await getCurrentUser();
   const orgId = user.platformOrganizationId || user.organizationId;
+  if (!orgId) return [];
 
   const events = await prisma.platformAuditLog.findMany({
     where: {
       sourceModel: "OfficeAiTask",
       sourceId: taskId,
-      platformOrganizationId: orgId || undefined,
+      platformOrganizationId: orgId,
     },
     orderBy: { createdAt: "desc" },
     take: 50,

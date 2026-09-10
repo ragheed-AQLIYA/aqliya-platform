@@ -313,7 +313,7 @@ export function useGovernancePage(params: Promise<{ id: string }>) {
           : formatExportMarkdown(result.data);
       setExportData(content);
     } else {
-      setError(result.error || "Failed to export");
+      setError(result.error || "فشل في التصدير");
     }
     setLoadingExport(false);
   }, [id]);

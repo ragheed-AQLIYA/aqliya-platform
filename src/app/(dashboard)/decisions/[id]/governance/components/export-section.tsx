@@ -76,11 +76,11 @@ export function ExportSection({
               size="sm"
               onClick={onDownload}
             >
-              <Download className="h-4 w-4 mr-1" />
+              <Download className="h-4 w-4 me-1" />
               تحميل الملف
             </Button>
             <Button variant="outline" size="sm" onClick={onCopy}>
-              <Copy className="h-4 w-4 mr-1" />
+              <Copy className="h-4 w-4 me-1" />
               {copied ? "تم النسخ!" : "نسخ المحتوى"}
             </Button>
           </div>

@@ -13,7 +13,7 @@ export default function RecommendationNotFound() {
           لم نتمكن من العثور على التوصية المطلوبة أو ليس لديك صلاحية الوصول إليها.
         </p>
         <p className="text-xs text-muted-foreground/60">
-          Recommendation not found or access is not permitted.
+          التوصية غير موجودة أو ليس لديك صلاحية الوصول.
         </p>
       </div>
       <Link

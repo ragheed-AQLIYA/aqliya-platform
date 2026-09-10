@@ -22,6 +22,7 @@ jest.mock("@/lib/platform/rate-limiter/presets", () => ({
     AI_ENDPOINTS: { maxRequests: 20, windowMs: 60_000 },
     LCOS_EVIDENCE_DOWNLOAD: { maxRequests: 10, windowMs: 60_000 },
     LCOS_EXPORT: { maxRequests: 5, windowMs: 60_000 },
+    POW_ENDPOINTS: { maxRequests: 20, windowMs: 60_000 },
   },
 }));
 
@@ -147,7 +148,26 @@ describe("Rate Limit Middleware — Rate Limit Triggered (429)", () => {
 });
 
 describe("Rate Limit Middleware — IP Extraction", () => {
-  it("extracts IP from X-Forwarded-For header", async () => {
+  const previousTrust = process.env.TRUST_PROXY;
+
+  afterEach(() => {
+    process.env.TRUST_PROXY = previousTrust;
+  });
+
+  it("ignores X-Forwarded-For when TRUST_PROXY is unset", async () => {
+    delete process.env.TRUST_PROXY;
+    const req = makeRequest("http://localhost/api/metrics", {
+      headers: { "x-forwarded-for": "192.168.1.1, 10.0.0.1" },
+    });
+    await rateLimitMiddleware(req);
+
+    const key = mockCheckEdgeRateLimit.mock.calls[0][0];
+    expect(key).toContain("anonymous");
+    expect(key).not.toContain("192.168.1.1");
+  });
+
+  it("extracts IP from X-Forwarded-For when TRUST_PROXY=true", async () => {
+    process.env.TRUST_PROXY = "true";
     const req = makeRequest("http://localhost/api/metrics", {
       headers: { "x-forwarded-for": "192.168.1.1, 10.0.0.1" },
     });
@@ -157,17 +177,8 @@ describe("Rate Limit Middleware — IP Extraction", () => {
     expect(key).toContain("192.168.1.1");
   });
 
-  it("extracts IP from X-Real-IP header when X-Forwarded-For is missing", async () => {
-    const req = makeRequest("http://localhost/api/metrics", {
-      headers: { "x-real-ip": "10.0.0.5" },
-    });
-    await rateLimitMiddleware(req);
-
-    const key = mockCheckEdgeRateLimit.mock.calls[0][0];
-    expect(key).toContain("10.0.0.5");
-  });
-
   it("falls back to 'anonymous' when no IP headers present", async () => {
+    process.env.TRUST_PROXY = "true";
     const req = makeRequest("http://localhost/api/metrics");
     await rateLimitMiddleware(req);
 

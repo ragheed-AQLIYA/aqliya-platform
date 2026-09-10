@@ -4,6 +4,7 @@ import { createLogger } from "@/lib/observability/logger";
 import type { OAuthConfig } from "next-auth/providers";
 import { prisma } from "@/lib/prisma";
 import { buildProviderConfig } from "@/lib/auth/sso-providers";
+import { decryptStoredSsoSecret } from "@/lib/auth/sso-service";
 
 
 const logger = createLogger({ product: "platform", action: "unknown" });
@@ -38,9 +39,15 @@ export async function loadEnabledDbOAuthProviders(): Promise<
     const providers: OAuthConfig<Record<string, unknown>>[] = [];
 
     for (const record of records) {
-      const built = buildProviderConfig(record, {
-        authProviderId: dbSsoProviderAuthId(record.id),
-      });
+      const built = buildProviderConfig(
+        {
+          ...record,
+          clientSecret: decryptStoredSsoSecret(record.clientSecret),
+        },
+        {
+          authProviderId: dbSsoProviderAuthId(record.id),
+        },
+      );
       if (hasOAuthCredentials(built)) {
         providers.push(built);
       }

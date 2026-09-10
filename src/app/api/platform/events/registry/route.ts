@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { CORE_EVENT_SCHEMA_VERSION } from "@/lib/core/contracts/event-envelope";
 import { EventSchemaRegistry } from "@/lib/core/events/schema-registry";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
-/** ADMIN — registered platform event schemas (Event Bus Phase 2). */
+/** Platform admin — registered platform event schemas (Event Bus Phase 2). */
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     const schemas = EventSchemaRegistry.list();
     return NextResponse.json({
       ok: true,

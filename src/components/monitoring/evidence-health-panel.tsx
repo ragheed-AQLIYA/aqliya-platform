@@ -1,6 +1,10 @@
 import { getEvidenceHealthSnapshot } from "@/lib/core/evidence/health";
+import { getCurrentUser } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export async function EvidenceHealthPanel() {
+  const user = await getCurrentUser();
+  if (!isPlatformAdmin(user)) return null;
   const snapshot = await getEvidenceHealthSnapshot();
 
   return (

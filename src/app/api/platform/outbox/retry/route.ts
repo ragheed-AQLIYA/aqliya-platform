@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { AuditEngine } from "@/lib/core/audit";
 import { retryFailedOutboxEvents } from "@/lib/core/events/outbox-service";
 import { sanitizeError, sanitizeErrorResponse, httpStatusFromCode } from "@/lib/platform/api-error";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
@@ -15,9 +16,7 @@ const outboxRetrySchema = z.object({
 export async function POST(request: Request) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     let ids: string[] | undefined;
     try {
       let rawBody: unknown;

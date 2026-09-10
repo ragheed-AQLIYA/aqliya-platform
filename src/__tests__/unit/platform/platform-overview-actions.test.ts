@@ -13,6 +13,11 @@ jest.mock("@/lib/platform/cache-strategy", () => ({
   ENTITY_CACHE_TTL_MS: 60000,
 }));
 
+const mockGetCurrentUser = jest.fn();
+jest.mock("@/lib/auth", () => ({
+  getCurrentUser: (...args: unknown[]) => mockGetCurrentUser(...args),
+}));
+
 const mockDecisionCount = jest.fn();
 const mockWorkflowRecordCount = jest.fn();
 const mockAuditAiOutputCount = jest.fn();
@@ -73,6 +78,12 @@ function makeDate(daysAgo: number): Date {
 describe("getPlatformHealthAction", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetCurrentUser.mockResolvedValue({
+      id: "user-1",
+      role: "VIEWER",
+      organizationId: "org-a",
+      platformOrganizationId: "org-a",
+    });
   });
 
   it("returns healthy status when all metrics are good", async () => {
@@ -243,6 +254,12 @@ describe("getPlatformHealthAction", () => {
 describe("getPlatformNotificationsAction", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockGetCurrentUser.mockResolvedValue({
+      id: "user-1",
+      role: "VIEWER",
+      organizationId: "org-a",
+      platformOrganizationId: "org-a",
+    });
   });
 
   it("returns empty notifications when no data exists", async () => {
@@ -441,6 +458,40 @@ describe("getPlatformNotificationsAction", () => {
     // Platform critical (uses action as title)
     expect(find("platform-critical-")?.title).toBe("فشل النظام");
   });
+
+  it.each(["VIEWER", "OPERATOR", "ADMIN"] as const)(
+    "scopes notification queries to the caller tenant for %s",
+    async (role) => {
+      mockGetCurrentUser.mockResolvedValue({
+        id: `${role}-1`,
+        role,
+        organizationId: "org-a",
+      });
+      mockDecisionFindMany.mockResolvedValue([]);
+      mockWorkflowRecordFindMany.mockResolvedValue([]);
+      mockLocalContentReviewFindMany.mockResolvedValue([]);
+      mockSalesDealFindMany.mockResolvedValue([]);
+      mockPlatformAuditLogFindMany.mockResolvedValue([]);
+
+      await getPlatformNotificationsAction();
+
+      expect(mockDecisionFindMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({ organizationId: "org-a" }),
+        }),
+      );
+      expect(mockSalesDealFindMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({ organizationId: "org-a" }),
+        }),
+      );
+      expect(mockDecisionFindMany).not.toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({ organizationId: "org-b" }),
+        }),
+      );
+    },
+  );
 });
 
 

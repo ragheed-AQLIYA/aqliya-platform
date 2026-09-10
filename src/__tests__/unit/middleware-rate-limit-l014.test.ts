@@ -108,6 +108,7 @@ describe("rateLimitMiddleware", () => {
   })
 
   it("uses unique keys per IP", async () => {
+    process.env.TRUST_PROXY = "true"
     const { rateLimitMiddleware } = await import("@/middleware-rate-limit")
     const reqA = makeNextRequest("/api/test", "1.1.1.1")
     const reqB = makeNextRequest("/api/test", "2.2.2.2")

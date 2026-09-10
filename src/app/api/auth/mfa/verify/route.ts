@@ -5,6 +5,11 @@ import { getToken, encode } from "next-auth/jwt";
 import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/auth/encryption";
 import { verifyMFAToken, verifyBackupCode } from "@/lib/auth/mfa";
+import {
+  resolveSessionCookieName,
+  sessionCookieSalt,
+  sessionMaxAgeSeconds,
+} from "@/lib/auth/session-cookie";
 
 const mfaVerifySchema = z.object({
   token: z.string().optional(),
@@ -38,9 +43,11 @@ export async function POST(req: NextRequest) {
 
     const { token, backupCode } = parsed.data;
 
+    const cookieName = resolveSessionCookieName(req.cookies);
     const sessionToken = await getToken({
       req,
       secret: process.env.AUTH_SECRET,
+      salt: cookieName,
     });
 
     if (!sessionToken?.sub) {
@@ -90,11 +97,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const cookieName =
-      process.env.NODE_ENV === "production"
-        ? "__Secure-authjs.session-token"
-        : "authjs.session-token";
-
     const newJwt = await encode({
       token: {
         ...sessionToken,
@@ -102,7 +104,8 @@ export async function POST(req: NextRequest) {
         mfaVerified: true,
       },
       secret: process.env.AUTH_SECRET!,
-      salt: "authjs.session-token",
+      salt: sessionCookieSalt(),
+      maxAge: sessionMaxAgeSeconds(),
     });
 
     const response = NextResponse.json({ success: true });
@@ -112,7 +115,7 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 30 * 24 * 60 * 60,
+      maxAge: sessionMaxAgeSeconds(),
     });
 
     return response;

@@ -35,7 +35,7 @@ describe("checkTenantAccess", () => {
     expect(result.reason).toContain("Tenant access denied");
   });
 
-  it("allows admin cross-tenant access", async () => {
+  it("denies tenant admin cross-tenant access", async () => {
     const adminUser: CurrentUser = {
       id: "admin-1",
       email: "admin@test.com",
@@ -49,8 +49,32 @@ describe("checkTenantAccess", () => {
       { type: "engagement", id: "e-1" },
       { tenantId: "other-org" },
     );
-    expect(result.allowed).toBe(true);
-    expect(result.resolvedTenantId).toBe("other-org");
+    expect(result.allowed).toBe(false);
+    expect(result.reason).toContain("Tenant access denied");
+  });
+
+  it("allows platform admin cross-tenant access", async () => {
+    const previous = process.env.PLATFORM_ADMIN_EMAILS;
+    process.env.PLATFORM_ADMIN_EMAILS = "platform@aqliya.com";
+    const adminUser: CurrentUser = {
+      id: "platform-1",
+      email: "platform@aqliya.com",
+      name: "Platform Admin",
+      role: "ADMIN" as const,
+      organizationId: "org-1",
+      organization: { id: "org-1", name: "Admin Org" },
+    };
+    try {
+      const result = await checkTenantAccess(
+        adminUser,
+        { type: "engagement", id: "e-1" },
+        { tenantId: "other-org" },
+      );
+      expect(result.allowed).toBe(true);
+      expect(result.resolvedTenantId).toBe("other-org");
+    } finally {
+      process.env.PLATFORM_ADMIN_EMAILS = previous;
+    }
   });
 
   it("falls back to resource.tenantId when options.tenantId not provided", async () => {
@@ -61,12 +85,37 @@ describe("checkTenantAccess", () => {
     expect(result.allowed).toBe(true);
   });
 
-  it("falls back to user.organizationId when no tenant context provided", async () => {
+  it("treats organization resource.id as the target tenant", async () => {
+    const adminUser: CurrentUser = {
+      id: "admin-1",
+      email: "admin@test.com",
+      name: "Admin",
+      role: "ADMIN" as const,
+      organizationId: "org-a",
+      organization: { id: "org-a", name: "Org A" },
+    };
     const result = await checkTenantAccess(
-      user,
-      { type: "engagement", id: "e-1" },
+      adminUser,
+      { type: "organization", id: "org-b" },
     );
-    expect(result.allowed).toBe(true);
+    expect(result.allowed).toBe(false);
+    expect(result.resolvedTenantId).toBe("org-b");
+  });
+
+  it("denies tenant admin from accessing another organization settings", async () => {
+    const adminUser: CurrentUser = {
+      id: "admin-1",
+      email: "admin@test.com",
+      name: "Admin",
+      role: "ADMIN" as const,
+      organizationId: "org-a",
+      organization: { id: "org-a", name: "Org A" },
+    };
+    const result = await checkTenantAccess(
+      adminUser,
+      { type: "settings", id: "org-b" },
+    );
+    expect(result.allowed).toBe(false);
   });
 });
 

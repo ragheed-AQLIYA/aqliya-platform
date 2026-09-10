@@ -10,7 +10,7 @@ export function OverviewSectionObjectives({ decision }: OverviewSectionsProps) {
   return (
     <section>
       <h2 className="text-lg font-semibold mb-2">الأهداف</h2>
-      <ul className="list-disc pl-5 text-sm">
+      <ul className="list-disc ps-5 text-sm">
         {objectives.map((obj) => (
           <li key={obj.id}>{obj.description}</li>
         ))}
@@ -25,7 +25,7 @@ export function OverviewSectionConstraints({ decision }: OverviewSectionsProps) 
   return (
     <section>
       <h2 className="text-lg font-semibold mb-2">القيود</h2>
-      <ul className="list-disc pl-5 text-sm">
+      <ul className="list-disc ps-5 text-sm">
         {constraints.map((con) => (
           <li key={con.id}>{con.description}</li>
         ))}
@@ -40,7 +40,7 @@ export function OverviewSectionAssumptions({ decision }: OverviewSectionsProps) 
   return (
     <section>
       <h2 className="text-lg font-semibold mb-2">الافتراضات</h2>
-      <ul className="list-disc pl-5 text-sm">
+      <ul className="list-disc ps-5 text-sm">
         {assumptions.map((ass) => (
           <li key={ass.id}>{ass.description}</li>
         ))}
@@ -55,7 +55,7 @@ export function OverviewSectionAlternatives({ decision }: OverviewSectionsProps)
   return (
     <section>
       <h2 className="text-lg font-semibold mb-2">البدائل</h2>
-      <ul className="list-disc pl-5 text-sm">
+      <ul className="list-disc ps-5 text-sm">
         {alternatives.map((alt) => (
           <li key={alt.id}>{alt.description}</li>
         ))}
@@ -70,7 +70,7 @@ export function OverviewSectionRisks({ decision }: OverviewSectionsProps) {
   return (
     <section>
       <h2 className="text-lg font-semibold mb-2">المخاطر</h2>
-      <ul className="list-disc pl-5 text-sm">
+      <ul className="list-disc ps-5 text-sm">
         {risks.map((risk) => (
           <li key={risk.id}>
             {risk.description} -{" "}

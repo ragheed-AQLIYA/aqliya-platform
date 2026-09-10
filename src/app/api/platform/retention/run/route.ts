@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { isPlatformAdmin } from "@/lib/authorization/platform-admin";
 import { runScheduledRetention } from "@/lib/core/policy/retention/engine";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { addHistory } from "@/lib/core/policy/retention/history-store";
@@ -13,7 +14,7 @@ const retentionRunSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
+    if (!hasRequiredRole(user, "ADMIN") && !isPlatformAdmin(user)) {
       throw new Error("Access denied: ADMIN role required");
     }
 
@@ -25,7 +26,13 @@ export async function POST(request: NextRequest) {
     }
     const parsed = retentionRunSchema.safeParse(rawBody);
     const data = parsed.success ? parsed.data : {};
-    const result = await runScheduledRetention(data.organizationId ?? user.platformOrganizationId);
+    const organizationId = isPlatformAdmin(user)
+      ? (data.organizationId ?? user.organizationId)
+      : user.organizationId;
+    if (!organizationId) {
+      throw new Error("Access denied: organization context required");
+    }
+    const result = await runScheduledRetention(organizationId);
 
     const historyEntry = {
       id: crypto.randomUUID(),

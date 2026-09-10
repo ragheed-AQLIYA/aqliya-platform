@@ -67,7 +67,7 @@ export function ExportSection({ record, id, onRequestExport, onApproveExport, on
           {record.exportStatus === "none" && (
             <form action={onRequestExport}>
               <Button type="submit" size="sm" variant="outline">
-                <Download className="ml-1 h-4 w-4" />
+                <Download className="ms-1 h-4 w-4" />
                 طلب تصدير
               </Button>
             </form>
@@ -77,14 +77,14 @@ export function ExportSection({ record, id, onRequestExport, onApproveExport, on
             <>
               <form action={onApproveExport}>
                 <Button type="submit" size="sm">
-                  <CheckCircle2 className="ml-1 h-4 w-4" />
+                  <CheckCircle2 className="ms-1 h-4 w-4" />
                   اعتماد التصدير
                 </Button>
               </form>
               <form action={onRejectExport} className="flex gap-2">
                 <Input name="reason" placeholder="سبب الرفض" className="w-48 h-9 text-sm" required />
                 <Button type="submit" size="sm" variant="destructive">
-                  <XCircle className="ml-1 h-4 w-4" />
+                  <XCircle className="ms-1 h-4 w-4" />
                   رفض
                 </Button>
               </form>
@@ -104,7 +104,7 @@ export function ExportSection({ record, id, onRequestExport, onApproveExport, on
           {record.exportStatus === "rejected" && (
             <form action={onRequestExport}>
               <Button type="submit" size="sm" variant="outline">
-                <Download className="ml-1 h-4 w-4" />
+                <Download className="ms-1 h-4 w-4" />
                 إعادة طلب
               </Button>
             </form>

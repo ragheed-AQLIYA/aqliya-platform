@@ -10,6 +10,11 @@ import bcrypt from "bcryptjs";
 import { isOAuthInviteAllowed } from "@/lib/auth/oauth-invite-only";
 import { getEnvOAuthProviders } from "@/lib/auth/oauth-env-providers";
 import { loadEnabledDbOAuthProviders } from "@/lib/auth/db-oauth-providers";
+import {
+  sessionCookieName,
+  sessionMaxAgeSeconds,
+  sessionAuthzRefreshMs,
+} from "@/lib/auth/session-cookie";
 
 type NextAuthBundle = ReturnType<typeof NextAuth>;
 
@@ -18,7 +23,7 @@ let nextAuthBundle: NextAuthBundle | null = null;
 async function attachUserToToken(
   token: Record<string, unknown>,
   email: string,
-): Promise<void> {
+): Promise<boolean> {
   const dbUser = await prisma.user.findUnique({
     where: { email },
     select: {
@@ -33,7 +38,7 @@ async function attachUserToToken(
       },
     },
   });
-  if (!dbUser) return;
+  if (!dbUser) return false;
   token.id = dbUser.id;
   token.email = dbUser.email;
   token.name = dbUser.name;
@@ -43,15 +48,31 @@ async function attachUserToToken(
   token.platformOrganizationId =
     dbUser.organization?.platformOrganizationId ?? undefined;
   token.mfaEnabled = dbUser.mfaEnabled ?? false;
+  token.authzRefreshedAt = Date.now();
+  return true;
 }
 
 function buildAuthConfig(
   dbOAuthProviders: OAuthConfig<Record<string, unknown>>[],
 ): NextAuthConfig {
+  const maxAge = sessionMaxAgeSeconds();
   return {
-    session: { strategy: "jwt" },
+    session: { strategy: "jwt", maxAge, updateAge: 60 * 60 },
     secret: process.env.AUTH_SECRET,
-    trustHost: true,
+    trustHost:
+      process.env.NODE_ENV !== "production" ||
+      process.env.AUTH_TRUST_HOST === "true",
+    cookies: {
+      sessionToken: {
+        name: sessionCookieName(),
+        options: {
+          httpOnly: true,
+          sameSite: "lax",
+          path: "/",
+          secure: process.env.NODE_ENV === "production",
+        },
+      },
+    },
     providers: [
       Credentials({
         id: "credentials",
@@ -121,28 +142,33 @@ function buildAuthConfig(
             token.mfaEnabled = (u.mfaEnabled as boolean | undefined) ?? false;
             token.mfaVerified = false;
           } else if (user.email) {
-            await attachUserToToken(
+            const attached = await attachUserToToken(
               token as Record<string, unknown>,
               user.email,
             );
+            if (!attached) return {};
             token.mfaVerified = false;
           }
-        } else if (account && token.email) {
-          await attachUserToToken(
-            token as Record<string, unknown>,
-            token.email as string,
+        } else if (token.email) {
+          const refreshedAt = Number(
+            (token as Record<string, unknown>).authzRefreshedAt ?? 0,
           );
+          const stale =
+            !account && Date.now() - refreshedAt > sessionAuthzRefreshMs();
+          if (account || stale) {
+            const attached = await attachUserToToken(
+              token as Record<string, unknown>,
+              token.email as string,
+            );
+            if (!attached) return {};
+          }
         }
 
-        if (trigger === "update" && session) {
-          const sessionPatch = session as Record<string, unknown>;
-          if (sessionPatch.mfaVerified === true) {
-            token.mfaVerified = true;
-          }
-          if (typeof sessionPatch.mfaEnabled === "boolean") {
-            token.mfaEnabled = sessionPatch.mfaEnabled;
-          }
-        }
+        // Never promote client-provided session fields into authentication
+        // claims. MFA verification is established only by the server-side
+        // /api/auth/mfa/verify route, which validates a TOTP or backup code and
+        // signs a fresh JWT. A session.update({ mfaVerified: true }) request
+        // must not be able to bypass that proof.
 
         return token;
       },

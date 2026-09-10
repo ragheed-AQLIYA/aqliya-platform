@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server";
-import { getCurrentUser, hasRequiredRole } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { getEvidenceHealthSnapshot } from "@/lib/core/evidence/health";
 import { sanitizeError, httpStatusFromCode } from "@/lib/platform/api-error";
+import { assertPlatformAdmin } from "@/lib/authorization/platform-admin";
 
 export const dynamic = "force-dynamic";
 
-/** ADMIN — Core Evidence Platform operational health. */
+/** Platform admin — Core Evidence Platform operational health. */
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    if (!hasRequiredRole(user, "ADMIN")) {
-      throw new Error("Access denied: ADMIN role required");
-    }
+    assertPlatformAdmin(user);
     const snapshot = await getEvidenceHealthSnapshot();
     const criticalCount = snapshot.alerts.filter(
       (a) => a.severity === "critical",

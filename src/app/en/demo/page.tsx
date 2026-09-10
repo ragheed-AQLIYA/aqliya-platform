@@ -2,11 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { DemoVideoSection } from "@/components/marketing/demo-video-section";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Interactive Demo | AQLIYA",
   description:
     "10–13 minute guided AuditOS demo on sanitized data. See human gates, evidence chain, and audit trail in action.",
+  alternates: buildAlternates("/en/demo"),
 };
 
 const steps = [

@@ -219,7 +219,7 @@ export default function DecisionScenariosPage({
                 ? "أ-١٫٢ لا يمكن المتابعة قبل قبول أ-١٫٠ الاستلام."
                 : "أ-١٫٢ لا يمكن المتابعة قبل اكتمال أ-١٫١ الإطار بشكل كافٍ."}
             </p>
-            <ul className="mt-4 list-disc pl-5 text-sm">
+            <ul className="mt-4 list-disc ps-5 text-sm">
               {(intakeBlocked
                 ? intake?.requiredNextSteps
                 : frameworkState?.nextSteps
@@ -233,7 +233,7 @@ export default function DecisionScenariosPage({
             {scenarioState && !scenarioState.isComplete && (
               <section className="mb-6 rounded-[24px] border border-border/70 p-4 shadow-sm">
                 <h3 className="text-sm font-bold">الخطوات التالية المطلوبة</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm">
+                <ul className="mt-2 list-disc ps-5 text-sm">
                   {scenarioState.nextSteps.map((step) => (
                     <li key={step}>{step}</li>
                   ))}

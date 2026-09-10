@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Reveal } from "@/components/marketing/reveal";
 import type { EngagementModelCard, EngagementPricingBand } from "@/lib/marketing/start-hub-content";
 import { cn } from "@/lib/utils";
 
@@ -26,14 +27,15 @@ export function EngagementSection({
   contactHref,
 }: EngagementSectionProps) {
   return (
-    <section id="engagement" className="scroll-mt-28 border-t py-14 sm:py-16">
+    <section id="engagement" className="scroll-mt-28 border-t py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-2xl font-black sm:text-3xl">{title}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{hint}</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {models.map((model) => (
-            <div
+          {models.map((model, i) => (
+            <Reveal
               key={model.id}
+              delay={i * 70}
               className={cn(
                 "rounded-xl border p-5",
                 model.featured
@@ -48,7 +50,7 @@ export function EngagementSection({
               <p className="mt-1 text-xs text-primary">{model.tagline}</p>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">{model.description}</p>
               <p className="mt-2 text-[10px] text-muted-foreground">{model.duration}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <h3 className="mt-10 text-lg font-black">{pricingTitle}</h3>

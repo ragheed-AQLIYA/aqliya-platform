@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import type { NavItem } from "./use-site-header";
+import type { NavItem, HeaderLabels } from "./use-site-header";
 
 type DesktopNavProps = {
   locale: "ar" | "en";
   navItems: NavItem[];
   contactHref: string;
+  labels: HeaderLabels;
   onSwitchLocale: (target: "ar" | "en") => void;
 };
 
@@ -21,23 +21,23 @@ export function DesktopNav({
   locale,
   navItems,
   contactHref,
+  labels,
   onSwitchLocale,
 }: DesktopNavProps) {
-  const t = useTranslations("common");
-
   return (
     <nav
       className="hidden items-center gap-0.5 md:flex"
-      aria-label={t("mainNavigation")}
+      aria-label={labels.mainNavigation}
     >
       {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
           className={cn(
-            "rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200",
+            "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200",
+            "after:absolute after:inset-x-3.5 after:bottom-1 after:h-px after:origin-center after:scale-x-0 after:bg-gradient-to-r after:from-primary after:to-aqliya-cyan after:transition-transform after:duration-200 hover:after:scale-x-100",
             item.isActive
-              ? "bg-primary/8 text-primary"
+              ? "bg-primary/8 text-primary after:scale-x-100"
               : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
           )}
           aria-current={item.isActive ? "page" : undefined}
@@ -60,7 +60,7 @@ export function DesktopNav({
               : "text-muted-foreground hover:text-foreground",
           )}
           aria-label={
-            value === "en" ? t("switchToEnglish") : t("switchToArabic")
+            value === "en" ? labels.switchToEnglish : labels.switchToArabic
           }
           aria-pressed={value === locale}
           lang={value}
@@ -73,7 +73,7 @@ export function DesktopNav({
         href={contactHref}
         className="mr-1 inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/15 transition-all duration-200 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       >
-        {t("bookSession")}
+        {labels.bookSession}
       </Link>
     </nav>
   );

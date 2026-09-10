@@ -1,12 +1,12 @@
 /**
  * Unified tenant isolation check.
  *
- * Consolidates tenant resolution logic previously scattered across
- * product-specific guards. All products route through this single check
- * to ensure consistent tenant isolation.
+ * Tenant ADMIN is scoped to user.organizationId.
+ * Only isPlatformAdmin() may access another tenant.
  */
 
 import type { CurrentUser } from "./types";
+import { isPlatformAdmin } from "./platform-admin";
 
 export interface TenantAccessRequest {
   /** Resource type being accessed */
@@ -26,26 +26,29 @@ export interface TenantAccessResult {
 /**
  * Check whether the current user has tenant-level access to the resource.
  *
- * The fundamental rule: a user's organizationId must match the resource's
- * owning organization (unless the user is an admin with cross-tenant access).
+ * A user's organizationId must match the resource's owning organization
+ * unless the user is an explicit platform admin.
  */
 export async function checkTenantAccess(
   user: CurrentUser,
   resource: { type: string; id?: string; tenantId?: string },
   options?: { tenantId?: string },
 ): Promise<TenantAccessResult> {
-  // Determine the target tenant
-  const targetTenantId = options?.tenantId ?? resource.tenantId ?? user.organizationId;
+  const inferredFromResource =
+    !options?.tenantId &&
+    !resource.tenantId &&
+    resource.id &&
+    (resource.type === "organization" || resource.type === "settings")
+      ? resource.id
+      : undefined;
 
-  // Admin users have cross-tenant access for platform operations
-  if (user.role === "ADMIN") {
+  const targetTenantId =
+    options?.tenantId ?? resource.tenantId ?? inferredFromResource ?? user.organizationId;
+
+  if (isPlatformAdmin(user)) {
     return { allowed: true, resolvedTenantId: targetTenantId };
   }
 
-  // Standard tenant isolation: user must belong to the target organization.
-  // We use organizationId (the user's home org) — platformOrganizationId
-  // is a platform-level scoping field that should not influence tenant
-  // isolation at the resource level.
   const userOrgId = user.organizationId;
   if (userOrgId !== targetTenantId) {
     return {
@@ -72,4 +75,19 @@ export async function assertTenantAccess(
     throw new Error(result.reason ?? "Tenant access denied");
   }
   return result.resolvedTenantId!;
+}
+
+/**
+ * Resolve the caller's tenant id. Client-supplied ids are ignored unless
+ * they match the session (or the caller is a platform admin).
+ */
+export function resolveCallerTenantId(
+  user: CurrentUser,
+  requested?: string | null,
+): string {
+  const requestedId = requested?.trim();
+  if (!requestedId) return user.organizationId;
+  if (requestedId === user.organizationId) return user.organizationId;
+  if (isPlatformAdmin(user)) return requestedId;
+  throw new Error("Access denied: organization scope mismatch");
 }

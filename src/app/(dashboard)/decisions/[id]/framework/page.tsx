@@ -235,7 +235,7 @@ export default function DecisionFrameworkPage({
               أولاً.
             </p>
             {intake && (
-              <ul className="mt-4 list-disc pl-5 text-sm">
+              <ul className="mt-4 list-disc ps-5 text-sm">
                 {intake.requiredNextSteps.map((step) => (
                   <li key={step}>{step}</li>
                 ))}
@@ -247,7 +247,7 @@ export default function DecisionFrameworkPage({
             {frameworkState && !frameworkState.isComplete && (
               <section className="mb-6 rounded-[24px] border border-border/70 p-4 shadow-sm">
                 <h3 className="text-sm font-bold">الخطوات التالية المطلوبة</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm">
+                <ul className="mt-2 list-disc ps-5 text-sm">
                   {frameworkState.nextSteps.map((step) => (
                     <li key={step}>{step}</li>
                   ))}

@@ -42,14 +42,14 @@ export function ApprovedSnapshot({
             <div className="flex items-center gap-4">
               <div>
                 <span className="text-muted-foreground">الثقة:</span>
-                <span className="ml-2 font-medium">
+                <span className="ms-2 font-medium">
                   {Math.round(approvedSnapshot.confidence * 100)}%
                 </span>
               </div>
               {approvedSnapshot.score != null && (
                 <div>
                   <span className="text-muted-foreground">النتيجة:</span>
-                  <span className="ml-2 font-medium">
+                  <span className="ms-2 font-medium">
                     {approvedSnapshot.score.toFixed(1)}
                   </span>
                 </div>
@@ -58,7 +58,7 @@ export function ApprovedSnapshot({
           )}
           <div>
             <span className="text-muted-foreground">الإجراء:</span>
-            <span className="ml-2 font-medium">
+            <span className="ms-2 font-medium">
               {approvedSnapshot.recommendedAction}
             </span>
           </div>

@@ -24,6 +24,12 @@ export async function getPlatformHealthAction(): Promise<PlatformHealth> {
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+    const organizationId = user.organizationId;
+    // Tenant health must not aggregate sibling organizations that happen to
+    // share a platform organization. Platform-wide reporting belongs to an
+    // explicitly authorized platform-admin surface.
+    const tenantAuditFilter = { organizationId };
+
     const [
       decisionsInReview,
       workflowFailed,
@@ -35,28 +41,44 @@ export async function getPlatformHealthAction(): Promise<PlatformHealth> {
       platformAuditLogsToday,
       usersLoggedInToday,
     ] = await Promise.all([
-      prisma.decision.count({ where: { status: "IN_REVIEW" } }).catch(() => 0),
+      prisma.decision.count({ where: { status: "IN_REVIEW", organizationId } }).catch(() => 0),
       prisma.workflowRecord
-        .count({ where: { status: { in: ["rejected", "cancelled"] } } })
+        .count({ where: { organizationId, status: { in: ["rejected", "cancelled"] } } })
         .catch(() => 0),
       prisma.workflowRecord
-        .count({ where: { status: "completed" } })
+        .count({ where: { organizationId, status: "completed" } })
         .catch(() => 0),
-      prisma.auditAiOutput.count().catch(() => 0),
       prisma.auditAiOutput
-        .count({ where: { status: { in: ["accepted", "approved"] } } })
+        .count({ where: { engagement: { organizationId } } })
         .catch(() => 0),
-      // [MIGRATED] auditEvent → platformAuditLog (dual-write with productKey: "audit_os")
-      prisma.platformAuditLog.count({ where: { productKey: "audit_os", createdAt: { gte: todayStart } } }).catch(() => 0),
-      prisma.platformAuditLog
-        .count({ where: { productKey: "audit_os", createdAt: { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) } } })
+      prisma.auditAiOutput
+        .count({
+          where: {
+            status: { in: ["accepted", "approved"] },
+            engagement: { organizationId },
+          },
+        })
         .catch(() => 0),
       prisma.platformAuditLog
-        .count({ where: { createdAt: { gte: todayStart } } })
+        .count({
+          where: { productKey: "audit_os", createdAt: { gte: todayStart }, ...tenantAuditFilter },
+        })
+        .catch(() => 0),
+      prisma.platformAuditLog
+        .count({
+          where: {
+            productKey: "audit_os",
+            createdAt: { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) },
+            ...tenantAuditFilter,
+          },
+        })
+        .catch(() => 0),
+      prisma.platformAuditLog
+        .count({ where: { createdAt: { gte: todayStart }, ...tenantAuditFilter } })
         .catch(() => 0),
       prisma.platformAuditLog
         .findMany({
-          where: { createdAt: { gte: todayStart } },
+          where: { createdAt: { gte: todayStart }, ...tenantAuditFilter },
           select: { actorId: true },
           distinct: ["actorId"],
         })
