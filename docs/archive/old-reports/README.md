@@ -2,7 +2,7 @@
 
 > **Historical — not authoritative.** Build-wave evidence from the 2026-05-28 Eid continuous build program.  
 > **Canonical index (active):** [`docs/reports/eid-continuous-build-index-2026-05-28.md`](../../evidence/reports/eid-continuous-build-index-2026-05-28.md)  
-> **Latest wave report (active):** [`docs/reports/eid-continuous-build-wave-10-2026-05-28.md`](../../reports/eid-continuous-build-wave-10-2026-05-28.md)
+> **Latest wave report (active):** [`docs/reports/eid-continuous-build-wave-10-2026-05-28.md`](../../evidence/reports/eid-continuous-build-wave-10-2026-05-28.md)
 
 ## Contents
 

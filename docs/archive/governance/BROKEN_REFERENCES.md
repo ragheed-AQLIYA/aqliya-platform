@@ -44,7 +44,7 @@ The overall link health is **good for a corpus of this size** — only 7 issues 
 #### Broken Link 2: ../phases/PHASE_1_CLOSURE.md
 
 - **Source:** docs/programs/repository-quality/PROGRAM_CHARTER.md (line 119)
-- **Context:** "Phase 1 execution completed 2026-06-29. Full classification in [phases/PHASE_1_CLOSURE.md](../phases/PHASE_1_CLOSURE.md)."
+- **Context:** "Phase 1 execution completed 2026-06-29. Full classification in [phases/PHASE_1_CLOSURE.md](../../programs/repository-health/phases/PHASE_1_CLOSURE.md)."
 - **Problem:** ../phases/PHASE_1_CLOSURE.md resolves to docs/programs/phases/PHASE_1_CLOSURE.md. The phases/ directory does not exist under docs/programs/ or docs/.
 - **Likely intent:** The phases/ directory was planned but never created.
 - **Related:** Lines 176 and 224 link to phases/PHASE_2_CLOSURE.md and phases/PHASE_3_CLOSURE.md (without ../ prefix), which would resolve to docs/programs/repository-quality/phases/ — also nonexistent.
