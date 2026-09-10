@@ -7,14 +7,42 @@ import {
   PlatformLayersSection,
   SystemCardGrid,
   ProofSection,
+  TrustSection,
 } from "@/components/marketing/home-sections";
+import { FAQSection } from "@/components/marketing/faq-section";
+import { PlatformArchitecture } from "@/components/marketing/platform-architecture";
 import { homeCopyAr } from "@/lib/marketing/copy-plain";
 import { publicCapabilityNote, publicOsStatus } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
-export const metadata: Metadata = {
-  title: homeCopyAr.metadata.title,
-  description: homeCopyAr.metadata.description,
+const heroArchitectureAr = {
+  topLabel: "المؤسسة",
+  topDesc: "وثائق، أنظمة، لوائح، وخبرة متراكمة  مبعثرة اليوم",
+  layers: [
+    { num: "04", title: "أنظمة التشغيل", desc: "تدقيق، محتوى محلي، قرارات  ترث الحوكمة والذكاء" },
+    { num: "03", title: "مشغّلات الذكاء", desc: "الذكاء يقترح ويحلّل  ضمن أدلة وصلاحيات" },
+    { num: "02", title: "قاعدة المعرفة", desc: "كل مخرج مرتبط بمصدره  شبكة أدلة متماسكة" },
+    { num: "01", title: "الحوكمة", desc: "صلاحيات، مراجعة، اعتماد، وسجل تدقيق" },
+  ],
+  bottomLabel: "النتيجة المؤسسية",
+  bottomDesc: "قرارات ومخرجات قابلة للدفاع أمام كل مراجعة",
 };
+
+const heroTrustSignalsAr = [
+  { label: "أدلة مرتبطة بالمصدر" },
+  { label: "مراجعة واعتماد بشري" },
+  { label: "سجل تدقيق كامل" },
+];
+
+export function generateMetadata(): Metadata {
+  const title = homeCopyAr.metadata.title;
+  const description = homeCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/"),
+  };
+}
 
 const systems = [
   { title: "AuditOS", note: publicCapabilityNote.auditOS, status: publicOsStatus.auditOS.label, href: "/products/audit" },
@@ -30,6 +58,8 @@ const platformLayers = [
   { num: "04", title: "أنظمة التشغيل", desc: "كل نظام يرث الحوكمة والذكاء  لا إعادة بناء من الصفر" },
 ];
 
+
+
 export default function HomePage() {
   const c = homeCopyAr;
 
@@ -42,6 +72,17 @@ export default function HomePage() {
         primaryCta={{ label: c.ctas.contact, href: "/contact" }}
         secondaryCta={{ label: c.ctas.demo, href: "/platform" }}
         personaChips={c.personaChips.map((p) => ({ ...p }))}
+        personaLabel="لِمن؟"
+        trustSignals={heroTrustSignalsAr}
+        visual={
+          <PlatformArchitecture
+            topLabel={heroArchitectureAr.topLabel}
+            topDesc={heroArchitectureAr.topDesc}
+            layers={heroArchitectureAr.layers}
+            bottomLabel={heroArchitectureAr.bottomLabel}
+            bottomDesc={heroArchitectureAr.bottomDesc}
+          />
+        }
       />
 
       <ProblemSection
@@ -90,9 +131,25 @@ export default function HomePage() {
         ctaHref="/products"
       />
 
+      <TrustSection
+        eyebrow="الثقة بنية لا وعد"
+        heading="لماذا تثق المؤسسات المحكومة بعقلية"
+        subtitle="الخصوصية، الصلاحيات، الأدلة، والتتبّع مبادئ أساسية في تصميم المنصة  لا إضافات لاحقة."
+        pillars={[
+          { title: "ذكاء خاص ومحكوم", desc: "الذكاء يعمل ضمن بيئة المؤسسة وصلاحياتها  لا صندوق أسود." },
+          { title: "صلاحيات وعزل مؤسسي", desc: "كل مستخدم يرى ما يخصه فقط  عزل كامل بين الجهات." },
+          { title: "أدلة قابلة للتتبّع", desc: "كل مخرج مرتبط بمصدره ويصمد أمام المراجعة." },
+          { title: "سجل تدقيق كامل", desc: "كل حدث مُوثَّق بالهوية والوقت  قابل للمراجعة لاحقاً." },
+        ]}
+        principleLabel="المبدأ المؤسسي"
+        principle="الذكاء يساعد. الإنسان يقرّر. الدليل يحكم."
+      />
+
       <ProofSection
         data={{ ...c.proof, ctaHref: "/proof" }}
       />
+
+      <FAQSection />
 
       <ConversionBand
         title={c.conversion.title}

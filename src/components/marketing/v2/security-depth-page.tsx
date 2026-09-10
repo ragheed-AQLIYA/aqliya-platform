@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { SecurityControlRow, SecurityPillar } from "@/lib/marketing/security-page-content";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 
 type SecurityDepthPageProps = {
   locale?: "ar" | "en";
@@ -47,20 +48,20 @@ export function SecurityDepthPage({
         }
       />
 
-      <section className="border-t bg-muted/10 py-14">
+      <section className="border-t bg-muted/10 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((p) => (
-              <div key={p.id} className="rounded-xl border border-border/60 bg-background p-5">
+            {pillars.map((p, i) => (
+              <Reveal key={p.id} delay={i * 70} className="rounded-xl border border-border/60 bg-background p-5">
                 <h2 className="text-sm font-black">{p.title}</h2>
                 <p className="mt-2 text-sm leading-7 text-muted-foreground">{p.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t py-14">
+      <section className="border-t py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-6">
           <h2 className="text-xl font-black">
             {locale === "en" ? "Controls at a glance" : "ضوابط باختصار"}

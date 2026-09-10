@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import {
   soc2HonestDisclaimerEn,
   soc2RoadmapMilestones,
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   title: "SOC2 Roadmap | AQLIYA",
   description:
     "Target SOC2 Type I roadmap with honest status  not a certification claim.",
+  alternates: buildAlternates("/en/soc2-roadmap"),
 };
 
 const statusLabel: Record<string, string> = {

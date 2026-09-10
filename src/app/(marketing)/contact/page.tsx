@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { ContactForm } from "./contact-form";
 import {
   contactPageCopyAr,
@@ -15,10 +16,15 @@ const statusKey: Record<string, keyof typeof publicOsStatus> = {
   "Office AI Assistant": "officeAI",
 };
 
-export const metadata: Metadata = {
-  title: contactPageCopyAr.metadata.title,
-  description: contactPageCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = contactPageCopyAr.metadata.title;
+  const description = contactPageCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/contact"),
+  };
+}
 
 export default function ContactPage() {
   const c = contactPageCopyAr;

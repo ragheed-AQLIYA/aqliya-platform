@@ -1,6 +1,26 @@
+import type { Metadata } from "next";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { TrackerProvider } from "@/components/tracking/tracker-provider";
+
+export const metadata: Metadata = {
+  openGraph: {
+    title: "AQLIYA | Private Governed Institutional Intelligence Platform",
+    description:
+      "AQLIYA is a Private Governed Institutional Intelligence Platform — governed AI, evidence, review, approval, and audit trail across institutional operating systems.",
+    url: "https://aqliya.com/en",
+    siteName: "AQLIYA",
+    locale: "en_US",
+    alternateLocale: "ar_SA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AQLIYA | Private Governed Institutional Intelligence Platform",
+    description:
+      "AQLIYA is a Private Governed Institutional Intelligence Platform — governed AI, evidence, review, approval, and audit trail across institutional operating systems.",
+  },
+};
 
 export default function EnglishMarketingLayout({
   children,

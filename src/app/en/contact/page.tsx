@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { BOOKING_EMAIL } from "@/lib/marketing/booking";
 import { contactPageCopyEn } from "@/lib/marketing/copy-contact-en";
@@ -7,6 +8,7 @@ import { contactPageCopyEn } from "@/lib/marketing/copy-contact-en";
 export const metadata: Metadata = {
   title: contactPageCopyEn.metadata.title,
   description: contactPageCopyEn.metadata.description,
+  alternates: buildAlternates("/en/contact"),
 };
 
 export default function EnglishContactPage() {

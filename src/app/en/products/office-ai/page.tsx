@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { publicOsStatusEn } from "@/lib/marketing/public-status"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Office AI Assistant  Shared Institutional Assistant | AQLIYA",
   description: "A governed shared assistant for document tasks, report drafting, and meeting notes across the AQLIYA platform.",
+  alternates: buildAlternates("/en/products/office-ai"),
 };
 
 export default function OfficeAIEnPage() {

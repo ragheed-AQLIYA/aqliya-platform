@@ -40,6 +40,8 @@ const publicExact = new Set([
   "/pilot-proof",
   "/soc2-roadmap",
   "/platform",
+  "/pricing",
+  "/start",
   "/privacy",
   "/proof-library",
   "/products",
@@ -65,6 +67,8 @@ const publicPrefixes = [
   "/products/",
   "/buyers/",
   "/insights/",
+  "/opengraph-image",
+  "/twitter-image",
 ];
 
 const mfaExemptPrefixes = [

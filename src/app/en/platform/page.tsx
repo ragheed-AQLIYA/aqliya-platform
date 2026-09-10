@@ -3,15 +3,18 @@ import type { Metadata } from "next";
 import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
 import {
   publicOsStatusEn,
   publicEngagementGateEn,
 } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Platform | AQLIYA Intelligence Core",
   description:
     "Shared governance core for institutional operating systems  intelligence coordination, workflow, evidence, RBAC, and audit trail in one foundation.",
+  alternates: buildAlternates("/en/platform"),
 };
 
 const deploymentModels = [
@@ -178,8 +181,9 @@ export default function EnglishPlatformPage() {
         />
         <div className="mt-12 grid gap-4 lg:grid-cols-2">
           {platformComponents.map((comp, i) => (
-            <div
+            <Reveal
               key={comp.title}
+              delay={i * 70}
               className="rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/10 p-6 transition-all hover:border-primary/20 hover:shadow-sm"
             >
               <div className="flex items-start gap-4">
@@ -201,7 +205,7 @@ export default function EnglishPlatformPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -216,28 +220,29 @@ export default function EnglishPlatformPage() {
           description="Every operating system inherits governance, evidence, workflow, and permissions from the same core."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {operatingSystems.map((sys) => (
-            <Link
-              key={sys.system}
-              href={sys.href}
-              className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
-            >
-              <div className="mb-3 flex items-start justify-between gap-3">
-                <h3 className="text-base font-black text-foreground group-hover:text-primary">
-                  {sys.useCase}
-                </h3>
-                <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary">
-                  {sys.statusLabel}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">{sys.description}</p>
-              <p className="mt-2 text-[10px] text-muted-foreground/70">
-                {sys.capabilityNote}
-              </p>
-              <p className="mt-3 text-[10px] font-medium text-muted-foreground/60">
-                Operating system: {sys.system}
-              </p>
-            </Link>
+          {operatingSystems.map((sys, i) => (
+            <Reveal key={sys.system} delay={i * 70} className="block">
+              <Link
+                href={sys.href}
+                className="group block rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
+              >
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <h3 className="text-base font-black text-foreground group-hover:text-primary">
+                    {sys.useCase}
+                  </h3>
+                  <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-[9px] font-bold text-primary">
+                    {sys.statusLabel}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">{sys.description}</p>
+                <p className="mt-2 text-[10px] text-muted-foreground/70">
+                  {sys.capabilityNote}
+                </p>
+                <p className="mt-3 text-[10px] font-medium text-muted-foreground/60">
+                  Operating system: {sys.system}
+                </p>
+              </Link>
+            </Reveal>
           ))}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">
@@ -270,9 +275,10 @@ export default function EnglishPlatformPage() {
             description="Every deployment model keeps the same platform components  the difference is where it runs and how much data sovereignty you retain."
           />
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {deploymentModels.map((model) => (
-              <div
+            {deploymentModels.map((model, i) => (
+              <Reveal
                 key={model.id}
+                delay={i * 70}
                 className={`rounded-2xl border p-6 ${
                   model.status === "available"
                     ? "border-status-success/25 bg-gradient-to-br from-status-success/[0.05] to-background"
@@ -301,9 +307,9 @@ export default function EnglishPlatformPage() {
                   {model.description}
                 </p>
                 <ul className="space-y-2">
-                  {model.points.map((point, i) => (
+                  {model.points.map((point, j) => (
                     <li
-                      key={i}
+                      key={j}
                       className="flex items-start gap-2 text-xs text-muted-foreground"
                     >
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
@@ -311,7 +317,7 @@ export default function EnglishPlatformPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

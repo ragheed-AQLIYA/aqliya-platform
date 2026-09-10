@@ -2,11 +2,14 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SectionEyebrow, WorkflowChain } from "@/components/enterprise";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
   title: "Governance | AQLIYA",
   description:
     "Complete evidence chains, multi-level RBAC, immutable audit trail, and strict AI governance  built into the platform foundation.",
+  alternates: buildAlternates("/en/governance"),
 };
 
 const evidenceLevels = [
@@ -174,9 +177,10 @@ export default function EnglishGovernancePage() {
           description="From data entry to final export  every step documented and linked. No gaps in the chain."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {evidenceLevels.map((level) => (
-            <div
+          {evidenceLevels.map((level, i) => (
+            <Reveal
               key={level.step}
+              delay={i * 70}
               className="rounded-2xl border border-border/60 p-5 transition-all hover:border-primary/20 hover:shadow-sm"
             >
               <div className="mb-3 flex items-center gap-3">
@@ -190,7 +194,7 @@ export default function EnglishGovernancePage() {
               <p className="text-sm leading-6 text-muted-foreground">
                 {level.desc}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <div className="mt-8 rounded-2xl border border-primary/15 bg-primary/[0.04] p-5">
@@ -217,9 +221,10 @@ export default function EnglishGovernancePage() {
             description="In AQLIYA, AI is not a black box. Every use is governed by published rules that prevent autonomous action and keep humans at the center of decisions."
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {aiRules.map((rule) => (
-              <div
+            {aiRules.map((rule, i) => (
+              <Reveal
                 key={rule.rule}
+                delay={i * 70}
                 className="rounded-2xl border border-border/60 bg-background p-5"
               >
                 <div className="mb-3 flex items-start gap-2">
@@ -231,7 +236,7 @@ export default function EnglishGovernancePage() {
                 <p className="text-sm leading-6 text-muted-foreground">
                   {rule.detail}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -245,9 +250,10 @@ export default function EnglishGovernancePage() {
             description="No implicit access in AQLIYA. Every permission is explicit at organization, workspace, role, and action level."
           />
           <div className="mt-10 space-y-3">
-            {rbacLevels.map((level) => (
-              <div
+            {rbacLevels.map((level, i) => (
+              <Reveal
                 key={level.level}
+                delay={i * 70}
                 className={`rounded-2xl border p-5 ${
                   level.critical
                     ? "border-primary/20 bg-primary/[0.04]"
@@ -267,7 +273,7 @@ export default function EnglishGovernancePage() {
                     </span>
                   )}
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -280,9 +286,10 @@ export default function EnglishGovernancePage() {
           description="Every action inside AQLIYA is recorded. No event leaves memory; no log is deleted."
         />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
-          {auditTrailProps.map((item) => (
-            <div
+          {auditTrailProps.map((item, i) => (
+            <Reveal
               key={item.prop}
+              delay={i * 70}
               className="flex gap-4 rounded-2xl border border-border/60 p-5"
             >
               <p className="w-40 shrink-0 text-xs font-bold text-foreground">
@@ -291,7 +298,7 @@ export default function EnglishGovernancePage() {
               <p className="flex-1 text-sm leading-6 text-muted-foreground">
                 {item.value}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <div className="mt-8 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
@@ -330,9 +337,10 @@ export default function EnglishGovernancePage() {
               title: "Config isolation",
               body: "Governance settings, roles, and configuration are per organization.",
             },
-          ].map((item) => (
-            <div
+          ].map((item, i) => (
+            <Reveal
               key={item.title}
+              delay={i * 70}
               className="rounded-2xl border border-border/60 bg-muted/10 p-5"
             >
               <p className="mb-2 text-sm font-black text-foreground">
@@ -341,7 +349,7 @@ export default function EnglishGovernancePage() {
               <p className="text-xs leading-6 text-muted-foreground">
                 {item.body}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

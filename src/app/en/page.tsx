@@ -7,13 +7,36 @@ import {
   PlatformLayersSection,
   SystemCardGrid,
   ProofSection,
+  TrustSection,
 } from "@/components/marketing/home-sections";
 import { homeCopyEn } from "@/lib/marketing/copy-plain-en";
 import { publicOsStatusEn } from "@/lib/marketing/public-status";
+import { PlatformArchitecture } from "@/components/marketing/platform-architecture";
+import { buildAlternates } from "@/lib/marketing/seo";
+
+const heroArchitectureEn = {
+  topLabel: "The institution",
+  topDesc: "Documents, systems, regulations, and expertise  fragmented today",
+  layers: [
+    { num: "04", title: "Operating systems", desc: "Audit, local content, decisions  inherit governance and intelligence" },
+    { num: "03", title: "Intelligence operators", desc: "AI suggests and analyzes  inside evidence and permissions" },
+    { num: "02", title: "Knowledge foundation", desc: "Every output linked to its source  a coherent evidence chain" },
+    { num: "01", title: "Governance", desc: "Permissions, review, approval, and audit trail" },
+  ],
+  bottomLabel: "Institutional outcome",
+  bottomDesc: "Decisions and outputs defensible under every review",
+};
+
+const heroTrustSignalsEn = [
+  { label: "Source-linked evidence" },
+  { label: "Human review & approval" },
+  { label: "Full audit trail" },
+];
 
 export const metadata: Metadata = {
   title: homeCopyEn.metadata.title,
   description: homeCopyEn.metadata.description,
+  alternates: buildAlternates("/en"),
 };
 
 const systems = [
@@ -42,6 +65,17 @@ export default function EnglishHomePage() {
         primaryCta={{ label: c.ctas.contact, href: "/en/contact" }}
         secondaryCta={{ label: c.ctas.demo, href: "/en/platform" }}
         personaChips={c.personaChips.map((p) => ({ ...p }))}
+        personaLabel="For whom?"
+        trustSignals={heroTrustSignalsEn}
+        visual={
+          <PlatformArchitecture
+            topLabel={heroArchitectureEn.topLabel}
+            topDesc={heroArchitectureEn.topDesc}
+            layers={heroArchitectureEn.layers}
+            bottomLabel={heroArchitectureEn.bottomLabel}
+            bottomDesc={heroArchitectureEn.bottomDesc}
+          />
+        }
       />
 
       <ProblemSection
@@ -90,6 +124,20 @@ export default function EnglishHomePage() {
         ctaHref="/en/products"
       />
 
+      <TrustSection
+        eyebrow="Trust by architecture, not promise"
+        heading="Why governed institutions trust AQLIYA"
+        subtitle="Privacy, permissions, evidence, and traceability are core design principles  not afterthoughts."
+        pillars={[
+          { title: "Private, governed AI", desc: "AI runs inside your institution's environment and permissions  never a black box." },
+          { title: "Permissions & tenant isolation", desc: "Each user sees only what belongs to them  full isolation between entities." },
+          { title: "Traceable evidence", desc: "Every output links to its source and stands up to review." },
+          { title: "Full audit trail", desc: "Every event logged with identity and timestamp  reviewable later." },
+        ]}
+        principleLabel="Institutional principle"
+        principle="AI assists. Humans decide. Evidence governs."
+      />
+
       <ProofSection
         data={{ ...c.proof, ctaHref: "/en/proof" }}
       />
@@ -97,7 +145,9 @@ export default function EnglishHomePage() {
       <ConversionBand
         title={c.conversion.title}
         body={c.conversion.body}
+        primaryHref="/en/contact"
         primaryLabel={c.conversion.primaryLabel}
+        secondaryHref="/en/proof"
         secondaryLabel={c.conversion.secondaryLabel}
       />
     </div>

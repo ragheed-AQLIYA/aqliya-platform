@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { DeploymentModel } from "@/lib/marketing/deployment-page-content";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import { cn } from "@/lib/utils";
 
 type DeploymentDepthPageProps = {
@@ -44,11 +45,13 @@ export function DeploymentDepthPage({ locale = "ar", models }: DeploymentDepthPa
         }
       />
 
-      <section className="border-t py-14">
+      <section className="border-t py-16 sm:py-20">
         <div className="mx-auto max-w-5xl space-y-5 px-6">
-          {models.map((model) => (
-            <article
+          {models.map((model, i) => (
+            <Reveal
               key={model.id}
+              delay={i * 70}
+              as="article"
               className="rounded-2xl border border-border/60 bg-background p-6 sm:p-8"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
@@ -71,7 +74,7 @@ export function DeploymentDepthPage({ locale = "ar", models }: DeploymentDepthPa
                   {model.note}
                 </p>
               )}
-            </article>
+            </Reveal>
           ))}
         </div>
       </section>
