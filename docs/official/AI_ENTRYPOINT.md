@@ -91,7 +91,7 @@ The documentation system is governed by a strict authority hierarchy. **Do not s
 
 The full governance system is defined in:
 - `docs/DOCUMENTATION_GOVERNANCE_v2.md` — Document lifecycle, ownership, naming, versioning, deprecation
-- `docs/AI_KNOWLEDGE_MAP.md` — Complete inventory and navigation (updated 2026-06-26)
+- `docs/official/AI_KNOWLEDGE_MAP.md` — Complete inventory and navigation (updated 2026-06-26)
 
 ---
 
@@ -101,7 +101,7 @@ Every AI assistant must read these files, in this order, at the start of every s
 
 | # | File | Why | Est. Time |
 |---|------|-----|-----------|
-| 0 | `docs/AI_ENTRYPOINT.md` | ★ This file — platform identity and orientation | 2 min |
+| 0 | `docs/official/AI_ENTRYPOINT.md` | ★ This file — platform identity and orientation | 2 min |
 | 1 | `docs/DOCUMENTATION_AUTHORITY.md` | Highest authority — conflict resolution rules | 2 min |
 | 2 | `docs/official/AQLIYA_MASTER_REFERENCE.md` | Platform identity, product list, status | 5 min |
 | 3 | `AGENTS.md` | Agent operating contract, all rules | 10 min |
@@ -113,7 +113,7 @@ Every AI assistant must read these files, in this order, at the start of every s
 | 9 | `README.md` | Project overview and setup | 5 min |
 | 10 | `docs/official/aqliya-implementation-rules-v1.1.md` | Implementation constraints and rules | 3 min |
 | 11 | `docs/commercial/WHAT_WE_DO_NOT_CLAIM.md` | Critical commercial boundaries | 2 min |
-| 12 | `docs/AI_KNOWLEDGE_MAP.md` | Full documentation navigation | 5 min |
+| 12 | `docs/official/AI_KNOWLEDGE_MAP.md` | Full documentation navigation | 5 min |
 
 **Total estimated reading time: ~52 minutes (first session) / ~17 minutes (subsequent sessions)**
 
