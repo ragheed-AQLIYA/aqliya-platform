@@ -1,7 +1,7 @@
 import "server-only"
 
 import { aiOrchestrator } from "@/lib/core/ai/orchestrator"
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 import { enforce } from "@/lib/kernel"
 import { isEnabled } from "@/lib/platform/feature-flags/registry"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"

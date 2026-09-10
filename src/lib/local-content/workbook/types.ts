@@ -1,7 +1,7 @@
 // ─── LocalContentOS Workbook — Domain Types ───
 // Phase 1: Workbook Population + Missing Data Collection only
 
-import type { LcWorkbook, LcWorkbookLine, LcDataRequest, LcDataRequestItem } from "@prisma/client";
+import type { LcWorkbook, LcWorkbookLine, LcDataRequest, LcDataRequestItem } from "@/generated/prisma/client";
 
 /** Workbook statuses */
 export const VALID_WORKBOOK_STATUSES = [

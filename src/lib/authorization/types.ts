@@ -8,7 +8,7 @@
  *   - src/lib/auth.ts
  */
 
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 import type { RequiredRole } from "@/lib/auth";
 
 // ─── Principal Types ───

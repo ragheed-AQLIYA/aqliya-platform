@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { computeHash, findNonce, verifyChain } from "./hash-chain"
 import type { HashChainProof, ChainVerificationResult } from "./types"
 import type { ChainEntryData } from "./hash-chain"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 
 async function loadEntryData(
   auditLogId: string,

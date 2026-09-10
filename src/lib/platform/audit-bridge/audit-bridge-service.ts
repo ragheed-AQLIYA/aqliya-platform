@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { prisma } from '@/lib/prisma'
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '@/generated/prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { BRIDGE_STRINGS } from './bridge-strings'
 

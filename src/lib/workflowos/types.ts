@@ -9,7 +9,7 @@ import type {
   SunbulDocument as WorkflowDocument,
   SunbulReview as WorkflowReview,
   SunbulAuditEvent as WorkflowAuditEvent,
-} from "@prisma/client";
+} from "@/generated/prisma/client";
 
 export type {
   WorkflowUserRole,

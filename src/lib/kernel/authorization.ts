@@ -1,6 +1,4 @@
-"use server";
-
-/**
+﻿/**
  * Kernel-level bridge for authorization.
  *
  * Re-exports the `enforce` and `isAllowed` action guards from the

@@ -4,9 +4,9 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
-import type { SsoProvider } from "@prisma/client";
+import type { SsoProvider } from "@/generated/prisma/client";
 import { encrypt, decrypt } from "@/lib/auth/encryption";
 
 // ─── Encryption helpers for clientSecret ───

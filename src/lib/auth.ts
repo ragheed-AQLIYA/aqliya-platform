@@ -3,7 +3,7 @@
  * Replaces static user + dev-user-email cookie
  */
 
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 export type RequiredRole = UserRole;
 
 import { auth } from "@/lib/auth-next";

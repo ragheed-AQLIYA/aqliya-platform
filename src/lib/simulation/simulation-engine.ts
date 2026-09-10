@@ -1,4 +1,4 @@
-import type { DecisionType, ScenarioType } from "@prisma/client"
+import type { DecisionType, ScenarioType } from "@/generated/prisma/client"
 import type {
   SimulationInput,
   SimulationScenarioResult,

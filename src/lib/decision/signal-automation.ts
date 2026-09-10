@@ -1,6 +1,6 @@
 // D3-02 — deterministic post-decision monitoring signal generation (system-only)
 
-import type { RiskLevel, SignalSeverity } from "@prisma/client";
+import type { RiskLevel, SignalSeverity } from "@/generated/prisma/client";
 
 export type MonitoringSignalDraft = {
   decisionId: string;

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import type { SalesActor, SalesOrgScope } from "../services";
 import type { SalesApprovalKind, SalesApprovalStatus } from "../l5-types";
 import { getSalesReview } from "./reviews";

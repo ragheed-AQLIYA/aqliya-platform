@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { evaluateCondition } from "./condition-evaluator";
 
-import type { AbacEffect, AbacOperator, Prisma } from "@prisma/client";
+import type { AbacEffect, AbacOperator, Prisma } from "@/generated/prisma/client";
 
 type AbacPolicyWithRelations = Prisma.AbacPolicyGetPayload<{
   include: { conditions: true; assignments: true };

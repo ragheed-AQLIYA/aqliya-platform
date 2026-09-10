@@ -19,7 +19,7 @@ import {
   uploadLocalContentEvidenceFileAction,
 } from "@/actions/localcontent-actions";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 const prisma = new PrismaClient();
 
 // ── Remaining jest.mock calls must come AFTER imports ──

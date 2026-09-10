@@ -2,7 +2,7 @@
 
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 import { revalidatePath } from "next/cache"
 
 export type UserPreferences = {

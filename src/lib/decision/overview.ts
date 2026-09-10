@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client"
+import { Prisma } from "@/generated/prisma/client"
 import { evaluateDecisionIntake } from "./intake"
 import { evaluateDecisionFramework } from "./framework"
 import { evaluateDecisionScenarios } from "./scenarios"

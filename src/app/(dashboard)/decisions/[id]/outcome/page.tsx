@@ -29,7 +29,7 @@ import {
   AlertCircle,
   HelpCircle,
 } from "lucide-react";
-import type { OutcomeStatus } from "@prisma/client";
+import type { OutcomeStatus } from "@/generated/prisma/client";
 
 type PageProps = {
   params: Promise<{ id: string }>;

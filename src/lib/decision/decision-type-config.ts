@@ -1,4 +1,4 @@
-import type { DecisionType } from "@prisma/client"
+import type { DecisionType } from "@/generated/prisma/client"
 
 export interface DecisionModuleConfig {
   id: string

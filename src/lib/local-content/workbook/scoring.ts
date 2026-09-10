@@ -3,7 +3,7 @@
 // The score is a weighted combination of revenue, supplier spend,
 // workforce, and asset metrics.
 
-import type { LcWorkbookLine } from "@prisma/client";
+import type { LcWorkbookLine } from "@/generated/prisma/client";
 import type {
   LcMetricResult,
   LcScoreResult,

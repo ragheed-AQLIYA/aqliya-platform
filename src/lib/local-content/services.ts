@@ -4,8 +4,8 @@
 // Tenant scoping is enforced via project-level organizationId checks.
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
-import type { ClassificationBasis, ClassificationConfidence } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
+import type { ClassificationBasis, ClassificationConfidence } from "@/generated/prisma/client";
 import { createLocalContentAuditEvent, AuditActions } from "./audit-events";
 import { assertLocalContentGovernanceTransition } from "@/lib/core/workflow/local-content-adapter";
 import type { ScoringResult } from "./types";

@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";
-import type { AuditEvent, Prisma } from "@prisma/client";
+import type { AuditEvent, Prisma } from "@/generated/prisma/client";
 
 export interface AuditOsAuditInput {
   engagementId: string;

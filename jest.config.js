@@ -25,6 +25,7 @@ module.exports = {
   setupFiles: [path.join(__dirname, "src/__tests__/setup.ts")],
   moduleNameMapper: {
     "^@/lib/auth$": path.join(__dirname, "src/__mocks__/lib-auth.js"),
+    "^@/generated/prisma/client$": path.join(__dirname, "src/__mocks__/prisma-client-mock.js"),
     "^@/(.*)$": path.join(__dirname, "src", "$1"),
     "^next-auth$": path.join(__dirname, "src/__mocks__/next-auth.js"),
     "^next-auth/providers/credentials$": path.join(__dirname, "src/__mocks__/next-auth.js"),

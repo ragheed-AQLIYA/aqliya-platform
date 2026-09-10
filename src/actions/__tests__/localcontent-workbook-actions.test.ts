@@ -2,7 +2,7 @@
 // Tests the action wrapper shape for scoring and the export JSON shape.
 // Uses mocked Prisma — no database required.
 
-import type { LcWorkbookLine } from "@prisma/client";
+import type { LcWorkbookLine } from "@/generated/prisma/client";
 
 // ─── Mocks (hoisted before imports) ───
 

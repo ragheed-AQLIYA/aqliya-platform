@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auditLogger, Product } from "../audit-logger";
 import { evaluateCondition } from "./condition-evaluator";
 
-import type { AbacEffect, AbacOperator } from "@prisma/client";
+import type { AbacEffect, AbacOperator } from "@/generated/prisma/client";
 
 export interface AbacContext {
   userId: string;

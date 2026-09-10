@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { AuditAction as PrismaAuditAction } from "@prisma/client";
+import { AuditAction as PrismaAuditAction } from "@/generated/prisma/client";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { Product } from "@/lib/platform/audit-logger";
 import { appendToAuditChain } from "@/lib/platform/audit/audit-store";

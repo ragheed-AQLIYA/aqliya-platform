@@ -8,7 +8,7 @@
 
 import "server-only";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import type { DealRepository, DealFilter } from "../domain/repository";
 import { Deal } from "../domain/deal";
 import type { ReviewDecision } from "../domain/deal";

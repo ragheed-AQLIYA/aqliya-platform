@@ -1,4 +1,4 @@
-import type { RiskLevel } from "@prisma/client"
+import type { RiskLevel } from "@/generated/prisma/client"
 
 export interface DecisionScoringData {
   objectives: Array<{ description: string }>

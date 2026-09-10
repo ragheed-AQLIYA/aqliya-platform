@@ -1,7 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import {
   recordSalesAuditEvent,
   SalesAuditActions,
@@ -15,7 +15,7 @@ import {
   assertStageChangeGovernance,
   countDealEvidenceLinks,
 } from "./governance";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 
 export interface SalesOrgScope {
   organizationId: string;

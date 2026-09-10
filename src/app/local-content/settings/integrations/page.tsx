@@ -81,7 +81,7 @@ import {
   listSyncLogsAction,
 } from "@/actions/erp-actions";
 
-import type { ErpConnection as PrismaErpConnection, ErpImportBatch as PrismaErpImportBatch, ErpSyncLog as PrismaErpSyncLog } from "@prisma/client";
+import type { ErpConnection as PrismaErpConnection, ErpImportBatch as PrismaErpImportBatch, ErpSyncLog as PrismaErpSyncLog } from "@/generated/prisma/client";
 
 type ErpConnection = PrismaErpConnection;
 type ErpImportBatch = PrismaErpImportBatch;

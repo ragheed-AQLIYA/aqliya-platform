@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { RiskLevel } from "@prisma/client"
+import { RiskLevel } from "@/generated/prisma/client"
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth"
 import { enforce } from "@/lib/kernel"
 import { logAudit, toAuditJson } from "@/lib/decision/decision-audit"

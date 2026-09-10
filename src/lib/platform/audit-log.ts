@@ -4,7 +4,7 @@
 // Strict mode available for callers that want throws on failure.
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { stampPlatformAuditEvent } from "@/lib/core/contracts/event-envelope";
 import {
   buildOutboxPayloadFromAuditLog,

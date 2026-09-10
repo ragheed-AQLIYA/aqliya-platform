@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { getCurrentUser, isExpectedAccessDeniedError } from "@/lib/auth";
 
 type ActionResult<T> =

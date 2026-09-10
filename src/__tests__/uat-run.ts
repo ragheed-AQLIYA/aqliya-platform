@@ -6,7 +6,7 @@ import { resolve } from "path";
 
 config({ path: resolve(__dirname, "../../.env") });
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg(process.env.DATABASE_URL!);

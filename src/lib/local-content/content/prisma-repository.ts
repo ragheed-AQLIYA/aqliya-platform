@@ -2,7 +2,7 @@
 
 import "server-only";
 
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { ContentStudioRepository } from "./repository-interface";
 import type {

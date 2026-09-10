@@ -2,7 +2,7 @@
 // إدارة آمنة للأسرار: تشفير، تخزين، تدقيق
 
 import { prisma } from "@/lib/prisma"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 import { writePlatformAuditLog } from "../audit-log"
 import { encryptSecret, decryptSecret } from "./vault-encryption"
 import type { VaultEntryInput, VaultSecretResult, VaultEntryData, VaultAuditPayload } from "./types"

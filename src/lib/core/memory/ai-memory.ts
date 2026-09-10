@@ -1,7 +1,7 @@
 import "server-only"
 import { prisma } from "@/lib/prisma"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 
 export interface HistoryOptions {
   organizationId: string

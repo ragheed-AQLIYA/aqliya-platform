@@ -1,4 +1,11 @@
 generator client {
+  provider                = "prisma-client"
+  output                  = "../src/generated/prisma"
+  generatedFileExtension  = "ts"
+  importFileExtension     = "ts"
+}
+
+generator legacy_client {
   provider = "prisma-client-js"
 }
 

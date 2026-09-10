@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { CrmConnection } from "@prisma/client";
+import type { CrmConnection } from "@/generated/prisma/client";
 import type { CrmConnector } from "./connector";
 import { HubSpotConnector } from "./hubspot-connector";
 import { SalesforceConnector } from "./salesforce-connector";

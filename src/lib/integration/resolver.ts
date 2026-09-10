@@ -5,7 +5,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import type { HealthCheckResult, IntegrationType } from "./types";
-import type { TenantIntegration, CrmConnection, ErpConnection } from "@prisma/client";
+import type { TenantIntegration, CrmConnection, ErpConnection } from "@/generated/prisma/client";
 
 // ─── Source type for audit/logging ───
 

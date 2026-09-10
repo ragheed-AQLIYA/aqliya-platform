@@ -12,7 +12,7 @@ import type {
   LcIndustryPatternMemory,
   LcOrganizationMatchMemory,
   LcAiAuditEvent,
-} from "@prisma/client";
+} from "@/generated/prisma/client";
 
 // ─── Mocks (hoisted before imports) ───
 

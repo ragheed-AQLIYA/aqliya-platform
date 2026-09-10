@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { validatePatternExtractionGate } from "./intelligence-gate"
 import { createDecisionPattern } from "./decision-pattern"
 import { upsertSectorPattern } from "./sector-pattern"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 
 /**
  * ALL pattern analysis happens here, NOT in Prisma

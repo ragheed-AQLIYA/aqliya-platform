@@ -1,7 +1,7 @@
 ﻿"use server";
 
 import { prisma } from "@/lib/prisma";
-import type { DecisionStatus } from "@prisma/client";
+import type { DecisionStatus } from "@/generated/prisma/client";
 import {
   evaluateIntake,
   evaluateFramework,

@@ -7,7 +7,7 @@ import {
   computeMetricContributions,
   computeSectionBreakdown,
 } from "../scoring";
-import type { LcWorkbookLine } from "@prisma/client";
+import type { LcWorkbookLine } from "@/generated/prisma/client";
 
 /** Helper to build a mock workbook line */
 function line(

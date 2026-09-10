@@ -1,4 +1,4 @@
-import type { RiskLevel } from "@prisma/client"
+import type { RiskLevel } from "@/generated/prisma/client"
 import type { RecommendationInput, RecommendationResult, RecommendationPrerequisites, RecommendationAdapter, ScenarioScores } from "./recommendation-types"
 import { RecommendationOutcome } from "./recommendation-types"
 import { generateRecommendation as generateTenderRecommendation } from "./tender-recommendation"

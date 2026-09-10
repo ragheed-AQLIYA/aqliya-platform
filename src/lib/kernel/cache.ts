@@ -1,6 +1,4 @@
-"use server";
-
-/**
+﻿/**
  * Kernel-level bridge for platform cache strategy.
  *
  * Re-exports the higher-level cache convenience functions from the

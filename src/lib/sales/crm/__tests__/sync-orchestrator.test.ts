@@ -16,7 +16,7 @@ import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { runSync, testCrmConnection, listCrmConnections, listSyncLogs } from "../sync-orchestrator";
 import { createConnector } from "../connector-factory";
 import type { CrmConnector } from "../connector";
-import type { CrmConnection } from "@prisma/client";
+import type { CrmConnection } from "@/generated/prisma/client";
 import type { CrmAccount, CrmContact, CrmOpportunity } from "../types";
 
 const mockConnector: jest.Mocked<CrmConnector> = {

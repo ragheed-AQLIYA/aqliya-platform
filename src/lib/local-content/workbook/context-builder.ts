@@ -4,7 +4,7 @@
 // Every AI call must receive this context to produce grounded results.
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 
 // ─── Types ───
 

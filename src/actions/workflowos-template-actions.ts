@@ -6,7 +6,7 @@ import { enforce } from "@/lib/kernel";
 import { writePlatformAuditLog } from "@/lib/platform/audit-log";
 import { revalidatePath } from "next/cache";
 import crypto from "node:crypto";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 
 function mapAuthError(error: unknown): string {
   const msg = error instanceof Error ? error.message : "";

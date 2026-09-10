@@ -9,7 +9,7 @@
  * Only TRUSTED patterns qualify for high-confidence auto-suggest.
  */
 
-import type { TBMappingPatternStatus } from "@prisma/client";
+import type { TBMappingPatternStatus } from "@/generated/prisma/client";
 
 export const MEMORY_TRUST_MIN_HIT_COUNT = 5;
 export const MEMORY_TRUST_MIN_REVIEWERS = 2;

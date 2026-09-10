@@ -5,7 +5,7 @@ import { buildChunkGovernanceMetadata } from "./governance-metadata"
 import { storeChunkEmbedding } from "./vector-store"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import type { EmbeddingProvider } from "@/lib/core/ai/types"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 import { getRagEmbeddingProvider, setRagEmbeddingProvider } from "./embedding-provider"
 
 // DocumentChunk model exists in schema — typed access used directly

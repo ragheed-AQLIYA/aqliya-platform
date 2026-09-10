@@ -6,7 +6,7 @@
  * in product directories, not in Core.
  */
 
-import type { DecisionType } from "@prisma/client";
+import type { DecisionType } from "@/generated/prisma/client";
 import { getDecisionTypeConfig } from "@/lib/decision/decision-type-config";
 import { evaluateDecisionIntake } from "@/lib/core/decision/evaluators/intake";
 import { evaluateDecisionFramework } from "@/lib/core/decision/evaluators/framework";

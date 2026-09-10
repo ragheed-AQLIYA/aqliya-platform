@@ -2,7 +2,7 @@
 // Validates workbook status transitions and controls tab/mutation access.
 // Follows the same pattern as AuditOS workflow-gating.ts.
 
-import type { LcWorkbook } from "@prisma/client";
+import type { LcWorkbook } from "@/generated/prisma/client";
 
 // ─── Status Constants ───
 

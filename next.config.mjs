@@ -165,6 +165,14 @@ const nextConfig = {
     "pdfjs-dist",
   ],
 
+  webpack(config) {
+    // Resolve TypeScript ahead of the Prisma generator's .js twin outputs —
+    // src/generated/prisma emits both client.ts and invalid-JS client.js.
+    const order = [".tsx", ".ts", ".mts", ".cts", ".jsx", ".js", ".mjs", ".cjs", ".json"];
+    config.resolve.extensions = [...new Set([...order, ...(config.resolve.extensions ?? [])])];
+    return config;
+  },
+
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

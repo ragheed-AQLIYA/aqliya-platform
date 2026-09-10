@@ -1,7 +1,7 @@
 // ─── SSO Service Tests ───
 // Tests for sso-service.ts (encryption, audit trail, org scoping, CRUD)
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 // Mock encryption for predictable test data
 // The real sso-service.ts wraps: encrypt → stores "enc:" + result; decrypt strips "enc:" then calls decrypt

@@ -1,6 +1,6 @@
 // SalesOS — product-scoped RBAC (mirrors LocalContentOS permission pattern)
 
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 
 export type SalesPermission =
   | "salesos:read"

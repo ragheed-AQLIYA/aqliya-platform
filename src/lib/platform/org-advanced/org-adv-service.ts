@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from '@/generated/prisma/client'
 import { writePlatformAuditLog } from '@/lib/platform/audit-log'
 import { ORG_STRINGS } from './org-strings'
 import { KNOWN_SETTINGS, LIFECYCLE_EVENT_TYPES } from './constants'

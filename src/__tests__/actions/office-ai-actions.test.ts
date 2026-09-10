@@ -2,7 +2,7 @@
 // Tests for office-ai-actions.ts.
 // Uses global PrismaClient mock (officeAiTask/officeAiOutput/officeAiFile already registered).
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 jest.mock("next/cache", () => ({
   revalidatePath: jest.fn(),

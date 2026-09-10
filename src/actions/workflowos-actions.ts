@@ -32,7 +32,7 @@ import { getUserWorkflowRole } from "@/lib/workflowos/tenant-guard";
 import { isExpectedAccessDeniedError, getCurrentUser } from "@/lib/auth";
 import { enforce } from "@/lib/kernel";
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 
 function mapAuthError(error: unknown): string {

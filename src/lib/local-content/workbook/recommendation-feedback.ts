@@ -4,7 +4,7 @@
 // what works, what gets ignored, and what consistently succeeds.
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { createAiAuditEvent } from "@/lib/local-content/audit-events";
 
 // ─── Types ───

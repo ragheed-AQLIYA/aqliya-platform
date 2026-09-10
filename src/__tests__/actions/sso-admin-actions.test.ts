@@ -2,7 +2,7 @@
 // Tests for sso-admin-actions.ts (CRUD, toggle, test config)
 // Uses mocked PrismaClient and @/lib/auth.
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 
 // We need to mock next/cache BEFORE any imports that reference it
 jest.mock("next/cache", () => ({

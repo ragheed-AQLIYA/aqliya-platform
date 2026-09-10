@@ -17,7 +17,7 @@ import { computeLcScore, getLineValue } from "./scoring";
 import { isAccountInCodeRange } from "./population";
 import { WORKBOOK_TEMPLATE, getTemplateLineByCode } from "./template";
 import { buildLocalContentContext } from "./context-builder";
-import type { LcWorkbookLine } from "@prisma/client";
+import type { LcWorkbookLine } from "@/generated/prisma/client";
 import type { LocalContentContext } from "./context-builder";
 
 // ─── Types ───

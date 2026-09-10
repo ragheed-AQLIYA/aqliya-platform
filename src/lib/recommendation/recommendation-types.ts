@@ -1,4 +1,4 @@
-import type { DecisionType, RiskLevel } from "@prisma/client"
+import type { DecisionType, RiskLevel } from "@/generated/prisma/client"
 
 export enum RecommendationOutcome {
   GO = "GO",

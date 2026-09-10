@@ -1,6 +1,4 @@
-"use server";
-
-/**
+﻿/**
  * Kernel-level sync bridge for feature flags.
  *
  * Re-exports the synchronous functions from the feature-flag registry

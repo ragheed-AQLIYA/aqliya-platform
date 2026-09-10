@@ -1,6 +1,6 @@
 // ─── SIEM Event Formatters ───
 
-import type { PlatformAuditLog } from "@prisma/client";
+import type { PlatformAuditLog } from "@/generated/prisma/client";
 
 export interface FormattedSiemEvent {
   format: string;

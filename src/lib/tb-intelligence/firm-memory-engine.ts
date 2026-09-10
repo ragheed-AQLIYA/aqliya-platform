@@ -3,7 +3,7 @@
  */
 
 import { prisma } from "@/lib/prisma";
-import type { TBMappingPatternStatus } from "@prisma/client";
+import type { TBMappingPatternStatus } from "@/generated/prisma/client";
 import { normaliseAccountText } from "./synonyms";
 import type { ClassificationResult } from "./types";
 import { confidenceFromHitCount } from "./firm-memory";

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { SalesAuditActions } from "./audit-events";
 
 export const SALES_AUDIT_TRAIL_DEFAULT_LIMIT = 100;

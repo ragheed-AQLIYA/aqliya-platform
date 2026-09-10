@@ -11,7 +11,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { computeLcScore, getLineValue } from "./scoring";
 import { createAiAuditEvent, AuditActions } from "@/lib/local-content/audit-events";
-import type { LcWorkbookLine } from "@prisma/client";
+import type { LcWorkbookLine } from "@/generated/prisma/client";
 import type { LcScoreResult, LcMetricResult } from "./types";
 
 // ─── Types ───

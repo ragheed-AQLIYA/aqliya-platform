@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { writePlatformAuditLog } from "@/lib/platform/audit-log"
 import { requireEnabled } from "@/lib/platform/feature-flags/registry"
 import { revalidatePath } from "next/cache"
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from "@/generated/prisma/client"
 
 export interface TenantListResult {
   id: string

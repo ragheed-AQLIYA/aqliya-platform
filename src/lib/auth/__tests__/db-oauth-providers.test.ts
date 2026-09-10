@@ -1,6 +1,6 @@
 import { buildProviderConfig } from "@/lib/auth/sso-providers";
 import { dbSsoProviderAuthId } from "@/lib/auth/db-oauth-providers";
-import type { SsoProvider } from "@prisma/client";
+import type { SsoProvider } from "@/generated/prisma/client";
 
 describe("db SSO provider wiring", () => {
   it("generates stable NextAuth provider ids for DB records", () => {

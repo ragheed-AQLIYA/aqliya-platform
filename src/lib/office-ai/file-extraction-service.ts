@@ -6,7 +6,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { getStorageProvider } from "@/lib/platform/storage";
 import { auditLogger, Product } from "@/lib/platform/audit-logger";
 import { parse } from "csv-parse/sync";

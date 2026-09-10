@@ -1,6 +1,4 @@
-"use server";
-
-/**
+﻿/**
  * Kernel-level bridge for AuditOS audit functions.
  *
  * Re-exports the most commonly imported audit utilities so consumers

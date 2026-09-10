@@ -3,7 +3,7 @@
 // Products MUST consume interfaces, not implementations.
 // Provider selection happens at runtime per tenant via ProviderRegistry.
 
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 
 // ─── Integration Types ───
 

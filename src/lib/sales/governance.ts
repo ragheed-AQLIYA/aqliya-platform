@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   recordSalesAuditEvent,

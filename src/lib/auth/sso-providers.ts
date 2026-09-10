@@ -3,7 +3,7 @@
 // Well-known providers (Google, GitHub, Azure AD, Okta) use env vars.
 // Custom OIDC/SAML built from stored config.
 
-import type { SsoProvider } from "@prisma/client";
+import type { SsoProvider } from "@/generated/prisma/client";
 import type { OAuthConfig, OIDCConfig } from "next-auth/providers";
 
 // ─── Supported Provider Types ───

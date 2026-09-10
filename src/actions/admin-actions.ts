@@ -3,7 +3,7 @@
 import { getCurrentUser } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import type { $Enums } from "@prisma/client"
+import type { $Enums } from "@/generated/prisma/client"
 import { createNotification } from "./notification-actions"
 
 async function assertAdmin(_organizationId?: string) {

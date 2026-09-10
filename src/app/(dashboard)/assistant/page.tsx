@@ -1,4 +1,4 @@
-import type { OfficeAiTask } from "@prisma/client";
+import type { OfficeAiTask } from "@/generated/prisma/client";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserTaskList } from "@/actions/office-ai-workspace-actions";
 import { createOfficeAiTaskAction } from "@/actions/office-ai-actions";

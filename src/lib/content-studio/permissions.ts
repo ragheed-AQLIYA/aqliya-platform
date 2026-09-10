@@ -1,6 +1,6 @@
 // LocalContentOS Content Studio — governance permissions
 
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@/generated/prisma/client";
 import type { LocalContentPermission } from "./contracts";
 
 const ROLE_PERMISSIONS: Record<UserRole, LocalContentPermission[]> = {
