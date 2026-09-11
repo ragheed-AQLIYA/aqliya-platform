@@ -6,6 +6,6 @@
 
 Historical council copy (2026-06-15 pre-merge conditions):
 
-→ **[docs/archive/2026-06/RELEASE_DECISION-audits-copy.md](../archive/2026-06/RELEASE_DECISION-audits-copy.md)**
+→ **[docs/archive/2026-06/RELEASE_DECISION-audits-copy.md](../../archive/2026-06/RELEASE_DECISION-audits-copy.md)**
 
 **Archived:** 2026-06-17 — repository cleanup Batch 5 (duplicate elimination).

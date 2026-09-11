@@ -1,6 +1,6 @@
 ﻿# Release Decision — AuditOS Factory Program PR #5 (Archived Copy)
 
-**Status:** Archived · Superseded by [`docs/review/RELEASE_DECISION.md`](docs/review/ — directory deleted 2026-07-01; file may exist in git history)  
+**Status:** Archived · Superseded by `docs/review/RELEASE_DECISION.md` (directory deleted 2026-07-01; file may exist in git history)  
 **Original path:** `docs/audits/RELEASE_DECISION.md`  
 **Archived:** 2026-06-17 (repository cleanup Batch 5)
 

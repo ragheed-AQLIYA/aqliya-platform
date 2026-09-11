@@ -208,10 +208,11 @@ function collectMdFiles(dir, relativeTo = REPO_ROOT) {
     for (const entry of entries) {
       const fullPath = resolve(dir, entry.name);
       const relPath = fullPath.replace(relativeTo + '\\', '').replace(/\\/g, '/');
-      if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
+      if (entry.name === 'node_modules') continue;
+      if (entry.name.startsWith('.') && entry.isDirectory()) continue;
       if (entry.isDirectory()) {
         results.push(...collectMdFiles(fullPath, relativeTo));
-      } else if (entry.name.endsWith('.md')) {
+      } else if (entry.name.endsWith('.md') || /\.(mdx|json|yaml|yml)$/.test(entry.name)) {
         results.push({ path: fullPath, relPath });
       }
     }
@@ -226,7 +227,7 @@ function extractMetadata(filePath, relPath) {
 
     // Title from H1
     const h1Match = content.match(/^#\s+(.+)$/m);
-    const title = h1Match ? h1Match[1].trim() : relPath.split('/').pop().replace('.md', '').replace(/_/g, ' ');
+    const title = h1Match ? h1Match[1].trim() : relPath.split('/').pop().replace(/\.[^.]+$/, '').replace(/_/g, ' ');
 
     // Description from first paragraph after H1
     const descMatch = content.match(/^#\s+.+?\n\n([^#\n].+?)(?:\n\n|$)/s);
@@ -258,7 +259,7 @@ function extractMetadata(filePath, relPath) {
 
     return { title, description, owner, status };
   } catch {
-    return { title: relPath.split('/').pop().replace('.md', '').replace(/_/g, ' '), description: '', owner: null, status: 'unknown' };
+    return { title: relPath.split('/').pop().replace(/\.[^.]+$/, '').replace(/_/g, ' '), description: '', owner: null, status: 'unknown' };
   }
 }
 

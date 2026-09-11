@@ -1,6 +1,6 @@
 # AQLIYA Documentation Governance
 
-> **Superseded By:** [Knowledge Governance Charter v1](governance/aqliya-knowledge-governance-charter-v1.md) (DOCUMENTATION_AUTHORITY.md Level 2)  
+> **Superseded By:** [Knowledge Governance Charter v1](archive/governance/aqliya-knowledge-governance-charter-v1.md) (DOCUMENTATION_AUTHORITY.md Level 2)  
 > **Status:** Historical reference — retained for backward compatibility. All governance authority now resides in the Knowledge Governance Charter.  
 > **Last Reviewed:** 2026-06-29
 
