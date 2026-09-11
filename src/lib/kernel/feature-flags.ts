@@ -1,5 +1,3 @@
-"use server";
-
 /**
  * Kernel-level sync bridge for feature flags.
  *
