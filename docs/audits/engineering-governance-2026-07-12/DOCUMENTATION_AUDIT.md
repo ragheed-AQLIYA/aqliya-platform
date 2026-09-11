@@ -341,5 +341,5 @@ Three operator guides (`decisionos-operator-guide.md`, `workflowos-operator-guid
 
 - **Files inspected:** 2,312 `.md` files across all `docs/` subdirectories
 - **Deep-read files:** `DOCUMENTATION_AUTHORITY.md`, `PRODUCT_STATUS_MATRIX.md`, `aqliya-roadmap-v1.1.md`, `AQLIYA_ROADMAP_v1.2.md`, `aqliya-glossary-v1.1.md`, all ADR files, 4 operator guides, `API_REFERENCE.md`, `MANUAL.md`, `ARCHITECTURE_DECISION_INDEX.md`, `ROADMAP_CONFLICT_MATRIX.md`, `AQLIYA_SYSTEM_TAXONOMY.md`, `ROUTE_STRATEGY.md`, `production-support-runbook.md`
-- **Pattern searches:** Broken links (`[text](../path)` resolution), banned terms (Strategic Future, Coming Soon, Planned), pre-v1.1 concept references (Edit OS, Content Authority OS), `docs/products/` references
+- **Pattern searches:** Broken links (`\[text\]\(../path\)` resolution), banned terms (Strategic Future, Coming Soon, Planned), pre-v1.1 concept references (Edit OS, Content Authority OS), `docs/products/` references
 - **Limitations:** Not all 2,312 files were read in full; broken link detection was based on relative `../` paths only, not absolute paths or anchor links; ADR code compliance verification was cursory; runbook actionability was assessed by inspection only (no live execution)

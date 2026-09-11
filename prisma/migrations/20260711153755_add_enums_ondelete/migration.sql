@@ -116,13 +116,40 @@ ALTER TABLE "institutional_memory_collections" DROP CONSTRAINT "institutional_me
 ALTER TABLE "institutional_memory_collections" DROP CONSTRAINT "institutional_memory_collections_updatedById_fkey";
 
 -- DropIndex
-DROP INDEX "KnowledgeCandidate_createdById_idx";
+-- REPAIRED 2026-08-22: these indexes back UNIQUE constraints, and PostgreSQL
+-- refuses to drop such an index directly (SQLSTATE 2BP01). Drop the owning
+-- constraint when there is one, otherwise the index. Same net effect.
+DO $repair$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'KnowledgeCandidate_createdById_idx') THEN
+    EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I',
+      (SELECT conrelid::regclass::text FROM pg_constraint WHERE conname = 'KnowledgeCandidate_createdById_idx' LIMIT 1),
+      'KnowledgeCandidate_createdById_idx');
+  ELSE
+    EXECUTE 'DROP INDEX IF EXISTS "KnowledgeCandidate_createdById_idx"';
+  END IF;
+END $repair$;
 
 -- DropIndex
-DROP INDEX "KnowledgeFoundationRelease_versionId_key";
+DO $repair$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'KnowledgeFoundationRelease_versionId_key') THEN
+    EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I',
+      (SELECT conrelid::regclass::text FROM pg_constraint WHERE conname = 'KnowledgeFoundationRelease_versionId_key' LIMIT 1),
+      'KnowledgeFoundationRelease_versionId_key');
+  ELSE
+    EXECUTE 'DROP INDEX IF EXISTS "KnowledgeFoundationRelease_versionId_key"';
+  END IF;
+END $repair$;
 
 -- DropIndex
-DROP INDEX "KnowledgeFoundationVersion_versionNumber_key";
+DO $repair$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'KnowledgeFoundationVersion_versionNumber_key') THEN
+    EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I',
+      (SELECT conrelid::regclass::text FROM pg_constraint WHERE conname = 'KnowledgeFoundationVersion_versionNumber_key' LIMIT 1),
+      'KnowledgeFoundationVersion_versionNumber_key');
+  ELSE
+    EXECUTE 'DROP INDEX IF EXISTS "KnowledgeFoundationVersion_versionNumber_key"';
+  END IF;
+END $repair$;
 
 -- AlterTable
 ALTER TABLE "AuditEngagement" DROP COLUMN "engagementType",
@@ -347,7 +374,9 @@ CREATE TABLE "ReviewNoteSLA" (
 );
 
 -- CreateTable
-CREATE TABLE "ContentEvidence" (
+-- REPAIRED 2026-08-22: 20260703000001_add_content_evidence already creates this
+-- table, byte-identically. Guarded so the chain replays on an empty database.
+CREATE TABLE IF NOT EXISTS "ContentEvidence" (
     "id" TEXT NOT NULL,
     "contentId" TEXT NOT NULL,
     "organizationId" TEXT NOT NULL,
@@ -455,13 +484,14 @@ CREATE UNIQUE INDEX "ReviewNoteSLA_reviewNoteId_key" ON "ReviewNoteSLA"("reviewN
 CREATE INDEX "ReviewNoteSLA_reviewNoteId_idx" ON "ReviewNoteSLA"("reviewNoteId");
 
 -- CreateIndex
-CREATE INDEX "ContentEvidence_contentId_idx" ON "ContentEvidence"("contentId");
+-- REPAIRED 2026-08-22: created identically by 20260703000001.
+CREATE INDEX IF NOT EXISTS "ContentEvidence_contentId_idx" ON "ContentEvidence"("contentId");
 
 -- CreateIndex
-CREATE INDEX "ContentEvidence_organizationId_idx" ON "ContentEvidence"("organizationId");
+CREATE INDEX IF NOT EXISTS "ContentEvidence_organizationId_idx" ON "ContentEvidence"("organizationId");
 
 -- CreateIndex
-CREATE INDEX "ContentEvidence_createdAt_idx" ON "ContentEvidence"("createdAt");
+CREATE INDEX IF NOT EXISTS "ContentEvidence_createdAt_idx" ON "ContentEvidence"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "ComponentMateriality_groupEngagementId_idx" ON "ComponentMateriality"("groupEngagementId");
@@ -608,7 +638,13 @@ ALTER TABLE "institutional_memory_collections" ADD CONSTRAINT "institutional_mem
 ALTER TABLE "ReviewNoteSLA" ADD CONSTRAINT "ReviewNoteSLA_reviewNoteId_fkey" FOREIGN KEY ("reviewNoteId") REFERENCES "ReviewNote"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ContentEvidence" ADD CONSTRAINT "ContentEvidence_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "ContentItem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- REPAIRED 2026-08-22: added identically by 20260703000001.
+DO $repair$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'ContentEvidence_contentId_fkey') THEN
+    ALTER TABLE "ContentEvidence" ADD CONSTRAINT "ContentEvidence_contentId_fkey"
+      FOREIGN KEY ("contentId") REFERENCES "ContentItem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+END $repair$;
 
 -- AddForeignKey
 ALTER TABLE "KnowledgeFoundationVersion" ADD CONSTRAINT "KnowledgeFoundationVersion_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

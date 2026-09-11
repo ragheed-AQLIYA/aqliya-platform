@@ -318,4 +318,4 @@ Factory flags are **independent** — disable individually without schema rollba
 - [`FACTORY_PROGRAM_CLOSURE.md`](./FACTORY_PROGRAM_CLOSURE.md) — program sign-off summary
 - [`../AUDITOS_OPERATOR_MANUAL.md`](../AUDITOS_OPERATOR_MANUAL.md) — core operator manual
 - [`../../pilot/GO-NOGO-CHECKLIST.md`](../../pilot/GO-NOGO-CHECKLIST.md) — platform-level Go/No-Go
-- [`../../audits/AQLIYA_PILOT_READINESS_FINAL.md`](../../audits/AQLIYA_PILOT_READINESS_FINAL.md) — platform pilot evidence
+- [`../../evidence/audits/AQLIYA_PILOT_READINESS_FINAL.md`](../../evidence/audits/AQLIYA_PILOT_READINESS_FINAL.md) — platform pilot evidence
