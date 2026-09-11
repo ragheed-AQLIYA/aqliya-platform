@@ -1,10 +1,20 @@
 {
-  "version": 1,
-  "description": "Expected orphan documents — non-.md artifacts that serve operational/config purposes but should not appear in the knowledge-map or navigation indexes.",
+  "version": 2,
+  "description": "Expected orphan documents — non-navigation artifacts (config, structured data, release deliverables) that should not appear in the knowledge-map or navigation indexes. v2 adds the 2026-09-10 baseline cohort: pre-existing main-branch legacy orphans registered to unblock orphan delta-checking (new orphans are still caught). Reversible: removing an entry re-enables detection for that path.",
   "orphans": [
+    {
+      "path": "docs/adr/ADR-DEPLOY-001-CLOUDFRONT-WAF-ATTACHMENT.md",
+      "reason": "Architecture Decision Record — legacy, not a knowledge-map navigation target; pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
     {
       "path": "docs/ai/knowledge-map.schema.json",
       "reason": "JSON Schema for the auto-generated knowledge-map; consumed by validation scripts, not by readers.",
+      "expected": true
+    },
+    {
+      "path": "docs/api/API_REFERENCE.md",
+      "reason": "API reference — operational reference, not AI knowledge-map target; pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
@@ -13,68 +23,1793 @@
       "expected": true
     },
     {
-      "path": "docs/config-drafts/claude-code-router-config.json",
-      "reason": "Draft config for Claude Code Router toolchain (Phase 1); not a documentation asset.",
+      "path": "docs/architecture/AQLIYA_ARCHITECTURE_CONSTITUTION.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/reports/.session4-walkthrough-output.json",
-      "reason": "Automated session output artifact; hidden file, not meant for human navigation.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_API_ROUTES_WAVE14_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/localcontent/FS_ANALYSIS.json",
-      "reason": "LocalContentOS review artifact — structured analysis output, not readable documentation.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_AUDITOS_WAVE10_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/localcontent/PILOT_METRICS.json",
-      "reason": "LocalContentOS pilot metrics artifact — structured data, not documentation.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_CLEANUP_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/localcontent/TB_ANALYSIS.json",
-      "reason": "LocalContentOS trial balance review artifact — structured data.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_CONSOLIDATION_COMPLETE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/localcontent/TIME_STUDY.json",
-      "reason": "LocalContentOS time study artifact — structured data.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_CONTENT_STUDIO_OFFICE_AI_WAVE15_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/localcontent/WORKBOOK_COVERAGE_MATRIX.json",
-      "reason": "LocalContentOS coverage matrix artifact — structured data.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_CURRENT_STATE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/skill-os/det-auditor-1.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON, not human-readable documentation.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_DECISIONOS_PERIPHERAL_COMPLETION_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/skill-os/det-auditor-2.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_DECISIONOS_PUBLICATION_PLAN.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/skill-os/det-evaluator-1.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_DECISIONOS_REMAINING_PLAN.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/skill-os/det-evaluator-2.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_LOCALCONTACTOS_WAVE12_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
-      "path": "docs/review/skill-os/det-evaluator-3.json",
-      "reason": "Skill-OS evaluation artifact — structured JSON.",
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_LOCALCONTENTOS_WAVE11_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_MIGRATION_PLAN.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_PLATFORM_REBASELINE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_PLATFORM_WAVE13_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_POST_DECISIONOS_REBASELINE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_PROGRAM_REBASELINE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_SALESOS_WAVE9_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_TARGET_MODEL.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE1_PROMPT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE1_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE16_17_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE2_PROMPT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE2_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE3_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WAVE4_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/AQLIYA_AUTHORIZATION_WORKFLOWOS_WAVE7_REPORT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/ARCHITECTURE_DECISION_INDEX.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/ARCHITECTURE_PROGRAM_CLOSURE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/CPV-001-G0_PRODUCT_QUALIFICATION.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/ENTERPRISE_ARCHITECTURE_PROGRAM.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/evidence-reviews/ERR-002_LIA-001_Phase_B.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/IES-001_INSTITUTIONAL_STANDARD.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/PLATFORM_CORE_EXTRACTION_BLUEPRINT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/PLATFORM_KERNEL_ARCHITECTURE.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/SALESOS_ARCHITECTURE_REALITY_ASSESSMENT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/architecture/SALESOS_V2_BLUEPRINT.md",
+      "reason": "Architecture documentation (reports/blueprints/indexes) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/AUDITOS_CAPABILITY_BACKLOG.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/AUDITOS_V2_BLUEPRINT.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/prds/PRD-01_Engagement_Management.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/specs/SPEC-02a_Engagement_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/specs/SPEC-02b_Engagement_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/specs/SPEC-02c_Engagement_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/specs/SPEC-02d_Engagement_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/auditos-vnext/specs/SPEC-02e_Engagement_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/AUDITOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/case-study-government.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/case-study-innovation-tech.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/CONTENTSTUDIO.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/DECISIONOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/financeos/FINANCEOS_KICKOFF.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/INSTITUTIONAL_MEMORY.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-01_Project_Management.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-02_Supplier_Spend_Management.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-03_Evidence_Classification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-04_Findings_Review.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-05_Approval_Export.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-06_Tender_Match.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-07_Verification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-08_Scoring_Analytics.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-09_Content_Studio.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-PRD-10_AI_Advisor.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-01a_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-01b_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-01c_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-01d_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-01e_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-02a_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-02b_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-02c_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-02d_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-02e_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-03a_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-03b_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-03c_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-03d_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-03e_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-04a_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-04b_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-04c_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-04d_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-04e_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-05a_Domain_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-05b_API_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-05c_Workflow_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-05d_UX_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-05e_Test_Specification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-06a-e_Tender_Match.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-07a-e_Verification.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-08a-e_Scoring_Analytics.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-09a-e_Content_Studio.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LC-SPEC-10a-e_AI_Advisor.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LIA-001_CAPABILITY_BACKLOG.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LIA-001_INSTITUTIONAL_ALIGNMENT.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/local-content/LOCALCONTENTOS_BLUEPRINT.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/LOCALCONTACTOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/LOCALCONTENTOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/OFFICE_AI_ASSISTANT.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/RISKEVIDENCE_PLAN.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/RISKOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/SALESOS_UNIFICATION_PLAN.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/SALESOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/assets/WORKFLOWOS.md",
+      "reason": "Product asset documentation (PRDs, SPECs, blueprints) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/commercial/CUSTOMER_JOURNEY.md",
+      "reason": "Commercial documentation (pricing, journey, process) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/commercial/PRICING_MODEL.md",
+      "reason": "Commercial documentation (pricing, journey, process) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/commercial/SALES_PROCESS.md",
+      "reason": "Commercial documentation (pricing, journey, process) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/commercial/SOC2_ROADMAP.md",
+      "reason": "Commercial documentation (pricing, journey, process) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/COMPANY_READINESS_MATRIX.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/DEPLOYMENT_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/ENGINEERING_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/EXECUTIVE_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/OPERATIONS_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/PILOT_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/PILOT_READINESS_SUMMARY.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/company/PRODUCT_GUIDE.md",
+      "reason": "Company guide documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/ACCESS_CONTROL_MATRIX.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_ACTIVATION_PROGRAM.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_COMMERCIAL_READINESS_STATUS.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_ACTIVATION.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_BRIEF.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_EVIDENCE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_EXECUTION_STATUS.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_FEEDBACK_LOG.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_READINESS_REPORT.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_SESSION_01_PLAN.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_SESSION_01_PREFLIGHT.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_SESSION_SCRIPT.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_SUCCESS_CRITERIA.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_TRIAGE_RULES.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_PILOT_USER_MATRIX.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/AUDITOS_POST_SESSION_DECISION_TEMPLATE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/BACKUP_RESTORE_DRILL.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/DEV_BASELINE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/EXECUTIVE_CLOSURE_MEMO.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/GITHUB_DEPLOY_ROLE_SETUP.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/INCIDENT_ROLLBACK_RUNBOOK.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/MORNING_EXECUTION_RUNBOOK.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/OBSERVABILITY_BASELINE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/OPERATIONAL_CLOSURE_STATUS.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/OVERNIGHT_EXECUTION_HANDOFF.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PENETRATION_TEST_SCOPE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PLATFORM_ACTIVATION_PROGRAM.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/POST_DEPLOY_SMOKE_TESTS.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PROD_ACCOUNT_UPGRADE_ACTIONS.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PROD_DEPLOYMENT_CHECKLIST.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PRODUCTION_CUTOVER_RUNBOOK.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/PRODUCTION_READINESS_GATE.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/RELEASE_ROLLBACK_POLICY.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/SECRETS_AND_ROTATION_RUNBOOK.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/deployment/STATE_RECOVERY_RUNBOOK.md",
+      "reason": "Deployment/operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/CAPABILITY_BACKLOG.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/content-studio-schema-drift.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/ENGINEERING_READINESS_REVIEW.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/ENGINEERING_RETROSPECTIVE.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/erp-integration-decision.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/backlog/engineering-sprint-plan.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/backlog/execution-backlog.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/IMPLEMENTATION_STATUS.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/reports/EXECUTIVE_ENGINEERING_REPORT.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-01-knowledge-governance-engine.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-02-rule-engine.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-03-validation-api.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-04-generators.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-05-cli.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-06-ci-integration.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-07-repository-contracts.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-08-graph-readiness.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-09-implementation-architecture.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-10-dependency-graph.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/governance/specs/SPEC-GOV-11-graph-readiness-phase.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/prds/PRD-01_Opportunity_Management.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/prds/PRD-02_Account_Intelligence.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_01_WP01.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_02_WP02.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_03_WP03.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_04_WP04.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_05_WP05.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_06_WP06.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/reviews/DRIFT_REVIEW_07_WP07.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-01a_Domain_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-01b_API_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-01c_Workflow_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-01d_UX_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-01e_Test_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-02a_Account_Domain_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-02b_Account_API_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-02c_Account_Workflow_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-02d_Account_UX_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPEC-02e_Account_Test_Specification.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/specs/SPECIFICATION-01_Opportunity_Management.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/engineering/TEMPLATE_VALIDATION_CYCLE2.md",
+      "reason": "Engineering documentation (PRDs, SPECs, reviews, governance) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/equity-bridge-raw.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/factory-accuracy-auditos-export.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/firm-memory-learning-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/local-ai-phase0-smoke.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p-and-l-root-cause-data.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p10-before-after-simulation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p11-audited-presentation-analysis.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p12-generalization-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p13-2-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/p14-ga-mapping-gap.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/phase-3b1-holdout-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/phase-3b2-stratified-holdout.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/phase-3c-firm-memory-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/phase-3d-governance-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/shalfa-live-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/shalfa-phase-3b-rules-rebenchmark.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/shalfa-pilot-setup.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/shalfa-real-tb-classification.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-benchmark-results.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-classification-benchmark.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-classification-rebenchmark.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-classification-validation.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-closing-adjustment-analysis.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-local-ai-benchmark-full.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-local-ai-benchmark-partial.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/evidence/tb-memory-reuse-rate.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/audits/SECURITY_RULE_DECISION_LOG.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/AuditOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/claim-normalization-template.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/contentstudio-historical-validation.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/contentstudio-p1-historical.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/coverage-gap-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/decision-registry.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-AuditOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-DecisionOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-IntelligenceCore.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-LocalContentOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-SalesOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/DOSSIER-WorkflowOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/evidence-coverage-matrix.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/evidence-freshness-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/evidence-index.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/freeze-v2-certificate.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/governance-findings-log.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/governance-review-brief.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/institutional-memory-p0-pattern.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/intelligence-core-capability-registry.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/intelligence-core-coverage-validation.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/intelligence-core-gov-package.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/intelligence-core-sprint3-package.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifest-readiness-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/AuditOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/MANIFEST-DecisionOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/manifest-generation-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/manifest-hashes.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/manifest-index.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/MANIFEST-IntelligenceCore.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/MANIFEST-LocalContentOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/MANIFEST-SalesOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/manifest-validation-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/manifests/MANIFEST-WorkflowOS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/office-ai-coverage-validation.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/office-ai-scalability-phase.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/product-registry.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/provenance-gate-report.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/riskos-p1-workspace-pattern.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/salesos-gov-package.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/salesos-governance-coverage-validation.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/salesos-governance-resolution.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/v3-1-review-input-package.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/v3-3-decision-package.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/wave-2-plan.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/workflowos-coverage-validation.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/evidence-catalog/workflowos-gr009-consumption-map.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/reports/.session4-walkthrough-output.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/reports/ARCHITECTURE_VERIFICATION_REPORT.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/reports/knowledge-governance-sprint-baseline.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/BACKUP_RESTORE_DRILL_EVIDENCE.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/CERTIFICATION_BLOCKERS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/COMPLIANCE_CHECKLIST.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/evidence/cycle6-governed-audit-smoke.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/evidence/ic-smoke-cycle5-live.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/evidence/ic-smoke-cycle5-offline.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/INFRA_GAP_LIST.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/INFRASTRUCTURE_READINESS_REPORT.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/L6_READINESS_SCORECARD.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/LIVE_SMOKE_REPORT.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/PENTEST_PREP_PACKET.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/POST_DEPLOY_SMOKE.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/REMOTE_STAGING_PROBE.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/ROLLBACK_READINESS_ASSESSMENT.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/STAGING_PGVECTOR_ACTIVATION_REPORT.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/TENANT_ISOLATION_RISK_REGISTER.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/cycle-6/TENANT_REMEDIATION_PROPOSALS.md",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/evidence/post-deploy-smoke-local.json",
+      "reason": "Evidence/report artifacts (JSON data + reports) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/evidence/validation/known-orphans.json",
+      "reason": "Allowlist file itself — consumed by the orphan detector script, not a documentation asset.",
+      "expected": true
+    },
+    {
+      "path": "docs/infrastructure/AQLIYA_AWS_BRINGUP_RUNBOOK.md",
+      "reason": "Infrastructure documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/infrastructure/AQLIYA_AWS_DEPLOYMENT_READINESS_VERIFICATION.md",
+      "reason": "Infrastructure documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/infrastructure/AQLIYA_AWS_FOUNDATION_BLUEPRINT.md",
+      "reason": "Infrastructure documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/localcontentos-ai-governance.md",
+      "reason": "Root-level product documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/localcontentos-commercial-readiness.md",
+      "reason": "Root-level product documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/observability/MONITORING_DASHBOARDS.md",
+      "reason": "Observability documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/operations/on-premise-deployment-guide.md",
+      "reason": "Operations documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/ARCHITECTURE_REVIEW_BOARD_DECISION.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/AUTHORIZATION_CERTIFICATION_HISTORY.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/AUTHORIZATION_DISCOVERY_REPORT.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/GUARD_MIGRATION_MAP.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/MIGRATION_PARITY_PLAN.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/OPERATIONAL_CERTIFICATION_GATE.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/POLICY_CATALOG.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/PRODUCT_MIGRATION_ORDER.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/PROGRAM_HEALTH_DASHBOARD.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/RB-02A_AUTHORIZATION_MODEL.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/platform/authorization/RB-02B_IMPLEMENTATION_PLAN.md",
+      "reason": "Platform engineering documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/l6-production-hardening/PROGRAM_CHARTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/lcp-000-pilot-definition/LCE-001_PILOT_EXECUTION.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/lcp-000-pilot-definition/PRE_EXECUTION_GATE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/lcp-000-pilot-definition/PROGRAM_CHARTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/BASELINE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/CAPABILITY_MAP.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/EXECUTION_BACKLOG.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/GAP_REGISTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/P0-A1_validation-inventory.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/P0-A2_validation-standard.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/PRODUCTION_READINESS_MATRIX.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/PROGRAM_CHARTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/01_TENANT_SURFACE_INVENTORY.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/02_TENANT_ISOLATION_MATRIX.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/03_TRUST_BOUNDARY_AUDIT.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/04_LEAKAGE_PROOF.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/05_ZERO_TENANT_LEAKAGE_GATE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-01/RB-01_PROGRAM_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/localcontentos-production-readiness/RB-02A_AUTHORIZATION_MODEL.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/PORTFOLIO_TRANSITION.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/BASELINE_REPORT.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/phases/PHASE_1_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/phases/PHASE_2_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/phases/PHASE_2.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/PROGRAM_CHARTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-health/PROGRAM_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/BASELINE_REPORT.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/phases/PHASE_1_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/phases/PHASE_2_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/phases/PHASE_3_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/PROGRAM_CHARTER.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/programs/repository-quality/PROGRAM_CLOSURE.md",
+      "reason": "Program management documentation (charters, closures, phases) — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
       "expected": true
     },
     {
       "path": "docs/releases/documentation-remediation-closure.md",
       "reason": "Program closure document — released artifact, not navigation target.",
+      "expected": true
+    },
+    {
+      "path": "docs/runbooks/localcontentos-ai-auth-review.md",
+      "reason": "Runbook/operator documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/runbooks/localcontentos-deployment-runbook.md",
+      "reason": "Runbook/operator documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/runbooks/localcontentos-dr-plan.md",
+      "reason": "Runbook/operator documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/runbooks/localcontentos-operator-guide.md",
+      "reason": "Runbook/operator documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/security/PENETRATION_TEST_SCOPE.md",
+      "reason": "Security documentation — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/source-of-truth/LCOS_RBAC_MATRIX.md",
+      "reason": "Source-of-truth matrix — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/source-of-truth/LCOS_STATE_MACHINE_MATRIX.md",
+      "reason": "Source-of-truth matrix — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/user/MANUAL.md",
+      "reason": "User manual — pre-existing baseline cohort (2026-09-10) — main-branch legacy debt, registered to unblock orphan delta-checking; not navigation targets; pending triage.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_DESIGN_SYSTEM.md",
+      "reason": "Website Phase 3 release deliverable — design system documentation, not a knowledge-map navigation target.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_FULL_VISUAL_SWEEP_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — visual sweep report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_HREFLANG_VALIDATION.md",
+      "reason": "Website Phase 3 release deliverable — hreflang validation report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PAGE_BLUEPRINTS.md",
+      "reason": "Website Phase 3 release deliverable — page blueprint specification for the release.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_BASELINE.md",
+      "reason": "Website Phase 3 release deliverable — baseline audit artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — phase final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_PHASE3_ROUTE_LOCALE_MATRIX.md",
+      "reason": "Website Phase 3 release deliverable — route/locale matrix artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_AUDIT.md",
+      "reason": "Website Phase 3 release deliverable — website audit report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — website final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_PHASE2_FINAL_REPORT.md",
+      "reason": "Website Phase 3 release deliverable — phase 2 final report artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_ROUTE_MIGRATION_MATRIX.md",
+      "reason": "Website Phase 3 release deliverable — route migration matrix artifact.",
+      "expected": true
+    },
+    {
+      "path": "docs/website/AQLIYA_WEBSITE_STRATEGY.md",
+      "reason": "Website Phase 3 release deliverable — website strategy document for the release.",
       "expected": true
     }
   ]

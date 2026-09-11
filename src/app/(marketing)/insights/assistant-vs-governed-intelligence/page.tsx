@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "المساعد الذكي مقابل الذكاء المؤسسي المحكوم | AQLIYA",
+  title: "المساعد الذكي مقابل الذكاء المؤسسي المحكوم",
   description:
     "الفرق بين مساعد ذكي وذكاء مؤسسي محكوم ليس في حجم النموذج  بل في هيكل المسؤولية والأدلة.",
 };

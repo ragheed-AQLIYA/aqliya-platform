@@ -5,7 +5,7 @@
 
 export const contactPageCopyAr = {
   metadata: {
-    title: "تواصل معنا | AQLIYA",
+    title: "تواصل معنا",
     description:
       "مكالمة تعريفية أو تجربة على بياناتكم  نطاق محدود ومعايير واضحة قبل أي التزام طويل.",
   },

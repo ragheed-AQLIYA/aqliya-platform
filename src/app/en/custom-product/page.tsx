@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { CustomProductForm } from "@/components/forms/custom-product-form";
 import { SectionEyebrow } from "@/components/enterprise";
 
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
   title: "Design Your System on AQLIYA | AQLIYA",
   description:
     "Design a custom governed system tailored to your institution's workflows. Submit your request and our team will reach out.",
+  alternates: buildAlternates("/en/custom-product"),
 };
 
 export default function EnCustomProductPage() {

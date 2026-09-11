@@ -118,11 +118,11 @@ ALTER TABLE "institutional_memory_collections" DROP CONSTRAINT "institutional_me
 -- DropIndex
 DROP INDEX "KnowledgeCandidate_createdById_idx";
 
--- DropIndex
-DROP INDEX "KnowledgeFoundationRelease_versionId_key";
+-- DropConstraint
+ALTER TABLE "KnowledgeFoundationRelease" DROP CONSTRAINT "KnowledgeFoundationRelease_versionId_key";
 
--- DropIndex
-DROP INDEX "KnowledgeFoundationVersion_versionNumber_key";
+-- DropConstraint
+ALTER TABLE "KnowledgeFoundationVersion" DROP CONSTRAINT "KnowledgeFoundationVersion_versionNumber_key";
 
 -- AlterTable
 ALTER TABLE "AuditEngagement" DROP COLUMN "engagementType",
@@ -347,24 +347,6 @@ CREATE TABLE "ReviewNoteSLA" (
 );
 
 -- CreateTable
-CREATE TABLE "ContentEvidence" (
-    "id" TEXT NOT NULL,
-    "contentId" TEXT NOT NULL,
-    "organizationId" TEXT NOT NULL,
-    "filename" TEXT NOT NULL,
-    "fileType" TEXT NOT NULL,
-    "fileSize" INTEGER NOT NULL DEFAULT 0,
-    "fileHash" TEXT,
-    "storageKey" TEXT,
-    "uploadedById" TEXT,
-    "description" TEXT,
-    "evidenceType" TEXT NOT NULL DEFAULT 'attachment',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "ContentEvidence_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "ComponentMateriality" (
     "id" TEXT NOT NULL,
     "groupEngagementId" TEXT NOT NULL,
@@ -453,15 +435,6 @@ CREATE UNIQUE INDEX "ReviewNoteSLA_reviewNoteId_key" ON "ReviewNoteSLA"("reviewN
 
 -- CreateIndex
 CREATE INDEX "ReviewNoteSLA_reviewNoteId_idx" ON "ReviewNoteSLA"("reviewNoteId");
-
--- CreateIndex
-CREATE INDEX "ContentEvidence_contentId_idx" ON "ContentEvidence"("contentId");
-
--- CreateIndex
-CREATE INDEX "ContentEvidence_organizationId_idx" ON "ContentEvidence"("organizationId");
-
--- CreateIndex
-CREATE INDEX "ContentEvidence_createdAt_idx" ON "ContentEvidence"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "ComponentMateriality_groupEngagementId_idx" ON "ComponentMateriality"("groupEngagementId");
@@ -606,9 +579,6 @@ ALTER TABLE "institutional_memory_collections" ADD CONSTRAINT "institutional_mem
 
 -- AddForeignKey
 ALTER TABLE "ReviewNoteSLA" ADD CONSTRAINT "ReviewNoteSLA_reviewNoteId_fkey" FOREIGN KEY ("reviewNoteId") REFERENCES "ReviewNote"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ContentEvidence" ADD CONSTRAINT "ContentEvidence_contentId_fkey" FOREIGN KEY ("contentId") REFERENCES "ContentItem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "KnowledgeFoundationVersion" ADD CONSTRAINT "KnowledgeFoundationVersion_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

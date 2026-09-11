@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { CustomProductForm } from "@/components/forms/custom-product-form";
 import { SectionEyebrow } from "@/components/enterprise";
 
@@ -19,9 +20,10 @@ const formSteps = [
 ];
 
 export const metadata: Metadata = {
-  title: "صمّم نظامك مع عقلية | AQLIYA",
+  title: "صمّم نظامك مع عقلية",
   description:
     "صمّم نظامًا برمجيًا خاصًا بطبيعة عمل مؤسستك. املأ الطلب وسيتواصل معك فريق عقلية.",
+  alternates: buildAlternates("/custom-product"),
 };
 
 export default function CustomProductPage() {

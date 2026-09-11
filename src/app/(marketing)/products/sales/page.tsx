@@ -8,12 +8,18 @@ import {
   EnterpriseCTA,
 } from "@/components/enterprise";
 import { publicOsStatus } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
-export const metadata: Metadata = {
-  title: "SalesOS  نظام تشغيل تطوير الأعمال والمبيعات | AQLIYA",
-  description:
-    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية  يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.",
-};
+export function generateMetadata(): Metadata {
+  const title = "SalesOS — نظام تشغيل تطوير الأعمال والمبيعات";
+  const description =
+    "SalesOS نظام تشغيل تطوير الأعمال والمبيعات ضمن عقلية  يحل تحديات تشغيلية محددة داخل المؤسسة مثل إدارة الحسابات والفرص والاجتماعات والعروض والعقود والذاكرة البيعية مع حوكمة وأدلة وسجل تدقيقي كامل.";
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/products/sales"),
+  };
+}
 
 const outputs = [
   "ICP Profiles",

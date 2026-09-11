@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { StartHubPage } from "@/components/marketing/v2/start-hub-page";
 import { buyerJourneys, universalJourneySteps } from "@/lib/marketing/buyer-journeys";
 import { startCopyAr } from "@/lib/marketing/copy-plain";
@@ -9,10 +10,15 @@ import {
   processPrinciplesAr,
 } from "@/lib/marketing/start-hub-content";
 
-export const metadata: Metadata = {
-  title: startCopyAr.metadata.title,
-  description: startCopyAr.metadata.description,
-};
+export function generateMetadata(): Metadata {
+  const title = startCopyAr.metadata.title;
+  const description = startCopyAr.metadata.description;
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/start"),
+  };
+}
 
 export default function StartPage() {
   const c = startCopyAr;

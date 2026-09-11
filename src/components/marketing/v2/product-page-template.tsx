@@ -1,12 +1,60 @@
 import Link from "next/link";
 import { BeforeAfterBlock, WorkflowChain } from "@/components/enterprise";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 import type { ProductPageContent } from "@/lib/marketing/product-pages-content";
 
 type GovernanceCard = {
   title: string;
   detail: string;
 };
+
+/**
+ * Product screenshot placeholder — displays a styled mockup of the product interface.
+ * Replace with actual screenshots when available.
+ */
+function ProductScreenshotPlaceholder({
+  productName,
+  productNameAr,
+  locale = "ar",
+}: {
+  productName: string;
+  productNameAr: string;
+  locale?: "ar" | "en";
+}) {
+  const displayName = locale === "ar" ? productNameAr : productName;
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-background via-background to-primary/5 shadow-2xl">
+      {/* Title bar */}
+      <div className="flex items-center gap-2 border-b border-border/40 bg-muted/30 px-4 py-2.5">
+        <div className="flex gap-1.5">
+          <span className="h-3 w-3 rounded-full bg-red-400/60" />
+          <span className="h-3 w-3 rounded-full bg-yellow-400/60" />
+          <span className="h-3 w-3 rounded-full bg-green-400/60" />
+        </div>
+        <span className="mx-auto text-[10px] font-medium text-muted-foreground">
+          {displayName}
+        </span>
+      </div>
+      {/* Mockup content */}
+      <div className="flex min-h-[280px] items-center justify-center p-8 sm:min-h-[360px]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+            <svg className="h-8 w-8 text-primary/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <p className="text-sm font-semibold text-muted-foreground">
+            {locale === "ar" ? "صورة واجهة النظام" : "Product Interface Screenshot"}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground/60">
+            {locale === "ar" ? "قريبًا" : "Coming soon"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function defaultGovernance(locale: "ar" | "en"): GovernanceCard[] {
   return locale === "ar"
@@ -83,6 +131,15 @@ export function ProductPageTemplate({
         }
       />
 
+      {/* ─── Product Screenshot ────────────────── */}
+      <section className="mx-auto w-full max-w-5xl px-6 -mt-4 pb-8">
+        <ProductScreenshotPlaceholder
+          productName={content.productName}
+          productNameAr={content.productNameAr ?? content.productName}
+          locale={locale}
+        />
+      </section>
+
       {/* ─── Problem → Solution ──────────────── */}
       <section className="mx-auto w-full max-w-7xl px-6 py-14">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -117,13 +174,14 @@ export function ProductPageTemplate({
           {t.highlights}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          {content.highlights.map((h) => (
-            <div
+          {content.highlights.map((h, i) => (
+            <Reveal
               key={h}
+              delay={i * 70}
               className="rounded-xl border border-primary/15 bg-primary/[0.03] px-4 py-5 text-sm font-semibold text-foreground"
             >
               {h}
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -134,11 +192,11 @@ export function ProductPageTemplate({
           {t.governance}
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {(content.governanceItems ?? defaultGovernance(locale)).map((g) => (
-            <div key={g.title} className="rounded-xl border border-border/60 bg-background p-5">
+          {(content.governanceItems ?? defaultGovernance(locale)).map((g, i) => (
+            <Reveal key={g.title} delay={i * 70} className="rounded-xl border border-border/60 bg-background p-5">
               <h4 className="mb-2 text-sm font-bold text-foreground">{g.title}</h4>
               <p className="text-sm leading-6 text-muted-foreground">{g.detail}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -150,14 +208,15 @@ export function ProductPageTemplate({
             {t.outcomes}
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {content.after.slice(0, 4).map((item) => (
-              <div
+            {content.after.slice(0, 4).map((item, i) => (
+              <Reveal
                 key={item}
+                delay={i * 70}
                 className="flex items-start gap-3 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.03] px-4 py-4"
               >
-                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500/60" />
+                <span className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500/60" aria-hidden />
                 <span className="text-sm leading-6 text-foreground">{item}</span>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

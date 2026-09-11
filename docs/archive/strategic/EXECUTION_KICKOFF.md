@@ -93,8 +93,8 @@ See `ANTI_ROADMAP_2026.md`.
 | [BOARD_MEMO_FINAL.md](./BOARD_MEMO_FINAL.md) | Decisions |
 | [EXECUTION_PLAN_12_MONTHS.md](./EXECUTION_PLAN_12_MONTHS.md) | Quarterly KPIs |
 | [WHAT_WE_DO_NOT_CLAIM.md](../../commercial/WHAT_WE_DO_NOT_CLAIM.md) | Sales trust |
-| [PILOT_SOW_TEMPLATE.md](../commercial/PILOT_SOW_TEMPLATE.md) | Close pilot |
-| [AQLIYA_CURRENT_STATE.md](../source-of-truth/AQLIYA_CURRENT_STATE.md) | Technical truth |
+| [PILOT_SOW_TEMPLATE.md](../../commercial/PILOT_SOW_TEMPLATE.md) | Close pilot |
+| [AQLIYA_CURRENT_STATE.md](../../source-of-truth/AQLIYA_CURRENT_STATE.md) | Technical truth |
 
 ---
 

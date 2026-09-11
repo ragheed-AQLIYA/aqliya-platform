@@ -4,12 +4,18 @@ import {
   SectionEyebrow,
   EnterpriseCTA,
 } from "@/components/enterprise";
+import { buildAlternates } from "@/lib/marketing/seo";
 
-export const metadata: Metadata = {
-  title: "Office AI Assistant  مساعد مؤسسي ذكي | AQLIYA",
-  description:
-    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيقي كامل.",
-};
+export function generateMetadata(): Metadata {
+  const title = "Office AI Assistant — مساعد مؤسسي ذكي";
+  const description =
+    "Office AI Assistant هو المساعد المؤسسي الذكي المشترك عبر جميع أنظمة عقلية  يقدّم مهام ذكية ضمن بيئة محكومة مع مراجعة بشرية وأدلة وسجل تدقيق كامل.";
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/products/office-ai"),
+  };
+}
 
 export default function OfficeAIProductPage() {
   return (

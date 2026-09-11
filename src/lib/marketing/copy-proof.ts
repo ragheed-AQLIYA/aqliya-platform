@@ -5,7 +5,7 @@
 
 export const proofPageCopyAr = {
   metadata: {
-    title: "الإثبات | AQLIYA",
+    title: "الإثبات",
     description:
       "ديمو، ملخص للقيادة، معايير التجربة، ونماذج مخرجات  كل ما تحتاجه قبل قرار الشراء.",
   },

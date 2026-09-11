@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "لماذا الحوكمة أهم من الذكاء | AQLIYA",
+  title: "لماذا الحوكمة أهم من الذكاء",
   description:
     "السؤال ليس كم دقيقاً نموذجك. السؤال هو: هل يمكنك الإجابة على من وافق ولماذا؟ الذكاء بدون حوكمة عبء لا أصل.",
 };

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import {
   soc2HonestDisclaimerAr,
   soc2RoadmapMilestones,
@@ -7,9 +8,10 @@ import {
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
 
 export const metadata: Metadata = {
-  title: "خارطة SOC2 | AQLIYA",
+  title: "خارطة SOC2",
   description:
     "خارطة طريق SOC2 Type I بمواعيد مستهدفة  بدون ادعاء شهادة. شفافية للمشتريات والأمن.",
+  alternates: buildAlternates("/soc2-roadmap"),
 };
 
 const statusLabel: Record<string, string> = {

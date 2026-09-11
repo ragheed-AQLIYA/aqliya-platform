@@ -1,12 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { tier1InstitutionalUseCases } from "@/lib/marketing/institutional-use-cases";
 import { ConversionBand, MarketingPageShell } from "@/components/marketing/v2/marketing-shell";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
-  title: "حالات الاستخدام المؤسسية | AQLIYA",
+  title: "حالات الاستخدام المؤسسية",
   description:
     "أربعة مسارات تشغيلية رئيسية: التدقيق، القرارات، المحتوى المحلي، والجاهزية التنظيمية  المشكلة، الوضع التقليدي، ومسار عقلية.",
+  alternates: buildAlternates("/use-cases"),
 };
 
 export default function UseCasesPage() {
@@ -28,11 +31,13 @@ export default function UseCasesPage() {
         }
       />
 
-      <section className="border-t bg-muted/10 py-14">
+      <section className="border-t bg-muted/10 py-16 sm:py-20">
         <div className="mx-auto max-w-4xl space-y-6 px-6">
-          {tier1InstitutionalUseCases.map((uc) => (
-            <article
+          {tier1InstitutionalUseCases.map((uc, i) => (
+            <Reveal
               key={uc.id}
+              delay={i * 70}
+              as="article"
               className={`rounded-2xl border ${uc.categoryBorder} ${uc.categoryBg} p-6 sm:p-8`}
             >
               <p className={`text-[10px] font-semibold uppercase tracking-wider ${uc.categoryColor}`}>
@@ -65,7 +70,7 @@ export default function UseCasesPage() {
               <Link href={uc.systemLink} className="btn-outline mt-4 inline-flex h-10 px-5 text-sm">
                 {uc.systemLabel}
               </Link>
-            </article>
+            </Reveal>
           ))}
         </div>
       </section>

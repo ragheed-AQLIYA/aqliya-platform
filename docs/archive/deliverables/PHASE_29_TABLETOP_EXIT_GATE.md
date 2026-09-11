@@ -39,11 +39,11 @@ Operational Readiness:           NOT YET VERIFIED
 | Step | Document | Owner |
 | ---- | -------- | ----- |
 | Readiness | [TABLETOP_READINESS_CHECKLIST.md](../../operations/knowledge-foundation/TABLETOP_READINESS_CHECKLIST.md) | Governance Lead |
-| Master record | [TABLETOP_EXECUTION_RECORD.md](../operations/knowledge-foundation/TABLETOP_EXECUTION_RECORD.md) | Facilitator |
-| Smoke | [TABLETOP_SMOKE_VALIDATION.md](../operations/knowledge-foundation/TABLETOP_SMOKE_VALIDATION.md) | Platform Ops |
-| Exercise | [TABLETOP_GOVERNANCE_EXERCISE.md](../operations/knowledge-foundation/TABLETOP_GOVERNANCE_EXERCISE.md) | Facilitator |
-| AAR | [TABLETOP_AFTER_ACTION_REPORT.md](../operations/knowledge-foundation/TABLETOP_AFTER_ACTION_REPORT.md) | Facilitator |
-| Go/No-Go | [PILOT_GO_NO_GO_DECISION.md](../operations/knowledge-foundation/PILOT_GO_NO_GO_DECISION.md) | Platform Owner |
+| Master record | [TABLETOP_EXECUTION_RECORD.md](../../operations/knowledge-foundation/TABLETOP_EXECUTION_RECORD.md) | Facilitator |
+| Smoke | [TABLETOP_SMOKE_VALIDATION.md](../../operations/knowledge-foundation/TABLETOP_SMOKE_VALIDATION.md) | Platform Ops |
+| Exercise | [TABLETOP_GOVERNANCE_EXERCISE.md](../../operations/knowledge-foundation/TABLETOP_GOVERNANCE_EXERCISE.md) | Facilitator |
+| AAR | [TABLETOP_AFTER_ACTION_REPORT.md](../../operations/knowledge-foundation/TABLETOP_AFTER_ACTION_REPORT.md) | Facilitator |
+| Go/No-Go | [PILOT_GO_NO_GO_DECISION.md](../../operations/knowledge-foundation/PILOT_GO_NO_GO_DECISION.md) | Platform Owner |
 
 ---
 
@@ -79,4 +79,4 @@ Pilot Go-Live Candidate:  APPROVED
 | Code changed for this guide | No (execution templates only) |
 | Tabletop executed | Not yet — human-facilitated step |
 
-**Next human action:** Fill [Tabletop Execution Record](../operations/knowledge-foundation/TABLETOP_EXECUTION_RECORD.md) Part 1 (readiness).
+**Next human action:** Fill [Tabletop Execution Record](../../operations/knowledge-foundation/TABLETOP_EXECUTION_RECORD.md) Part 1 (readiness).

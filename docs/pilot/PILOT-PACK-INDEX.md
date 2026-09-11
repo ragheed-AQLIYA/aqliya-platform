@@ -38,6 +38,6 @@ LocalContentOS packs are **not** duplicates of AuditOS commercial-pack; they cov
 ## Archive and Duplication Evidence
 
 - Full overlap analysis: [`docs/archive/commercial-legacy/COMMERCIAL_DUPLICATION_REVIEW.md`](../archive/commercial-legacy/COMMERCIAL_DUPLICATION_REVIEW.md)
-- Project-organization closure: [`docs/reports/project-organization/09-final-closure.md`](../reports/project-organization/09-final-closure.md)
+- Project-organization closure: [`docs/reports/project-organization/09-final-closure.md`](../evidence/reports/project-organization/09-final-closure.md)
 
 **Policy:** No deletes. Use this index to choose the correct primary source. Content merge across trees remains a future optional project (Category C3 — pointer-only resolution complete 2026-06-01).

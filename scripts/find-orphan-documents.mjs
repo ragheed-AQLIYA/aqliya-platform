@@ -46,7 +46,7 @@ function getAllDocFiles(dir, relativeTo = REPO_ROOT) {
     const entries = readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
       const fullPath = resolve(dir, entry.name);
-      const relPath = fullPath.replace(relativeTo + '\\', '').replace(/\\/g, '/');
+      const relPath = relative(relativeTo, fullPath).replace(/\\/g, '/');
 
       // Skip hidden dirs, node_modules, .git
       if (entry.name.startsWith('.') && entry.isDirectory()) continue;
@@ -91,10 +91,10 @@ const NAVIGATION_DOCS = [
   'AGENTS.md',
   'README.md',
   'docs/README.md',
-  'docs/AI_ENTRYPOINT.md',
-  'docs/AI_KNOWLEDGE_MAP.md',
-  'docs/AI_STARTUP_CURRICULUM.md',
-  'docs/AI_READING_PROFILES.md',
+  'docs/official/AI_ENTRYPOINT.md',
+  'docs/official/AI_KNOWLEDGE_MAP.md',
+  'docs/official/AI_STARTUP_CURRICULUM.md',
+  'docs/official/AI_READING_PROFILES.md',
   'docs/DOCUMENTATION_AUTHORITY.md',
   'docs/DOCUMENTATION_AUTHORITY_MATRIX.md',
   'docs/DOCUMENTATION_GOVERNANCE_v2.md',
@@ -196,7 +196,7 @@ function isExcluded(relPath) {
 
 // 4.5 Load known-orphans allowlist
 let knownOrphans = new Set();
-const KNOWN_ORPHANS_PATH = resolve(REPO_ROOT, 'docs/validation/known-orphans.json');
+const KNOWN_ORPHANS_PATH = resolve(REPO_ROOT, 'docs/evidence/validation/known-orphans.json');
 try {
   const ko = JSON.parse(readFileSync(KNOWN_ORPHANS_PATH, 'utf-8'));
   if (Array.isArray(ko.orphans)) {

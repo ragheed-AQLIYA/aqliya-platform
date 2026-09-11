@@ -18,7 +18,7 @@
  */
 
 import { readFileSync, existsSync, readdirSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -56,7 +56,7 @@ function getAllMarkdownFiles(dir, exclude = new Set(['node_modules', '.git', '.n
       if (entry.isDirectory()) {
         results.push(...getAllMarkdownFiles(fullPath, exclude));
       } else if (entry.name.endsWith('.md')) {
-        results.push({ path: fullPath, relPath: fullPath.replace(REPO_ROOT + '\\', '').replace(/\\/g, '/') });
+        results.push({ path: fullPath, relPath: relative(REPO_ROOT, fullPath).replace(/\\/g, '/') });
       }
     }
   } catch { /* skip */ }

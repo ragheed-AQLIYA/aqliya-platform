@@ -27,7 +27,7 @@
 | 3 | Terraform apply (L0-01) | **Critical** | Ops | Review **PASS** | Apply **OPEN** | `infra/terraform/`, `terraform-readiness-review-l0-01.md` |
 | 4 | Backup restore drill | High | Ops | Scripts **PASS** | Drill **OPEN** | [BACKUP_RESTORE_DRILL_EVIDENCE.md](./BACKUP_RESTORE_DRILL_EVIDENCE.md) |
 | 5 | Cross-tenant isolation tests | Medium | Engineering | **PASS** (Jest) | Staging DB run **OPEN** | `src/__tests__/cross-tenant-isolation.test.ts`, `org-scoping.test.ts` |
-| 6 | Director G6-7 CLOSED | **Critical** | Director | **CONDITIONAL** | **OPEN** | [cycle-6-close.md](../../archive/operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md) |
+| 6 | Director G6-7 CLOSED | **Critical** | Director | **CONDITIONAL** | **OPEN** | [cycle-6-close.md](../../../archive/operations/parallel-execution-cycle-2026-06-06-cycle-6-close.md) |
 | 7 | `staging.aqliya.ai` reachable | **Critical** | Ops / infra | N/A | **OPEN** (2026-06-06 DNS FAIL) | [REMOTE_STAGING_PROBE.md](./REMOTE_STAGING_PROBE.md) |
 
 ---

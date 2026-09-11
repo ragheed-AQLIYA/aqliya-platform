@@ -44,9 +44,9 @@ console.log('\n🔍 AQLIYA Reading Order Validator\n');
 // 1. Read AI_ENTRYPOINT.md
 let entrypoint;
 try {
-  entrypoint = readFileSync(resolve(REPO_ROOT, 'docs/AI_ENTRYPOINT.md'), 'utf-8');
+  entrypoint = readFileSync(resolve(REPO_ROOT, 'docs/official/AI_ENTRYPOINT.md'), 'utf-8');
 } catch (e) {
-  error(`Cannot read docs/AI_ENTRYPOINT.md: ${e.message}`);
+  error(`Cannot read docs/official/AI_ENTRYPOINT.md: ${e.message}`);
   process.exit(1);
 }
 
@@ -70,10 +70,10 @@ console.log(`Found ${entries.length} reading order entries`);
 // 3. Check that AI_ENTRYPOINT.md itself is at position 0
 const entryZero = entries.find(e => e.position === 0);
 if (entryZero) {
-  if (entryZero.path === 'docs/AI_ENTRYPOINT.md') {
-    ok('Position #0 correctly points to docs/AI_ENTRYPOINT.md');
+  if (entryZero.path === 'docs/official/AI_ENTRYPOINT.md') {
+    ok('Position #0 correctly points to docs/official/AI_ENTRYPOINT.md');
   } else {
-    error(`Position #0 should point to docs/AI_ENTRYPOINT.md, but points to "${entryZero.path}"`);
+    error(`Position #0 should point to docs/official/AI_ENTRYPOINT.md, but points to "${entryZero.path}"`);
   }
 } else {
   error('No position #0 found in reading order');

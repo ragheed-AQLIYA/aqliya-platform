@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "دراسات الحالة | AQLIYA",
+  title: "دراسات الحالة",
   description:
     "سيناريوهات مؤسسية موثقة توضح كيف تحول عقلية سير العمل من عمليات يدوية مبعثرة إلى مسارات محكومة قابلة للتدقيق.",
+  alternates: buildAlternates("/case-studies"),
 };
 
 const scenarios = [
@@ -169,7 +172,7 @@ export default function CaseStudiesPage() {
       </section>
 
       {/* Institutional reference scenarios */}
-      <section className="py-12 border-b border-white/5">
+      <section className="py-16 sm:py-20 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6">
           <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-8">
             <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
@@ -223,14 +226,14 @@ export default function CaseStudiesPage() {
       {/* Trust Points */}
       <section className="py-10 border-b border-white/5">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {trustPoints.map((t) => (
-            <div key={t.title} className="flex gap-4 items-start">
+          {trustPoints.map((t, i) => (
+            <Reveal key={t.title} delay={i * 70} className="flex gap-4 items-start">
               <span className="text-cyan-400 text-xl mt-0.5">{t.icon}</span>
               <div>
                 <p className="text-white font-medium text-sm">{t.title}</p>
                 <p className="text-slate-400 text-sm mt-1">{t.body}</p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -238,8 +241,8 @@ export default function CaseStudiesPage() {
       {/* Scenarios */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6 space-y-20">
-          {scenarios.map((s) => (
-            <div key={s.id} className="glass-card rounded-2xl overflow-hidden">
+          {scenarios.map((s, i) => (
+            <Reveal key={s.id} delay={i * 70} className="glass-card rounded-2xl overflow-hidden">
               {/* Header */}
               <div className="p-8 border-b border-white/5">
                 <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -343,7 +346,7 @@ export default function CaseStudiesPage() {
                   {s.note}
                 </p>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

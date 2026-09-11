@@ -156,7 +156,7 @@ Optional human-readable report at docs/reports/knowledge-governance-gate-[timest
 
 ### RULE-3: Internal Markdown Links Resolve
 
-**Check:** All internal markdown links ([text](relative/path)) within docs/ resolve to existing files.
+**Check:** All internal markdown links (text with relative-path targets) within docs/ resolve to existing files.
 
 **Exclusions:**
 - External URLs (https://, http://) — not checked

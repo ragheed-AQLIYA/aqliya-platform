@@ -2,13 +2,20 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SectionEyebrow } from "@/components/enterprise";
 import { OperatingSystemMapVisual } from "@/components/visuals";
+import { Reveal } from "@/components/marketing/reveal";
 import { publicOsStatus } from "@/lib/marketing/public-status";
+import { buildAlternates } from "@/lib/marketing/seo";
 
-export const metadata: Metadata = {
-  title: "المنصة | AQLIYA Intelligence Core",
-  description:
-    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.",
-};
+export function generateMetadata(): Metadata {
+  const title = "المنصة — Intelligence Core";
+  const description =
+    "البنية الأساسية المشتركة التي تعتمد عليها جميع أنظمة عقلية  حوكمة، سير عمل، أدلة، وسجل تدقيق في نواة واحدة.";
+  return {
+    title,
+    description,
+    alternates: buildAlternates("/platform"),
+  };
+}
 
 const deploymentModels = [
   {
@@ -31,14 +38,14 @@ const deploymentModels = [
     title: "AQLIYA Private",
     titleAr: "خوادم خاصة",
     status: "planned",
-    statusLabel: "نشر خاص",
+    statusLabel: "قيد التخطيط",
     description:
-      "نشر داخل بنية تحتية المؤسسة مع قاعدة بيانات محلية وتحكم كامل في البيانات  للمؤسسات ذات متطلبات السيادة والأمن العالية.",
+      "اتجاه استراتيجي لنشر داخل بنية المؤسسة مع تحكم محلي في البيانات. ليس حزمة إنتاج جاهزة، ويخضع لتقييم وتصميم مشترك.",
     points: [
-      "بيانات تبقى داخل بنية المؤسسة",
-      "تحكم كامل في قواعد البيانات والتخزين",
-      "يعتمد على اكتمال نموذج السحابة",
-      "متاح لعملاء منتقَين خلال مرحلة التطوير",
+      "الهدف: بقاء البيانات داخل بنية المؤسسة",
+      "الهدف: تحكم كامل في قواعد البيانات والتخزين",
+      "يعتمد على اكتمال نموذج السحابة أولًا",
+      "مخطط فقط — ليس عرض شراء جاهزًا للتسليم",
     ],
   },
   {
@@ -235,8 +242,9 @@ export default function PlatformPage() {
 
             <div className="space-y-4">
               {[...platformLayers].reverse().map((layer, _i) => (
-                <div
+                <Reveal
                   key={layer.num}
+                  delay={_i * 70}
                   className="relative rounded-2xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-6 transition-all hover:border-primary/20 hover:shadow-sm"
                 >
                   <div className="flex items-start gap-5">
@@ -271,7 +279,7 @@ export default function PlatformPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -331,11 +339,11 @@ export default function PlatformPage() {
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {operatingSystems.map((sys) => (
+            {operatingSystems.map((sys, i) => (
+              <Reveal key={sys.system} delay={i * 70}>
               <Link
-                key={sys.system}
                 href={sys.href}
-                className="group rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
+                className="group block rounded-2xl border border-border/70 bg-gradient-to-br from-background to-muted/15 p-6 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <h3 className="text-base font-black text-foreground group-hover:text-primary">
@@ -350,6 +358,7 @@ export default function PlatformPage() {
                   نظام التشغيل: {sys.system}
                 </p>
               </Link>
+              </Reveal>
             ))}
           </div>
 
@@ -385,9 +394,10 @@ export default function PlatformPage() {
           />
 
           <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {deploymentModels.map((model) => (
-              <div
+            {deploymentModels.map((model, i) => (
+              <Reveal
                 key={model.id}
+                delay={i * 70}
                 className={`rounded-2xl border p-6 ${
                   model.status === "available"
                     ? "border-status-success/25 bg-gradient-to-br from-status-success/[0.05] to-background"
@@ -426,7 +436,7 @@ export default function PlatformPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             ))}
           </div>
 

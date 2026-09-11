@@ -1,11 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/marketing/seo";
 import { ScheduleDiagnosticCta } from "@/components/marketing/schedule-diagnostic-cta";
+import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
   title: "Institutional Use Cases | AQLIYA",
   description:
     "Real operational paths: audit, decisions, local content, compliance, and institutional knowledge.",
+  alternates: buildAlternates("/en/use-cases"),
 };
 
 const useCases = [
@@ -75,9 +78,11 @@ export default function EnglishUseCasesPage() {
       </section>
 
       <section className="mx-auto max-w-4xl space-y-5 px-6 py-16">
-        {useCases.map((uc) => (
-          <article
+        {useCases.map((uc, i) => (
+          <Reveal
             key={uc.id}
+            delay={i * 70}
+            as="article"
             className="rounded-2xl border border-border/60 p-6 sm:p-8"
           >
             <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">
@@ -89,7 +94,7 @@ export default function EnglishUseCasesPage() {
             <Link href={uc.href} className="btn-outline mt-4 inline-flex h-10 px-5 text-sm">
               Learn more
             </Link>
-          </article>
+          </Reveal>
         ))}
 
         <div className="rounded-2xl border border-border/60 p-8 text-center">

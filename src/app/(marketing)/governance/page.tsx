@@ -1,11 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SectionEyebrow, WorkflowChain } from "@/components/enterprise";
+import { Reveal } from "@/components/marketing/reveal";
+import { buildAlternates } from "@/lib/marketing/seo";
 
 export const metadata: Metadata = {
-  title: "الحوكمة | AQLIYA",
+  title: "الحوكمة",
   description:
     "سلسلة أدلة كاملة، RBAC متعدد المستويات، Audit Trail غير قابل للتعديل، وحوكمة AI صارمة  مدمجة في البنية.",
+  alternates: buildAlternates("/governance"),
 };
 
 // ─── Evidence Chain Levels ──────────────────────────────────────────────────
@@ -164,9 +167,10 @@ export default function GovernancePage() {
 
         <div className="mt-10">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {evidenceLevels.map((level) => (
-              <div
+            {evidenceLevels.map((level, i) => (
+              <Reveal
                 key={level.step}
+                delay={i * 70}
                 className="rounded-2xl border border-border/60 p-5 transition-all hover:border-primary/20 hover:shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-3">
@@ -179,7 +183,7 @@ export default function GovernancePage() {
                   </div>
                 </div>
                 <p className="text-sm leading-6 text-muted-foreground">{level.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
 
@@ -203,9 +207,10 @@ export default function GovernancePage() {
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {aiRules.map((rule) => (
-              <div
+            {aiRules.map((rule, i) => (
+              <Reveal
                 key={rule.rule}
+                delay={i * 70}
                 className="rounded-2xl border border-border/60 bg-background p-5"
               >
                 <div className="flex items-start gap-2 mb-3">
@@ -213,7 +218,7 @@ export default function GovernancePage() {
                   <p className="text-sm font-bold text-foreground">{rule.rule}</p>
                 </div>
                 <p className="text-sm leading-6 text-muted-foreground">{rule.detail}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -229,9 +234,10 @@ export default function GovernancePage() {
           />
 
           <div className="mt-10 space-y-3">
-            {rbacLevels.map((level) => (
-              <div
+            {rbacLevels.map((level, i) => (
+              <Reveal
                 key={level.level}
+                delay={i * 70}
                 className={`rounded-2xl border p-5 ${
                   level.critical
                     ? "border-primary/20 bg-primary/[0.04]"
@@ -252,7 +258,7 @@ export default function GovernancePage() {
                     </span>
                   )}
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -267,9 +273,10 @@ export default function GovernancePage() {
         />
 
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
-          {auditTrailProps.map((item) => (
-            <div
+          {auditTrailProps.map((item, i) => (
+            <Reveal
               key={item.prop}
+              delay={i * 70}
               className="flex gap-4 rounded-2xl border border-border/60 p-5"
             >
               <div className="w-40 shrink-0">
@@ -278,7 +285,7 @@ export default function GovernancePage() {
               <p className="text-sm leading-6 text-muted-foreground flex-1">
                 {item.value}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
 
@@ -306,14 +313,15 @@ export default function GovernancePage() {
             { title: "عزل الصلاحيات", body: "مستخدم في مؤسسة لا يمكنه رؤية أو الوصول لأي بيانات مؤسسة أخرى." },
             { title: "عزل سجل التدقيق", body: "سجل التدقيق لكل مؤسسة منفصل ومحمي." },
             { title: "عزل الإعدادات", body: "إعدادات الحوكمة والأدوار والتهيئة مستقلة لكل مؤسسة." },
-          ].map((item) => (
-            <div
+          ].map((item, i) => (
+            <Reveal
               key={item.title}
+              delay={i * 70}
               className="rounded-2xl border border-border/60 bg-muted/10 p-5"
             >
               <p className="text-sm font-black text-foreground mb-2">{item.title}</p>
               <p className="text-xs leading-6 text-muted-foreground">{item.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

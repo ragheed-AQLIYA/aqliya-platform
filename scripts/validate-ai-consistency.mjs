@@ -52,13 +52,13 @@ console.log('\n🔍 AI Documentation Consistency Validator\n');
 
 // Define the 7 AI guidance documents
 const AI_DOCS = {
-  entrypoint: { path: 'docs/AI_ENTRYPOINT.md', name: 'AI Entrypoint' },
-  knowledgeMapHuman: { path: 'docs/AI_KNOWLEDGE_MAP.md', name: 'AI Knowledge Map (human)' },
+  entrypoint: { path: 'docs/official/AI_ENTRYPOINT.md', name: 'AI Entrypoint' },
+  knowledgeMapHuman: { path: 'docs/official/AI_KNOWLEDGE_MAP.md', name: 'AI Knowledge Map (human)' },
   knowledgeMapMachine: { path: 'docs/ai/knowledge-map.json', name: 'Knowledge Map (machine)' },
   authority: { path: 'docs/DOCUMENTATION_AUTHORITY.md', name: 'Documentation Authority' },
   governance: { path: 'docs/DOCUMENTATION_GOVERNANCE_v2.md', name: 'Documentation Governance v2' },
-  readingProfiles: { path: 'docs/AI_READING_PROFILES.md', name: 'AI Reading Profiles' },
-  curriculum: { path: 'docs/AI_STARTUP_CURRICULUM.md', name: 'AI Startup Curriculum' },
+  readingProfiles: { path: 'docs/official/AI_READING_PROFILES.md', name: 'AI Reading Profiles' },
+  curriculum: { path: 'docs/official/AI_STARTUP_CURRICULUM.md', name: 'AI Startup Curriculum' },
 };
 
 // 1. Check all 7 files exist

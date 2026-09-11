@@ -51,7 +51,7 @@ export function Sidebar() {
             </div>
           </Link>
         </div>
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 space-y-1 p-4" role="navigation" aria-label="القائمة الرئيسية">
           {navigation.map((item) => {
             const isActive =
               pathname === item.href || pathname?.startsWith(item.href + "/");
@@ -60,6 +60,7 @@ export function Sidebar() {
                 <Button
                   variant={isActive ? "secondary" : "ghost"}
                   className="w-full justify-start"
+                  aria-current={isActive ? "page" : undefined}
                 >
                   <item.icon className="ml-2 h-4 w-4" />
                   {item.name}

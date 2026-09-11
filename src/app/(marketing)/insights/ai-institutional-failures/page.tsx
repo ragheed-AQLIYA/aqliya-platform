@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "خمس حالات فشل مؤسسي بسبب الذكاء الاصطناعي | AQLIYA",
+  title: "خمس حالات فشل مؤسسي بسبب الذكاء الاصطناعي",
   description:
     "لم تفشل هذه المؤسسات بسبب أن الذكاء الاصطناعي كان رديئاً. فشلت لأن لم يكن هناك هيكل حوكمة. القصة المشتركة في خمس حالات من قطاعات مختلفة.",
 };
